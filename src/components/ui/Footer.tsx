@@ -231,21 +231,11 @@ export default function Footer() {
       {/* ── Bottom Bar ── */}
       <div className="border-t border-outline-variant/10">
         <div className="max-w-7xl mx-auto px-4 md:px-margin-md lg:px-margin-lg py-5">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-3 text-body-sm text-on-surface-variant/60">
-            <p>© {new Date().getFullYear()} {SITE_NAME}. All rights reserved.</p>
-            <div className="flex flex-wrap items-center justify-center md:justify-end gap-x-4 gap-y-2">
-              <p className="font-mono text-label-tech tracking-wider text-center md:text-right">
-                {TECH_SPECS_LINE}
-              </p>
-              <span
-                className="hidden sm:inline text-outline-variant/40"
-                aria-hidden="true"
-              >
-                •
-              </span>
+          <div className="flex flex-col lg:flex-row items-center justify-between gap-3 text-body-sm text-on-surface-variant/60">
+            <div className="flex flex-wrap items-center justify-center lg:justify-start gap-x-3 gap-y-2">
               <Link
                 href="/admin"
-                className="inline-flex items-center gap-1.5 font-mono text-label-tech uppercase tracking-wider text-on-surface-variant/75 hover:text-primary transition-colors"
+                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-surface-container border border-outline-variant/25 font-mono text-label-tech uppercase tracking-wider text-on-surface-variant/75 hover:text-primary hover:border-primary/40 transition-colors"
                 title="Founder Admin Console"
               >
                 <span className="material-symbols-outlined text-[14px]">
@@ -253,7 +243,17 @@ export default function Footer() {
                 </span>
                 <span>Admin</span>
               </Link>
+              <span
+                className="hidden sm:inline text-outline-variant/40"
+                aria-hidden="true"
+              >
+                •
+              </span>
+              <p>© {new Date().getFullYear()} {SITE_NAME}. All rights reserved.</p>
             </div>
+            <p className="font-mono text-label-tech tracking-wider text-center lg:text-right">
+              {TECH_SPECS_LINE}
+            </p>
           </div>
         </div>
       </div>
