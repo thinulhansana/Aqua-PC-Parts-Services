@@ -24,7 +24,11 @@ export const authConfig: NextAuthConfig = {
   callbacks: {
     authorized({ auth, request: { nextUrl } }) {
       const isLoggedIn = Boolean(auth?.user);
-      const isProtectedRoute = nextUrl.pathname.startsWith("/account");
+      const isProtectedRoute =
+        nextUrl.pathname === "/account" ||
+        nextUrl.pathname.startsWith("/account/") ||
+        nextUrl.pathname === "/admin" ||
+        nextUrl.pathname.startsWith("/admin/");
 
       if (isProtectedRoute && !isLoggedIn) {
         const loginUrl = new URL("/login", nextUrl.origin);

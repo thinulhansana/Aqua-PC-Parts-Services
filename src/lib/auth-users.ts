@@ -27,6 +27,15 @@ export interface PublicUserProfile {
   createdAt: string;
 }
 
+export interface AdminUserRecord extends PublicUserProfile {
+  updatedAt: string;
+}
+
+export interface AdminUsersListResult {
+  users: AdminUserRecord[];
+  storage: "d1" | "local";
+}
+
 interface D1UserRow {
   id: string;
   name: string;
@@ -39,6 +48,8 @@ interface D1UserRow {
   created_at: string;
   updated_at: string;
 }
+
+type D1AdminUserRow = Omit<D1UserRow, "password_hash">;
 
 // Track initialized D1 instances in this isolate
 const initializedDatabases = new WeakSet<object>();
@@ -70,6 +81,13 @@ function toPublicProfile(user: StoredUser): PublicUserProfile {
     phone: user.phone,
     rigSpecs: user.rigSpecs,
     createdAt: user.createdAt,
+  };
+}
+
+function toAdminUserRecord(user: StoredUser): AdminUserRecord {
+  return {
+    ...toPublicProfile(user),
+    updatedAt: user.updatedAt,
   };
 }
 
@@ -519,5 +537,46 @@ export async function updateUserProfileByEmail(
     user.updatedAt = now;
     await writeLocalUsers(users);
     return toPublicProfile(user);
+  });
+}
+
+export async function listAllUsers(): Promise<AdminUsersListResult> {
+  const db = await getD1Database();
+  if (db) {
+    await ensureD1Schema(db);
+    const result = await db
+      .prepare(
+        "SELECT id, name, email, provider, image, phone, rig_specs, created_at, updated_at FROM users ORDER BY created_at DESC"
+      )
+      .all<D1AdminUserRow>();
+
+    const rows = Array.isArray(result?.results) ? result.results : [];
+    const users: AdminUserRecord[] = rows.map((row) => ({
+      id: row.id,
+      name: row.name,
+      email: row.email,
+      provider: row.provider === "google" ? "google" : "credentials",
+      image: row.image ?? undefined,
+      phone: row.phone ?? undefined,
+      rigSpecs: row.rig_specs ?? undefined,
+      createdAt: row.created_at,
+      updatedAt: row.updated_at,
+    }));
+
+    return { users, storage: "d1" };
+  }
+
+  return serializeTask(async () => {
+    const users = await readLocalUsers();
+    const sorted = [...users].sort((a, b) => {
+      const timeA = new Date(a.createdAt).getTime();
+      const timeB = new Date(b.createdAt).getTime();
+      return (Number.isFinite(timeB) ? timeB : 0) - (Number.isFinite(timeA) ? timeA : 0);
+    });
+
+    return {
+      users: sorted.map(toAdminUserRecord),
+      storage: "local",
+    };
   });
 }

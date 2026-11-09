@@ -233,9 +233,27 @@ export default function Footer() {
         <div className="max-w-7xl mx-auto px-4 md:px-margin-md lg:px-margin-lg py-5">
           <div className="flex flex-col md:flex-row items-center justify-between gap-3 text-body-sm text-on-surface-variant/60">
             <p>© {new Date().getFullYear()} {SITE_NAME}. All rights reserved.</p>
-            <p className="font-mono text-label-tech tracking-wider">
-              {TECH_SPECS_LINE}
-            </p>
+            <div className="flex flex-wrap items-center justify-center md:justify-end gap-x-4 gap-y-2">
+              <p className="font-mono text-label-tech tracking-wider text-center md:text-right">
+                {TECH_SPECS_LINE}
+              </p>
+              <span
+                className="hidden sm:inline text-outline-variant/40"
+                aria-hidden="true"
+              >
+                •
+              </span>
+              <Link
+                href="/admin"
+                className="inline-flex items-center gap-1.5 font-mono text-label-tech uppercase tracking-wider text-on-surface-variant/75 hover:text-primary transition-colors"
+                title="Founder Admin Console"
+              >
+                <span className="material-symbols-outlined text-[14px]">
+                  admin_panel_settings
+                </span>
+                <span>Admin</span>
+              </Link>
+            </div>
           </div>
         </div>
       </div>
