@@ -19,7 +19,7 @@ export default function NotFound() {
           className="inline-flex items-center gap-space-xs px-space-md py-0.5 rounded-full bg-surface-container font-mono text-label-tech text-secondary border border-secondary/30"
         >
           <span className="w-1.5 h-1.5 rounded-full bg-secondary shadow-[0_0_8px_rgba(79,219,200,0.9)] animate-pulse" />
-          <span>TELEMETRY FAULT // ROUTE NOT FOUND</span>
+          <span>HTTP 404 // PAGE NOT FOUND</span>
         </motion.div>
 
         <motion.h1
@@ -40,10 +40,10 @@ export default function NotFound() {
           className="flex flex-col gap-space-xs"
         >
           <h2 className="font-syne text-headline-sm text-on-surface">
-            Memory Bus Void: Page Unmapped
+            This Route Couldn&apos;t Be Found
           </h2>
           <p className="text-body-md text-on-surface-variant">
-            The telemetry address requested does not match any authenticated lab bay or diagnostic queue on this server.
+            The page you requested may have moved or the URL may contain a typo. Jump back to Aqua PC Solutions home, browse our catalog, or contact our team.
           </p>
         </motion.div>
 
@@ -52,34 +52,29 @@ export default function NotFound() {
           initial="hidden"
           animate="visible"
           custom={3}
-          className="p-space-md rounded-xl bg-surface-container-low font-mono text-label-tech text-outline border border-outline-variant/15 w-full max-w-md"
-        >
-          <span>DIAGNOSTIC_QCODE: 0x00_NULL_POINTER_EXCEPTION</span>
-        </motion.div>
-
-        <motion.div
-          variants={fadeUpVariants}
-          initial="hidden"
-          animate="visible"
-          custom={4}
           className="pt-space-md flex flex-wrap items-center justify-center gap-space-md"
         >
           <Link
             href="/"
-            className="relative overflow-hidden group px-space-xl py-space-md rounded-xl bg-gradient-to-r from-primary to-secondary text-on-primary font-syne text-title-md font-bold shadow-cyan-glow hover:shadow-cyan-glow-lg hover:-translate-y-0.5 transition-all"
+            className="relative overflow-hidden group px-space-xl py-space-md rounded-xl bg-gradient-to-r from-primary to-secondary text-surface font-syne text-title-md font-bold shadow-cyan-glow hover:shadow-cyan-glow-lg hover:-translate-y-0.5 transition-all"
           >
             <span className="absolute inset-0 animate-shimmer opacity-0 group-hover:opacity-100 transition-opacity" />
-            <span className="relative z-10">Return to Command Center</span>
+            <span className="relative z-10">Return Home</span>
+          </Link>
+          <Link
+            href="/shop"
+            className="px-space-xl py-space-md rounded-xl bg-surface-container-high hover:bg-surface-bright text-on-surface font-syne text-title-md border border-outline-variant/30 transition-all hover:border-primary/40 hover:-translate-y-0.5"
+          >
+            Browse PC Parts
           </Link>
           <Link
             href="/contact"
-            className="px-space-xl py-space-md rounded-xl bg-surface-container-high hover:bg-surface-bright text-on-surface font-syne text-title-md border border-outline-variant/30 transition-all hover:border-primary/40 hover:-translate-y-0.5"
+            className="px-space-xl py-space-md rounded-xl bg-surface-container hover:bg-surface-container-high text-on-surface-variant hover:text-on-surface font-syne text-title-md border border-outline-variant/20 transition-all hover:-translate-y-0.5"
           >
-            Contact Lab Support
+            Contact Us
           </Link>
         </motion.div>
       </div>
     </div>
   );
 }
-

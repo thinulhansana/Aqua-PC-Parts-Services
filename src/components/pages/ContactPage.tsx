@@ -5,6 +5,18 @@ import dynamic from "next/dynamic";
 import { motion, AnimatePresence } from "framer-motion";
 import { useSession } from "next-auth/react";
 import { useAuthModal } from "@/components/auth/AuthContext";
+import { TOTAL_SHOP_ITEMS, buildWhatsAppUrl } from "@/lib/shopData";
+import {
+  SITE_NAME,
+  SITE_LOCATION,
+  SITE_PHONE_DISPLAY,
+  SITE_PHONE_HREF,
+  SITE_EMAIL,
+  SITE_EMAIL_HREF,
+  SITE_WHATSAPP_URL,
+  SITE_MAPS_URL,
+  SITE_HOURS,
+} from "@/lib/constants";
 import {
   RevealSection,
   SpotlightCard,
@@ -24,7 +36,7 @@ const TechnicianChat = dynamic(
           <span className="material-symbols-outlined text-[32px] text-primary animate-spin">
             progress_activity
           </span>
-          <span>Connecting to Technician Console...</span>
+          <span>Loading Direct WhatsApp Console...</span>
         </div>
       </div>
     ),
@@ -40,7 +52,7 @@ const TicketTracer = dynamic(
           <span className="material-symbols-outlined text-[32px] text-secondary animate-spin">
             progress_activity
           </span>
-          <span>Initializing Real-Time Telemetry Link...</span>
+          <span>Loading Ticket Inquiry Console...</span>
         </div>
       </div>
     ),
@@ -48,11 +60,11 @@ const TicketTracer = dynamic(
 );
 
 const CATEGORY_LABELS: Record<string, string> = {
-  emergency: "Emergency Repair / No POST Diagnostic",
-  cooling: "Liquid Cooling Flush & Hard-Line Service",
-  "custom-build": "Custom Enthusiast PC Build Consultation",
-  "hardware-purchase": "Hardware Sourcing & Binning Procurement",
-  workstation: "Corporate Multi-GPU Workstation Inquiry",
+  emergency: "Repair / No-POST Diagnostic",
+  cooling: "Thermal Service & Cooling Upgrade",
+  "custom-build": "Custom PC Build Consultation",
+  "hardware-purchase": "PC Parts Quote & Sourcing",
+  workstation: "Business / Studio Workstation Support",
 };
 
 const URGENCY_LABELS: Record<
@@ -70,8 +82,8 @@ const URGENCY_LABELS: Record<
     color: "text-primary",
   },
   emergency: {
-    label: "Emergency Rush",
-    time: "Same-Day Direct",
+    label: "Same-Day Priority",
+    time: "Urgent Triage",
     color: "text-secondary",
   },
 };
@@ -150,14 +162,14 @@ export default function ContactPage() {
       const payload = {
         "Ticket ID": generatedTicket,
         "Client Full Name": formData.fullName,
-        "Diagnostic Alert Email": formData.email,
-        "SMS Phone": formData.phone || "Not provided",
-        "Primary Service Category":
+        "Contact Email": formData.email,
+        "Phone / WhatsApp": formData.phone || "Not provided",
+        "Service Category":
           CATEGORY_LABELS[formData.category] || formData.category,
-        "Hardware Spec Blueprint": formData.specs || "None specified",
-        "Symptom Log & Scope": formData.description,
-        "Triage Urgency Protocol": formData.urgency.toUpperCase(),
-        _subject: `[Aqua Lab Requisition] ${generatedTicket} - ${formData.fullName}`,
+        "PC Specs": formData.specs || "None specified",
+        "Issue & Request Details": formData.description,
+        "Priority Level": formData.urgency.toUpperCase(),
+        _subject: `[${SITE_NAME} Intake] ${generatedTicket} - ${formData.fullName}`,
       };
 
       const response = await fetch("https://formspree.io/f/mljjkokj", {
@@ -183,14 +195,14 @@ export default function ContactPage() {
           );
         } else {
           setSubmitError(
-            "Transmission rejected by intake gateway. Please verify your email format or try again."
+            "Submission could not be completed. Please verify your email address or contact us directly on WhatsApp."
           );
         }
       }
     } catch (err) {
-      console.error("Formspree submission error:", err);
+      console.error("Form submission error:", err);
       setSubmitError(
-        "Network telemetry timeout. Please verify connectivity or call our hotline at +94 78 819 4535 or reach us via WhatsApp."
+        `Network timeout. Please check your connection, call ${SITE_PHONE_DISPLAY}, or message us on WhatsApp.`
       );
     } finally {
       setIsSubmitting(false);
@@ -227,6 +239,12 @@ export default function ContactPage() {
     }
   };
 
+  const ticketWhatsAppUrl = buildWhatsAppUrl(
+    `Hi ${SITE_NAME}, I just submitted Ticket ${ticketId}.\nName: ${formData.fullName}\nService: ${CATEGORY_LABELS[formData.category] || formData.category
+    }\nPriority: ${formData.urgency.toUpperCase()}${formData.specs ? `\nSpecs: ${formData.specs}` : ""
+    }\nDetails: ${formData.description}`
+  );
+
   return (
     <div className="flex flex-col w-full">
       {/* ── Top Ambient Glow & Header Block ── */}
@@ -242,20 +260,20 @@ export default function ContactPage() {
               initial="hidden"
               animate="visible"
               custom={0}
-              className="flex items-center gap-space-sm"
+              className="flex flex-wrap items-center gap-space-sm"
             >
               <span className="inline-flex items-center gap-space-xs px-space-sm py-0.5 rounded-full bg-surface-container font-mono text-label-tech text-secondary border border-secondary/30">
                 <span className="w-1.5 h-1.5 rounded-full bg-secondary shadow-[0_0_8px_rgba(79,219,200,0.9)] animate-pulse" />
-                TRANSMISSION PIPELINE ACTIVE
+                WORKSHOP &amp; INTAKE ACTIVE
               </span>
-              <span className="font-mono text-label-tech text-outline">
-                MAIN LAB // STATION #04
+              <span className="font-mono text-label-tech text-outline uppercase">
+                {SITE_LOCATION} // ONLINE &amp; IN-STORE
               </span>
             </motion.div>
             <h1 className="font-syne text-display-hero-mobile lg:text-headline-lg text-on-surface uppercase tracking-tight">
-              <MaskedReveal delay={0.05}>Get in Touch with Our</MaskedReveal>{" "}
+              <MaskedReveal delay={0.05}>Get in Touch with</MaskedReveal>{" "}
               <MaskedReveal delay={0.18}>
-                <span className="text-shimmer">Hardware Engineers &amp; Diagnostic Lab</span>
+                <span className="text-shimmer">{SITE_NAME}</span>
               </MaskedReveal>
             </h1>
             <motion.p
@@ -265,11 +283,11 @@ export default function ContactPage() {
               custom={2}
               className="text-body-lg text-on-surface-variant max-w-2xl"
             >
-              Whether your custom loop experienced thermal saturation, your rig fails POST diagnostics, or you need architecture-level silicon matching, our bench technicians respond within clock cycles.
+              Request part pricing in LKR, plan a custom PC build, or book diagnostics and thermal servicing at our {SITE_LOCATION} workshop.
             </motion.p>
           </div>
 
-          {/* Quick Telemetry Strip */}
+          {/* Honest Workshop Snapshot Strip */}
           <motion.div
             variants={fadeUpVariants}
             initial="hidden"
@@ -280,14 +298,14 @@ export default function ContactPage() {
             <SpotlightCard className="p-space-md rounded-xl bg-surface-container-low flex items-center justify-between shadow-sm border border-outline-variant/15 hover:border-primary/40 hover:-translate-y-1 transition-all duration-300">
               <div className="relative z-10">
                 <span className="font-mono text-[10px] text-outline block">
-                  CURRENT BENCH LOAD
+                  CATALOGED HARDWARE
                 </span>
                 <span className="font-syne text-headline-sm text-on-surface">
-                  <AnimatedNumber value="14 Units" />
+                  <AnimatedNumber value={`${TOTAL_SHOP_ITEMS} Items`} />
                 </span>
               </div>
               <span className="material-symbols-outlined text-primary text-[28px] relative z-10 group-hover:scale-110 transition-transform">
-                speed
+                inventory_2
               </span>
             </SpotlightCard>
             <SpotlightCard
@@ -296,40 +314,40 @@ export default function ContactPage() {
             >
               <div className="relative z-10">
                 <span className="font-mono text-[10px] text-outline block">
-                  AVG INTAKE TRIAGE
+                  TESTING WARRANTY
                 </span>
                 <span className="font-syne text-headline-sm text-secondary">
-                  <AnimatedNumber value="18 Mins" />
+                  <AnimatedNumber value="06 Months" />
                 </span>
               </div>
               <span className="material-symbols-outlined text-secondary text-[28px] relative z-10 group-hover:scale-110 transition-transform">
-                timer
+                verified
               </span>
             </SpotlightCard>
             <SpotlightCard className="p-space-md rounded-xl bg-surface-container-low flex items-center justify-between shadow-sm border border-outline-variant/15 hover:border-tertiary/40 hover:-translate-y-1 transition-all duration-300">
               <div className="relative z-10">
                 <span className="font-mono text-[10px] text-outline block">
-                  LEAK TEST RIGS
+                  BURN-IN VALIDATION
                 </span>
                 <span className="font-syne text-headline-sm text-tertiary">
-                  <AnimatedNumber value="6 Available" />
+                  <AnimatedNumber value="24 Hours" />
                 </span>
               </div>
               <span className="material-symbols-outlined text-tertiary text-[28px] relative z-10 group-hover:scale-110 transition-transform">
-                water_drop
+                speed
               </span>
             </SpotlightCard>
             <SpotlightCard className="p-space-md rounded-xl bg-surface-container-low flex items-center justify-between shadow-sm border border-outline-variant/15 hover:border-primary/40 hover:-translate-y-1 transition-all duration-300">
               <div className="relative z-10">
                 <span className="font-mono text-[10px] text-outline block">
-                  REPAIR SUCCESS RATE
+                  DELIVERY COVERAGE
                 </span>
                 <span className="font-syne text-headline-sm text-primary">
-                  <AnimatedNumber value="99.4%" />
+                  Island-wide
                 </span>
               </div>
               <span className="material-symbols-outlined text-primary text-[28px] relative z-10 group-hover:scale-110 transition-transform">
-                verified
+                local_shipping
               </span>
             </SpotlightCard>
           </motion.div>
@@ -368,19 +386,19 @@ export default function ContactPage() {
                       <div className="inline-flex items-center gap-space-xs px-space-sm py-0.5 rounded-full bg-secondary/10 border border-secondary/30 w-fit mx-auto sm:mx-0">
                         <span className="w-2 h-2 rounded-full bg-secondary shadow-[0_0_8px_rgba(79,219,200,0.9)] animate-pulse" />
                         <span className="font-mono text-label-tech text-secondary tracking-wider uppercase">
-                          Transmission Confirmed // Bench Ticket Generated
+                          Request Submitted // Ticket Reference Issued
                         </span>
                       </div>
                       <h2 className="font-syne text-headline-md text-on-surface">
                         Thank You, {formData.fullName}
                       </h2>
                       <p className="text-body-md text-on-surface-variant max-w-xl">
-                        Your direct inquiry and hardware telemetry profile have been successfully delivered to the Aqua PC Parts &amp; Services cleanroom intake gateway.
+                        Your inquiry and system details have been delivered to the {SITE_NAME} workshop intake desk. Save your reference number below or send it directly on WhatsApp for faster follow-up.
                       </p>
                     </div>
                   </div>
 
-                  {/* Authenticated Intake Dossier Card */}
+                  {/* Ticket Summary Card */}
                   <div className="p-space-lg rounded-xl bg-surface-container flex flex-col gap-space-md border border-primary/30 shadow-inner relative overflow-hidden">
                     <div className="absolute top-0 right-0 w-36 h-36 bg-primary/10 rounded-full blur-2xl pointer-events-none" />
 
@@ -398,8 +416,8 @@ export default function ContactPage() {
                         type="button"
                         onClick={handleCopyTicket}
                         className={`inline-flex items-center gap-space-xs px-space-md py-space-xs rounded-lg font-mono text-label-tech transition-all border ${copied
-                          ? "bg-secondary/20 text-secondary border-secondary/40 shadow-sm"
-                          : "bg-surface-container-high hover:bg-surface-bright text-on-surface border-outline-variant/30"
+                            ? "bg-secondary/20 text-secondary border-secondary/40 shadow-sm"
+                            : "bg-surface-container-high hover:bg-surface-bright text-on-surface border-outline-variant/30"
                           }`}
                       >
                         <span className="material-symbols-outlined text-[16px]">
@@ -409,11 +427,11 @@ export default function ContactPage() {
                       </button>
                     </div>
 
-                    {/* Telemetry Summary Grid */}
+                    {/* Summary Grid */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-space-sm text-body-sm">
                       <div className="p-space-sm rounded-lg bg-surface-container-high/60 flex flex-col border border-outline-variant/10">
                         <span className="font-mono text-[10px] text-outline uppercase">
-                          Client Diagnostic Email
+                          Contact Email
                         </span>
                         <span className="font-mono text-body-sm text-on-surface truncate">
                           {formData.email}
@@ -421,7 +439,7 @@ export default function ContactPage() {
                       </div>
                       <div className="p-space-sm rounded-lg bg-surface-container-high/60 flex flex-col border border-outline-variant/10">
                         <span className="font-mono text-[10px] text-outline uppercase">
-                          Triage Protocol SLA
+                          Requested Turnaround
                         </span>
                         <span
                           className={`font-mono text-body-sm font-bold ${URGENCY_LABELS[formData.urgency]?.color || "text-primary"
@@ -433,7 +451,7 @@ export default function ContactPage() {
                       </div>
                       <div className="p-space-sm rounded-lg bg-surface-container-high/60 flex flex-col sm:col-span-2 border border-outline-variant/10">
                         <span className="font-mono text-[10px] text-outline uppercase">
-                          Selected Service Scope
+                          Service Category
                         </span>
                         <span className="font-syne text-body-md text-on-surface">
                           {CATEGORY_LABELS[formData.category] || formData.category}
@@ -442,7 +460,7 @@ export default function ContactPage() {
                       {formData.specs && (
                         <div className="p-space-sm rounded-lg bg-surface-container-high/60 flex flex-col sm:col-span-2 border border-outline-variant/10">
                           <span className="font-mono text-[10px] text-outline uppercase">
-                            Hardware Spec Blueprint
+                            System Specs Provided
                           </span>
                           <span className="font-mono text-[12px] text-on-surface-variant truncate">
                             {formData.specs}
@@ -452,10 +470,10 @@ export default function ContactPage() {
                     </div>
                   </div>
 
-                  {/* 3-Step Cleanroom Intake Pipeline */}
+                  {/* 3-Step Intake Pipeline */}
                   <div className="flex flex-col gap-space-xs">
                     <span className="font-mono text-[11px] text-outline uppercase tracking-wider">
-                      Automated Laboratory Dispatch Pipeline
+                      Next Steps
                     </span>
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-space-sm">
                       <div className="p-space-sm rounded-lg bg-surface-container/70 flex items-start gap-space-xs border border-outline-variant/15">
@@ -464,23 +482,23 @@ export default function ContactPage() {
                         </span>
                         <div className="flex flex-col">
                           <span className="font-syne text-body-sm font-semibold text-on-surface">
-                            Formspree Sync
+                            Requisition Logged
                           </span>
                           <span className="text-[11px] text-on-surface-variant">
-                            Delivered to lead engineering console
+                            Sent to our intake inbox
                           </span>
                         </div>
                       </div>
                       <div className="p-space-sm rounded-lg bg-surface-container/70 flex items-start gap-space-xs border border-outline-variant/15">
-                        <span className="material-symbols-outlined text-primary text-[18px] shrink-0 mt-0.5 animate-pulse">
-                          sensors
+                        <span className="material-symbols-outlined text-primary text-[18px] shrink-0 mt-0.5">
+                          engineering
                         </span>
                         <div className="flex flex-col">
                           <span className="font-syne text-body-sm font-semibold text-on-surface">
-                            Bench Allocation
+                            Workshop Review
                           </span>
                           <span className="text-[11px] text-on-surface-variant">
-                            Assigned to Tech Lab Bay #01
+                            Specs &amp; parts checked in {SITE_LOCATION}
                           </span>
                         </div>
                       </div>
@@ -490,10 +508,10 @@ export default function ContactPage() {
                         </span>
                         <div className="flex flex-col">
                           <span className="font-syne text-body-sm font-semibold text-on-surface">
-                            Diagnostic Dossier
+                            Direct LKR Quote
                           </span>
                           <span className="text-[11px] text-on-surface-variant">
-                            Email dispatch confirmation sent
+                            Sent via email, call, or WhatsApp
                           </span>
                         </div>
                       </div>
@@ -501,26 +519,37 @@ export default function ContactPage() {
                   </div>
 
                   {/* Action Buttons */}
-                  <div className="pt-space-sm flex flex-col sm:flex-row items-center gap-space-md">
-                    <button
-                      type="button"
-                      onClick={handleResetForm}
-                      className="w-full sm:w-auto px-space-lg py-space-sm rounded-lg bg-surface-container-high hover:bg-surface-bright text-on-surface font-syne text-body-md border border-outline-variant/30 transition-all flex items-center justify-center gap-space-xs"
+                  <div className="pt-space-sm flex flex-wrap items-center gap-space-sm">
+                    <a
+                      href={ticketWhatsAppUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center justify-center gap-space-xs px-space-lg py-space-sm rounded-lg bg-[#25D366] hover:bg-[#1ebe5a] text-white font-syne text-body-md font-bold transition-all"
                     >
+                      <span>Share Ticket on WhatsApp</span>
                       <span className="material-symbols-outlined text-[18px]">
-                        restart_alt
+                        open_in_new
                       </span>
-                      <span>Submit Another Requisition</span>
-                    </button>
+                    </a>
                     <button
                       type="button"
                       onClick={scrollToTracer}
-                      className="w-full sm:w-auto px-space-lg py-space-sm rounded-lg bg-gradient-to-r from-primary to-secondary text-surface font-syne text-body-md font-bold transition-all shadow-cyan-glow hover:shadow-cyan-glow-lg flex items-center justify-center gap-space-xs"
+                      className="px-space-lg py-space-sm rounded-lg bg-gradient-to-r from-primary to-secondary text-surface font-syne text-body-md font-bold transition-all shadow-cyan-glow hover:shadow-cyan-glow-lg flex items-center justify-center gap-space-xs"
                     >
                       <span className="material-symbols-outlined text-[18px]">
                         query_stats
                       </span>
-                      <span>Trace Ticket in Real-Time</span>
+                      <span>Check Ticket Status</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={handleResetForm}
+                      className="px-space-lg py-space-sm rounded-lg bg-surface-container-high hover:bg-surface-bright text-on-surface font-syne text-body-md border border-outline-variant/30 transition-all flex items-center justify-center gap-space-xs"
+                    >
+                      <span className="material-symbols-outlined text-[18px]">
+                        restart_alt
+                      </span>
+                      <span>Submit Another Request</span>
                     </button>
                   </div>
                 </motion.div>
@@ -529,10 +558,10 @@ export default function ContactPage() {
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-space-lg">
                     <div>
                       <span className="font-mono text-label-tech text-primary uppercase tracking-widest block">
-                        SECURE INTAKE // 01
+                        SERVICE &amp; QUOTE FORM // 01
                       </span>
                       <h2 className="font-syne text-headline-md text-on-surface">
-                        Repair Intake &amp; Quote Requisition
+                        Book a Repair, Build or Parts Quote
                       </h2>
                     </div>
                     <div className="flex items-center gap-2 shrink-0">
@@ -564,14 +593,13 @@ export default function ContactPage() {
                   </div>
 
                   <form onSubmit={handleSubmit} className="flex flex-col gap-space-md">
-                    {/* Error Banner if transmission fails */}
                     {submitError && (
                       <div className="p-space-md rounded-lg bg-error-container/20 text-on-error-container border border-error/40 flex items-start gap-space-sm text-body-sm">
                         <span className="material-symbols-outlined text-error text-[20px] shrink-0">
                           error
                         </span>
                         <div className="flex flex-col">
-                          <span className="font-bold">Transmission Interrupted</span>
+                          <span className="font-bold">Submission Interrupted</span>
                           <span>{submitError}</span>
                         </div>
                       </div>
@@ -584,13 +612,13 @@ export default function ContactPage() {
                           className="font-mono text-label-badge text-on-surface-variant uppercase tracking-wider"
                           htmlFor="full-name"
                         >
-                          Client Full Name *
+                          Full Name *
                         </label>
                         <div className="relative">
                           <input
                             className="w-full pl-10 pr-space-md py-space-sm rounded-lg bg-surface-container text-on-surface placeholder:text-outline text-body-md focus:outline-none focus:ring-2 focus:ring-primary transition-all border border-outline-variant/20 disabled:opacity-60"
                             id="full-name"
-                            placeholder="Dr. Evelyn Vance"
+                            placeholder="Kasun Perera"
                             required
                             type="text"
                             disabled={isSubmitting}
@@ -609,7 +637,7 @@ export default function ContactPage() {
                           className="font-mono text-label-badge text-on-surface-variant uppercase tracking-wider"
                           htmlFor="email"
                         >
-                          Diagnostic Alert Email *
+                          Email Address *
                         </label>
                         <div className="relative">
                           <input
@@ -638,7 +666,7 @@ export default function ContactPage() {
                           className="font-mono text-label-badge text-on-surface-variant uppercase tracking-wider"
                           htmlFor="phone"
                         >
-                          SMS Telemetry Phone
+                          Phone / WhatsApp Number
                         </label>
                         <div className="relative">
                           <input
@@ -662,7 +690,7 @@ export default function ContactPage() {
                           className="font-mono text-label-badge text-on-surface-variant uppercase tracking-wider"
                           htmlFor="category"
                         >
-                          Primary Service Category *
+                          Service Category *
                         </label>
                         <div className="relative">
                           <select
@@ -676,19 +704,19 @@ export default function ContactPage() {
                             }
                           >
                             <option value="emergency">
-                              Emergency Repair / No POST Diagnostic
+                              Repair / No-POST Diagnostic
                             </option>
                             <option value="cooling">
-                              Liquid Cooling Flush &amp; Hard-Line Service
+                              Thermal Service &amp; Cooling Upgrade
                             </option>
                             <option value="custom-build">
-                              Custom Enthusiast PC Build Consultation
+                              Custom PC Build Consultation
                             </option>
                             <option value="hardware-purchase">
-                              Hardware Sourcing &amp; Binning Procurement
+                              PC Parts Quote &amp; Sourcing
                             </option>
                             <option value="workstation">
-                              Corporate Multi-GPU Workstation Inquiry
+                              Business / Studio Workstation Support
                             </option>
                           </select>
                           <span className="material-symbols-outlined absolute left-3 top-2.5 text-outline text-[18px]">
@@ -707,13 +735,13 @@ export default function ContactPage() {
                         className="font-mono text-label-badge text-on-surface-variant uppercase tracking-wider"
                         htmlFor="specs"
                       >
-                        Current Rig Spec Blueprint (CPU, GPU, Motherboard, PSU)
+                        Current PC Specs or Requested Parts (Optional)
                       </label>
                       <div className="relative">
                         <input
                           className="w-full pl-10 pr-space-md py-space-sm rounded-lg bg-surface-container text-on-surface placeholder:text-outline font-mono text-label-tech focus:outline-none focus:ring-2 focus:ring-primary transition-all border border-outline-variant/20 disabled:opacity-60"
                           id="specs"
-                          placeholder="e.g. AMD Ryzen 9 7950X3D / ASUS ROG Crosshair Hero / RTX 4090 OC / Seasonic 1200W"
+                          placeholder="e.g. Ryzen 7 5700X / B550 Board / RTX 3060 12GB / 16GB DDR4"
                           type="text"
                           disabled={isSubmitting}
                           value={formData.specs}
@@ -727,18 +755,18 @@ export default function ContactPage() {
                       </div>
                     </div>
 
-                    {/* Description / Symptom Log */}
+                    {/* Description */}
                     <div className="flex flex-col gap-space-xs">
                       <label
                         className="font-mono text-label-badge text-on-surface-variant uppercase tracking-wider"
                         htmlFor="description"
                       >
-                        Symptom Log / Overclock Details / Project Scope *
+                        Issue Description, Build Budget (LKR), or Parts Needed *
                       </label>
                       <textarea
                         className="w-full p-space-md rounded-lg bg-surface-container text-on-surface placeholder:text-outline text-body-md focus:outline-none focus:ring-2 focus:ring-primary transition-all resize-y border border-outline-variant/20 disabled:opacity-60"
                         id="description"
-                        placeholder="Detail symptoms: e.g. Q-Code 00 on boot, pump tachometer reading zero, sudden thermal throttle to 98°C under rendering, or desired custom hardline aesthetic..."
+                        placeholder="Describe your issue or request (e.g. no display on startup, overheating during gaming, looking for an RTX 3060 / B550 upgrade, or planning a Rs. 250,000 gaming build)..."
                         required
                         rows={4}
                         disabled={isSubmitting}
@@ -749,10 +777,10 @@ export default function ContactPage() {
                       />
                     </div>
 
-                    {/* Urgency Tier Matrix Selector */}
+                    {/* Urgency Selector */}
                     <div className="flex flex-col gap-space-xs pt-space-xs">
                       <span className="font-mono text-label-badge text-on-surface-variant uppercase tracking-wider">
-                        Triage Urgency Protocol
+                        Preferred Turnaround
                       </span>
                       <div className="grid grid-cols-1 sm:grid-cols-3 gap-space-sm">
                         {[
@@ -760,29 +788,29 @@ export default function ContactPage() {
                             id: "standard",
                             title: "Standard",
                             time: "48 – 72 Hours",
-                            note: "Standard queue bench schedule",
+                            note: "Standard workshop queue",
                             color: "text-on-surface",
                           },
                           {
                             id: "express",
                             title: "Express 24h",
                             time: "Next Bench Slot",
-                            note: "Priority parts routing & test run",
+                            note: "Priority testing & parts check",
                             color: "text-primary",
                           },
                           {
                             id: "emergency",
-                            title: "Emergency Rush",
-                            time: "Same-Day Direct",
-                            note: "Immediate lead engineer assignment",
+                            title: "Same-Day Priority",
+                            time: "Urgent Triage",
+                            note: "Fastest workshop attention",
                             color: "text-secondary",
                           },
                         ].map((tier) => (
                           <label
                             key={tier.id}
                             className={`cursor-pointer relative p-space-md rounded-lg bg-surface-container hover:bg-surface-container-high transition-colors flex flex-col gap-1 text-left border ${formData.urgency === tier.id
-                              ? "border-primary bg-primary/10"
-                              : "border-outline-variant/20"
+                                ? "border-primary bg-primary/10"
+                                : "border-outline-variant/20"
                               } ${isSubmitting ? "opacity-60 cursor-not-allowed" : ""}`}
                           >
                             <input
@@ -802,8 +830,8 @@ export default function ContactPage() {
                               </span>
                               <span
                                 className={`w-2.5 h-2.5 rounded-full ${formData.urgency === tier.id
-                                  ? "bg-primary"
-                                  : "bg-outline"
+                                    ? "bg-primary"
+                                    : "bg-outline"
                                   }`}
                               />
                             </div>
@@ -818,18 +846,18 @@ export default function ContactPage() {
                       </div>
                     </div>
 
-                    {/* Submit Requisition Button with Sleek Loading Spinner */}
+                    {/* Submit Button */}
                     <div className="pt-space-sm flex flex-col sm:flex-row items-center justify-between gap-space-md">
                       <div className="flex items-center gap-space-xs text-outline font-mono text-label-tech">
                         <span className="material-symbols-outlined text-[16px] text-secondary">
                           verified_user
                         </span>
-                        <span>SHA-256 Encrypted Lab Intake Ticket</span>
+                        <span>Sent directly to {SITE_NAME} Intake Desk</span>
                       </div>
                       <button
                         className={`w-full sm:w-auto px-space-xl py-space-md rounded-lg bg-gradient-to-r from-primary to-secondary text-surface font-syne text-title-md font-bold transition-all shadow-cyan-glow flex items-center justify-center gap-space-sm ${isSubmitting
-                          ? "cursor-not-allowed opacity-85"
-                          : "hover:shadow-cyan-glow-lg hover:-translate-y-0.5 cursor-pointer"
+                            ? "cursor-not-allowed opacity-85"
+                            : "hover:shadow-cyan-glow-lg hover:-translate-y-0.5 cursor-pointer"
                           }`}
                         type="submit"
                         disabled={isSubmitting}
@@ -856,14 +884,14 @@ export default function ContactPage() {
                                 d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                               />
                             </svg>
-                            <span>Transmitting Requisition...</span>
+                            <span>Sending Request...</span>
                           </>
                         ) : (
                           <>
                             <span className="material-symbols-outlined text-[20px]">
                               assignment_turned_in
                             </span>
-                            <span>Request Technical Quote &amp; Intake Ticket</span>
+                            <span>Submit Request &amp; Get Ticket ID</span>
                           </>
                         )}
                       </button>
@@ -874,7 +902,7 @@ export default function ContactPage() {
             </AnimatePresence>
           </div>
 
-          {/* Right Column: Workshop Headquarters & Channels */}
+          {/* Right Column: Workshop Location & Channels */}
           <div className="lg:col-span-5 flex flex-col gap-space-lg">
             {/* HQ Facility Card */}
             <div className="bg-surface-container-low rounded-xl p-space-lg shadow-xl flex flex-col gap-space-md border border-outline-variant/20">
@@ -882,19 +910,19 @@ export default function ContactPage() {
                 <div className="flex items-center gap-space-xs">
                   <span className="w-2.5 h-2.5 rounded-full bg-secondary shadow-[0_0_8px_rgba(79,219,200,0.8)]" />
                   <span className="font-mono text-label-tech text-secondary">
-                    HEADQUARTERS &amp; CLEANROOM
+                    WORKSHOP &amp; TEST LAB
                   </span>
                 </div>
                 <span className="font-mono text-label-badge text-outline border border-outline-variant/30 px-2 py-0.5 rounded">
-                  CLASS-10K LAB
+                  ESD-SAFE BENCH
                 </span>
               </div>
               <div className="flex flex-col gap-1">
                 <h3 className="font-syne text-title-md text-on-surface">
-                  Aqua PC Tech Lab
+                  {SITE_NAME}
                 </h3>
                 <p className="text-body-md text-on-surface-variant">
-                  Embilipitiya, Sri Lanka
+                  {SITE_LOCATION}
                 </p>
               </div>
 
@@ -908,32 +936,32 @@ export default function ContactPage() {
                     Monday – Friday
                   </span>
                   <span className="text-on-surface font-mono text-label-tech">
-                    8:00 AM – 7:00 PM
+                    {SITE_HOURS.weekdays}
                   </span>
                 </div>
                 <div className="flex justify-between items-center text-body-sm">
                   <span className="text-on-surface-variant">
-                    Saturday Diagnostics
+                    Saturday
                   </span>
                   <span className="text-on-surface font-mono text-label-tech">
-                    10:00 AM – 5:00 PM
+                    {SITE_HOURS.saturday}
                   </span>
                 </div>
                 <div className="flex justify-between items-center text-body-sm pt-space-xs border-t border-outline-variant/10">
                   <span className="text-primary font-semibold">
-                    Online Emergency Intake
+                    Online Intake &amp; Quotes
                   </span>
                   <span className="px-space-xs py-0.5 rounded bg-primary/20 text-primary font-mono text-label-tech">
-                    24/7/365
+                    {SITE_HOURS.online}
                   </span>
                 </div>
               </div>
 
-              {/* Live Interactive Google Map Component */}
+              {/* Embedded Google Map */}
               <div className="w-full rounded-xl overflow-hidden border border-outline-variant/20 bg-surface-container shadow-inner flex flex-col">
                 <div className="w-full h-64 relative bg-surface-container-high">
                   <iframe
-                    title="Aqua PC Tech Lab - Embilipitiya, Sri Lanka"
+                    title={`${SITE_NAME} - ${SITE_LOCATION}`}
                     src="https://maps.google.com/maps?q=Embilipitiya,+Sri+Lanka&t=&z=14&ie=UTF8&iwloc=&output=embed"
                     className="w-full h-full border-0"
                     loading="lazy"
@@ -947,11 +975,11 @@ export default function ContactPage() {
                       location_on
                     </span>
                     <span className="font-mono text-label-tech text-on-surface">
-                      Embilipitiya, Sri Lanka
+                      {SITE_LOCATION}
                     </span>
                   </div>
                   <a
-                    href="https://www.google.com/maps/search/?api=1&query=Embilipitiya,+Sri+Lanka"
+                    href={SITE_MAPS_URL}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-surface-container-high hover:bg-surface-bright text-primary text-body-sm font-medium transition-colors border border-outline-variant/30"
@@ -968,12 +996,12 @@ export default function ContactPage() {
             {/* Direct Channels */}
             <div className="bg-surface-container-low rounded-xl p-space-lg shadow-xl flex flex-col gap-space-md border border-outline-variant/20">
               <span className="font-mono text-label-tech text-primary uppercase tracking-widest">
-                RAPID TELEMETRY CHANNELS
+                DIRECT CONTACT CHANNELS
               </span>
               <div className="grid grid-cols-1 gap-space-sm">
                 <a
                   className="p-space-md rounded-lg bg-surface-container hover:bg-surface-container-high transition-all flex items-center justify-between group border border-outline-variant/15 hover:border-primary/40"
-                  href="tel:+94788194535"
+                  href={SITE_PHONE_HREF}
                 >
                   <div className="flex items-center gap-space-md">
                     <div className="w-10 h-10 rounded-lg bg-surface-container-high flex items-center justify-center text-primary group-hover:scale-105 transition-transform border border-primary/20">
@@ -983,10 +1011,10 @@ export default function ContactPage() {
                     </div>
                     <div>
                       <span className="font-syne text-title-md text-on-surface block">
-                        Repair &amp; Diagnostic Hotline
+                        Direct Call &amp; Support Line
                       </span>
                       <span className="font-mono text-telemetry-num text-outline group-hover:text-primary transition-colors">
-                        +94 78 819 4535
+                        {SITE_PHONE_DISPLAY}
                       </span>
                     </div>
                   </div>
@@ -997,7 +1025,7 @@ export default function ContactPage() {
 
                 <a
                   className="p-space-md rounded-lg bg-surface-container hover:bg-surface-container-high transition-all flex items-center justify-between group border border-outline-variant/15 hover:border-secondary/40"
-                  href="mailto:thinulhansana.business@gmail.com"
+                  href={SITE_EMAIL_HREF}
                 >
                   <div className="flex items-center gap-space-md">
                     <div className="w-10 h-10 rounded-lg bg-surface-container-high flex items-center justify-center text-secondary group-hover:scale-105 transition-transform border border-secondary/20">
@@ -1005,22 +1033,22 @@ export default function ContactPage() {
                         mail
                       </span>
                     </div>
-                    <div>
+                    <div className="min-w-0">
                       <span className="font-syne text-title-md text-on-surface block">
-                        Direct Inquiries &amp; Orders
+                        Direct Email &amp; Quotes
                       </span>
-                      <span className="font-mono text-telemetry-num text-outline group-hover:text-secondary transition-colors">
-                        thinulhansana.business@gmail.com
+                      <span className="font-mono text-telemetry-num text-outline group-hover:text-secondary transition-colors break-all">
+                        {SITE_EMAIL}
                       </span>
                     </div>
                   </div>
-                  <span className="material-symbols-outlined text-outline group-hover:text-on-surface transition-colors">
+                  <span className="material-symbols-outlined text-outline group-hover:text-on-surface transition-colors shrink-0">
                     chevron_right
                   </span>
                 </a>
 
                 <a
-                  href="https://wa.me/message/CYZRQDEHLIRZF1"
+                  href={SITE_WHATSAPP_URL}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="p-space-md rounded-lg bg-gradient-to-br from-surface-container to-surface-container-high hover:border-[#25D366]/50 transition-all flex items-center justify-between group border border-outline-variant/20"
@@ -1041,7 +1069,7 @@ export default function ContactPage() {
                         WhatsApp Instant Support
                       </span>
                       <span className="font-mono text-label-tech text-outline">
-                        Direct Inquiry &amp; Availability
+                        Fast Quotes &amp; Stock Checks
                       </span>
                     </div>
                   </div>
@@ -1055,7 +1083,7 @@ export default function ContactPage() {
         </div>
       </section>
 
-      {/* ── Out-of-State Emergency Drop-Off & Mail-In Section ── */}
+      {/* ── Sri Lanka Courier & Safe Drop-Off Guide ── */}
       <RevealSection className="max-w-[1440px] mx-auto px-gutter-lg pb-space-2xl w-full">
         <div className="bg-surface-container-low rounded-xl p-space-lg sm:p-space-xl shadow-xl relative overflow-hidden border border-outline-variant/20">
           <motion.div
@@ -1066,28 +1094,32 @@ export default function ContactPage() {
             <div className="flex flex-col gap-space-xs max-w-2xl">
               <div className="flex items-center gap-space-xs">
                 <span className="material-symbols-outlined text-secondary text-[22px]">
-                  flight_takeoff
+                  local_shipping
                 </span>
                 <span className="font-mono text-label-tech text-secondary uppercase tracking-widest">
-                  DOMESTIC &amp; GLOBAL LOGISTICS
+                  SRI LANKA COURIER &amp; IN-STORE DROP-OFF
                 </span>
               </div>
               <h2 className="font-syne text-headline-md text-on-surface">
-                Out-of-State Mail-In Diagnostic Protocol
+                Island-Wide Courier &amp; Safe Packing Guide
               </h2>
               <p className="text-body-md text-on-surface-variant">
-                Sending a custom rigid loop PC or an unshelled flagship GPU? Follow our lab-standard packing architecture to ensure zero mechanical deflection or transit shock.
+                Outside {SITE_LOCATION}? Follow these quick packing steps when sending a PC, motherboard, or graphics card via Sri Lankan courier so it arrives safely at our bench.
               </p>
             </div>
-            <button
+            <a
+              href={buildWhatsAppUrl(
+                `Hi ${SITE_NAME}, I need help packing and sending my PC / component via Sri Lanka courier for service.`
+              )}
+              target="_blank"
+              rel="noopener noreferrer"
               className="inline-flex items-center gap-space-xs px-space-lg py-space-sm rounded-lg bg-surface-container hover:bg-surface-bright text-primary font-syne text-title-md transition-all shadow-sm self-start md:self-auto border border-primary/20 hover:border-primary/50 hover:-translate-y-0.5"
-              type="button"
             >
               <span className="material-symbols-outlined text-[20px]">
-                download
+                support_agent
               </span>
-              <span>Download Shipping Foam Cutout Template</span>
-            </button>
+              <span>Get Courier Packing Help</span>
+            </a>
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-gutter">
@@ -1099,20 +1131,20 @@ export default function ContactPage() {
                     01
                   </span>
                   <span className="material-symbols-outlined text-outline text-[24px] group-hover:text-primary transition-colors">
-                    invert_colors_off
+                    inventory
                   </span>
                 </div>
                 <div className="flex flex-col gap-space-xs relative z-10">
                   <h3 className="font-syne text-title-md text-on-surface">
-                    Loop Draining &amp; Instapak
+                    Unseat GPUs &amp; Heavy Coolers
                   </h3>
                   <p className="text-body-md text-on-surface-variant">
-                    Fully drain all cooling fluids using the lowest manifold valve. Fill internal chassis cavities with expanding Instapak™ or high-density polyfoam to anchor the GPU bracket.
+                    Before shipping a full desktop tower, remove heavy graphics cards or large tower coolers and wrap them separately in anti-static sleeve and bubble wrap or firm foam.
                   </p>
                 </div>
                 <div className="mt-auto pt-space-xs relative z-10">
                   <span className="font-mono text-label-tech text-tertiary">
-                    MANDATORY FOR CUSTOM LOOPS
+                    PROTECTS PCIE SLOTS IN TRANSIT
                   </span>
                 </div>
               </SpotlightCard>
@@ -1134,15 +1166,15 @@ export default function ContactPage() {
                 </div>
                 <div className="flex flex-col gap-space-xs relative z-10">
                   <h3 className="font-syne text-title-md text-on-surface">
-                    Insured Pre-Paid Waybills
+                    Double-Box &amp; Tracked Delivery
                   </h3>
                   <p className="text-body-md text-on-surface-variant">
-                    We generate direct FedEx Priority or UPS Air insured labels up to $10,000 declared hardware value. Double-box rigs with a minimum of 2 inches of cushioning around original carton.
+                    Place wrapped parts inside a sturdy outer box with padding on all sides, and message your waybill or tracking number to {SITE_PHONE_DISPLAY} on WhatsApp before dispatch.
                   </p>
                 </div>
                 <div className="mt-auto pt-space-xs relative z-10">
                   <span className="font-mono text-label-tech text-secondary">
-                    INCLUDES TRANSIT SENSOR STICKERS
+                    ISLAND-WIDE COURIER SUPPORT
                   </span>
                 </div>
               </SpotlightCard>
@@ -1156,20 +1188,20 @@ export default function ContactPage() {
                     03
                   </span>
                   <span className="material-symbols-outlined text-outline text-[24px] group-hover:text-tertiary transition-colors">
-                    sensor_occupied
+                    photo_camera
                   </span>
                 </div>
                 <div className="flex flex-col gap-space-xs relative z-10">
                   <h3 className="font-syne text-title-md text-on-surface">
-                    In-Bay Video Unboxing
+                    Arrival Photo &amp; Bench Log
                   </h3>
                   <p className="text-body-md text-on-surface-variant">
-                    Every external parcel is unboxed under calibrated 4K bench cameras. You receive a link to the visual intake audit within 45 minutes of laboratory dock arrival.
+                    As soon as your parcel reaches our {SITE_LOCATION} workshop, we photograph unboxing condition, log serial numbers, and message you before bench diagnostics begin.
                   </p>
                 </div>
                 <div className="mt-auto pt-space-xs relative z-10">
                   <span className="font-mono text-label-tech text-primary">
-                    AUDITED CHAIN OF CUSTODY
+                    TRANSPARENT CHAIN OF CUSTODY
                   </span>
                 </div>
               </SpotlightCard>
@@ -1178,21 +1210,18 @@ export default function ContactPage() {
         </div>
       </RevealSection>
 
-      {/* ── Live Chat & Instant Ticket Status Lookup Widget Section (Code-Split) ── */}
+      {/* ── Direct WhatsApp & Ticket Status Inquiry Section ── */}
       <section className="max-w-[1440px] mx-auto px-gutter-lg pb-space-2xl w-full">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-gutter-lg">
-          {/* Live Chat Launchpad (Code-Split) */}
           <div className="md:col-span-6">
             <TechnicianChat />
           </div>
 
-          {/* Ticket Status Real-Time Telemetry Lookup (Code-Split) */}
           <div className="md:col-span-6 scroll-mt-28" id="telemetry-tracer">
-            <TicketTracer />
+            <TicketTracer initialTicketId={ticketId || undefined} />
           </div>
         </div>
       </section>
     </div>
   );
 }
-

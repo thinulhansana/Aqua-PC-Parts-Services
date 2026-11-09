@@ -1,107 +1,112 @@
 import React from "react";
+import {
+  SITE_NAME,
+  SITE_URL,
+  SITE_PHONE_E164,
+  SITE_EMAIL,
+  SITE_ADDRESS,
+  SITE_FOUNDED_DATE,
+} from "@/lib/constants";
 
 export default function LocalBusinessSchema() {
   const schemaData = {
     "@context": "https://schema.org",
-    "@type": ["ComputerRepairService", "LocalBusiness"],
-    "@id": "https://aquapcparts.com/#organization",
-    "name": "Aqua PC Parts & Services",
-    "alternateName": "Aqua PC Parts & Services",
-    "description":
-      "Premier custom PC engineering, quality parts, component diagnostics, and high-performance workstation builds in Embilipitiya, Sri Lanka.",
-    "url": "https://aquapcparts.com",
-    "telephone": "+94788194535",
-    "email": "thinulhansana.business@gmail.com",
-    "image": [
+    "@type": ["ComputerRepairService", "ComputerStore", "LocalBusiness"],
+    "@id": `${SITE_URL}/#organization`,
+    name: SITE_NAME,
+    alternateName: "Aqua PC Tech Lab",
+    description:
+      "Certified Grade-A PC hardware, custom gaming builds, precision liquid & thermal optimization, and component-level diagnostics in Embilipitiya, Sri Lanka.",
+    url: SITE_URL,
+    telephone: SITE_PHONE_E164,
+    email: SITE_EMAIL,
+    foundingDate: SITE_FOUNDED_DATE,
+    image: [
       "https://lh3.googleusercontent.com/aida-public/AB6AXuCzAgT1ycU31D0XXng7zUxriWh_-AJeqiSxHggoL5n3OUn4967qRAk-8lipNJE3yhEI7S-rW0Vsvwu_WISzGD-15X3dYeF9K8GgkFpO0o95G7tY4kRuq23kMPeGXuxcIWu_DjNPW1oqvT0x2nL2DyfK_lPLNU9uUWFRgb9EIlVpHynrASnW-tXBGyJPMH-euBM4FfPsd68trJRjtrzVLpUxXR_f5_msEEoRUSf5azYx",
-      "https://lh3.googleusercontent.com/aida-public/AB6AXuDp5XScZK4J0J5uZcjpWUe9tLQHruoNtDTru3Suf2QQO7OzsRmeNGxFYv0m7kUcGuQj93-k-oFAsXVhdM5yq_I7ELDoqXrKkZzS9zze64mlZroyW5zOBLo-zK44XVE789CnAk6nIlUwmE7MyekZpeBE9rkKcH3qNNWMTFysyb_1jtMfjLpUeu2pAAyCeN59NN_rKXKwLKGaHhneSjgKLO0rDfYMutiY9bfXvwM2qvBm"
     ],
-    "address": {
+    address: {
       "@type": "PostalAddress",
-      "streetAddress": "Embilipitiya",
-      "addressLocality": "Embilipitiya",
-      "addressRegion": "Sabaragamuwa",
-      "postalCode": "70200",
-      "addressCountry": "LK"
+      streetAddress: SITE_ADDRESS.street,
+      addressLocality: SITE_ADDRESS.locality,
+      addressRegion: SITE_ADDRESS.region,
+      postalCode: SITE_ADDRESS.postalCode,
+      addressCountry: SITE_ADDRESS.country,
     },
-    "geo": {
+    geo: {
       "@type": "GeoCoordinates",
-      "latitude": 6.3438,
-      "longitude": 80.8504
+      latitude: 6.3438,
+      longitude: 80.8504,
     },
-    "openingHoursSpecification": [
+    openingHoursSpecification: [
       {
         "@type": "OpeningHoursSpecification",
-        "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
-        "opens": "08:00",
-        "closes": "19:00"
+        dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+        opens: "08:00",
+        closes: "19:00",
       },
       {
         "@type": "OpeningHoursSpecification",
-        "dayOfWeek": ["Saturday"],
-        "opens": "10:00",
-        "closes": "17:00"
-      }
+        dayOfWeek: ["Saturday"],
+        opens: "10:00",
+        closes: "17:00",
+      },
     ],
-    "priceRange": "$$$",
-    "currenciesAccepted": "USD",
-    "paymentAccepted": "Credit Card, Debit Card, Wire Transfer, Crypto",
-    "areaServed": [
+    priceRange: "$$",
+    currenciesAccepted: "LKR",
+    paymentAccepted: "Cash, Bank Transfer, Card Payment",
+    areaServed: [
+      {
+        "@type": "City",
+        name: "Embilipitiya",
+      },
       {
         "@type": "AdministrativeArea",
-        "name": "Austin Metropolitan Area"
+        name: "Sabaragamuwa Province",
       },
       {
         "@type": "Country",
-        "name": "United States (Mail-in Diagnostic Triage)"
-      }
+        name: "Sri Lanka",
+      },
     ],
-    "aggregateRating": {
-      "@type": "AggregateRating",
-      "ratingValue": "4.98",
-      "reviewCount": "342",
-      "bestRating": "5",
-      "worstRating": "1"
-    },
-    "hasOfferCatalog": {
+    hasOfferCatalog: {
       "@type": "OfferCatalog",
-      "name": "PC Engineering & Diagnostic Services",
-      "itemListElement": [
+      name: "PC Engineering, Custom Builds & Diagnostic Services",
+      itemListElement: [
         {
           "@type": "Offer",
-          "itemOffered": {
+          itemOffered: {
             "@type": "Service",
-            "name": "Emergency Hardware Diagnostics & Micro-Soldering",
-            "description":
-              "Oscilloscope rail testing, short-circuit thermal cam imaging, BGA reballing, and component-level board recovery."
+            name: "Hardware Diagnostics & Component-Level Repair",
+            description:
+              "Short-circuit tracing, oscilloscope signal verification, power rail testing, and board-level repair. Free inspection when repair is approved.",
           },
-          "price": "79.00",
-          "priceCurrency": "USD"
+          price: "4500.00",
+          priceCurrency: "LKR",
         },
         {
           "@type": "Offer",
-          "itemOffered": {
+          itemOffered: {
             "@type": "Service",
-            "name": "Custom Hardline & Soft-Tube Liquid Cooling Loop Assembly",
-            "description":
-              "CNC acrylic manifold fabrication, 2.0 BAR pressure certification, and sub-ambient fluid tuning."
+            name: "Custom PC Assembly & Liquid Cooling Setup",
+            description:
+              "Precision custom desktop assembly, AIO or open liquid cooling integration, airflow tuning, and 24-hour stability testing.",
           },
-          "price": "249.00",
-          "priceCurrency": "USD"
+          price: "8500.00",
+          priceCurrency: "LKR",
         },
         {
           "@type": "Offer",
-          "itemOffered": {
+          itemOffered: {
             "@type": "Service",
-            "name": "Silicon Delidding & Direct-Die Liquid Metal Application",
-            "description":
-              "Surgical IHS removal, high-temp conformal coating, and gallium-indium thermal compound application."
+            name: "Thermal Overhaul & Cooling Service",
+            description:
+              "High-conductivity thermal repasting, deep chassis dust removal, and sustained full-load temperature optimization.",
           },
-          "price": "89.00",
-          "priceCurrency": "USD"
-        }
-      ]
-    }
+          price: "2500.00",
+          priceCurrency: "LKR",
+        },
+      ],
+    },
   };
 
   return (

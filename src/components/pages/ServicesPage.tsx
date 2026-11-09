@@ -4,6 +4,12 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { TOTAL_SHOP_ITEMS } from "@/lib/shopData";
+import {
+  SITE_EST,
+  SITE_LOCATION,
+  SITE_WHATSAPP_URL,
+} from "@/lib/constants";
 import {
   RevealSection,
   SpotlightCard,
@@ -21,152 +27,147 @@ const SERVICES = [
   {
     id: "srv-01",
     code: "SRV-01 // DIAGNOSTICS",
-    title: "Emergency Diagnostics & Component-Level Repair",
-    desc: "Immediate triage for catastrophic hardware failures. We bypass basic part-swapping using board-level logic analysis, short-circuit injection, and micro-soldering precision.",
-    price: "From $79",
-    tat: "24-48h TAT",
-    badgeType: "secondary",
+    title: "Hardware Diagnostics & Board-Level Repair",
+    desc: "Fast, accurate fault isolation for dead systems, no-display issues, random shutdowns, and power rail failures using bench oscilloscopes and thermal scanning.",
+    price: "From Rs. 4,500",
+    tat: "24–48h TAT",
     span: "lg:col-span-7",
     color: "text-primary",
     bgColor: "bg-primary-container/20",
     icon: "power_off",
     specs: [
       {
-        title: "No-POST Circuit Trace",
-        desc: "Oscilloscope bus & rail frequency verification",
+        title: "No-POST & Rail Triage",
+        desc: "Power rail voltage verification and POST sequence tracing",
       },
       {
-        title: "BGA Re-balling & Solder",
-        desc: "VRAM chips, VRM MOSFETs, SMD decoupling caps",
+        title: "Board-Level Component Repair",
+        desc: "MOSFETs, SMD capacitors, BIOS recovery, and connector rework",
       },
       {
-        title: "Short-Circuit Thermal Cam",
-        desc: "FLIR detection down to 0.05°C resistance gradients",
+        title: "Thermal & Short Detection",
+        desc: "Localized short-circuit detection to prevent wider board damage",
       },
       {
-        title: "NVMe / NAND Recovery",
-        desc: "Hardware-level bridge controller raw data extraction",
+        title: "Storage & Data Check",
+        desc: "NVMe SSD and SATA health diagnostics and partition verification",
       },
     ],
-    footer: "Diagnostic fee credited directly to repair execution.",
-    action: "Initiate Triage",
+    footer: "Free inspection when repair proceeds (Rs. 1,500 report if declined).",
+    action: "Request Repair",
   },
   {
     id: "srv-02",
-    code: "SRV-02 // HYDRO-LOOP",
-    title: "Custom Hardline & Soft-Tube Liquid Cooling",
-    desc: "Hydro-dynamic perfection. Acrylic, PMMA, and copper tubing routing with custom manifold distribution plates, pneumatic pressure validation, and biocide purification.",
-    price: "From $249",
-    tat: "Bespoke",
-    badgeType: "primary",
+    code: "SRV-02 // CUSTOM BUILDS",
+    title: "Custom PC Builds & Liquid Cooling Setup",
+    desc: "Clean, tailored desktop builds for gaming, editing, and workstations. From compact airflow rigs to AIO and liquid-cooled configurations tested end-to-end.",
+    price: "From Rs. 8,500",
+    tat: "2–4 Days",
     span: "lg:col-span-5",
     color: "text-secondary",
     bgColor: "bg-secondary-container/20",
     icon: "water_drop",
     rows: [
-      { label: "Manifold Precision Cut", value: "CNC Milling 0.01mm" },
-      { label: "Hydrostatic Pressure Seal", value: "2.0 BAR N2 Cert" },
-      { label: "Biological Protection", value: "Glycol-Free Inhibitors" },
+      { label: "Clean Cable Architecture", value: "Included" },
+      { label: "AIO / Liquid Loop Check", value: "Leak & Pressure Tested" },
+      { label: "OS, Drivers & Fan Curves", value: "Pre-Tuned" },
     ],
-    footer: "Full 2-Year Anti-Leak Guarantee.",
-    action: "Design Loop",
+    footer: "Backed by our 06-Month Testing Warranty & 24h stability check.",
+    action: "Book Custom Build",
   },
   {
     id: "srv-03",
     code: "SRV-03 // THERMAL",
-    title: "Thermal Overhaul & Delidding / Liquid Metal",
-    desc: "Exposing raw silicon for direct-die cooling. We dissolve factory solder, coat SMDs in high-temp acrylic sealant, and apply gallium-indium thermal compound.",
-    price: "From $89",
+    title: "Thermal Overhaul & Cooling Maintenance",
+    desc: "Fix overheating CPUs and GPUs with deep internal dust removal, premium thermal paste replacement, pad checks, and balanced fan curve calibration.",
+    price: "From Rs. 2,500",
     tat: "Same Day",
-    badgeType: "tertiary",
     span: "lg:col-span-4",
     color: "text-tertiary",
     bgColor: "bg-tertiary-container/20",
     icon: "thermostat",
     highlight: {
-      label: "Observed Delta Drop",
-      metric: "-18.4 °C AVG",
-      note: "Tested on Intel i9-14900KS / AMD 7950X3D",
+      label: "Typical Core Temp Drop",
+      metric: "-10°C to -18°C",
+      note: "Deep clean, fresh Kryonaut-class paste & airflow tuning",
     },
-    action: "View Delid Compatibility",
+    action: "Book Thermal Service",
   },
   {
     id: "srv-04",
     code: "SRV-04 // TUNING",
-    title: "Overclocking & BIOS Optimization",
-    desc: "Granular memory sub-timing tuning (tRFC, tREFI), per-core voltage offset curve shaping, and comprehensive 24-hour AIDA64 / Karhu RAM burn-in certification.",
-    price: "From $119",
-    tat: "48h Cycle",
-    badgeType: "primary",
+    title: "BIOS, Memory & System Optimization",
+    desc: "Resolve micro-stutters, instability, and sub-optimal boost behavior with safe BIOS updates, XMP/EXPO profile validation, and 24-hour load stress testing.",
+    price: "From Rs. 3,500",
+    tat: "24h Cycle",
     span: "lg:col-span-4",
     color: "text-primary",
     bgColor: "bg-primary-container/20",
     icon: "speed",
     highlight: {
-      label: "Benchmark Validation",
-      metric: "0 WHEA Errors",
-      note: "Karhu RAM 10,000% Coverage guaranteed",
+      label: "Burn-In Validation",
+      metric: "24h Verified",
+      note: "Full Prime95, FurMark & memory stability check",
     },
-    action: "Examine Profiles",
+    action: "Request Tuning",
   },
   {
     id: "srv-05",
-    code: "SRV-05 // ENTERPRISE",
-    title: "Corporate AI & Render Fleet Advisory",
-    desc: "Multi-GPU topology planning, PCIe lane arbitration, dual-PSU redundant delivery, and silent server-rack deployment for deep learning & architectural modeling.",
-    price: "From $199",
+    code: "SRV-05 // WORKSTATIONS",
+    title: "Business, Studio & Bulk Hardware Support",
+    desc: "Reliable hardware specification, multi-PC upgrades, workstation assembly, and direct component sourcing across Sri Lanka with transparent LKR invoicing.",
+    price: "Custom Quote",
     tat: "Priority SLA",
-    badgeType: "secondary",
     span: "lg:col-span-4",
     color: "text-secondary",
     bgColor: "bg-secondary-container/20",
     icon: "hub",
     highlight: {
-      label: "Fleet Reliability MTBF",
-      metric: "99.98% Up",
-      note: "Dedicated enterprise SLA agreement",
+      label: "Catalog Inventory Ready",
+      metric: `${TOTAL_SHOP_ITEMS} Items`,
+      note: "CPUs, GPUs, boards, RAM, SSDs & monitors ready to quote",
     },
-    action: "Consultation Intake",
+    action: "Request Quote",
   },
 ];
 
 const LAB_INSTRUMENTS = [
   {
-    category: "Optical Diagnostics",
-    title: "FLIR High-Res Thermal Imagers",
-    desc: "Pinpoints microscopic current leakage and VRM choke degradation before fatal catastrophic shorting occurs.",
-    res: "0.02°C Res",
-    cal: "CALIBRATED: 08/2024",
+    category: "Thermal Diagnostics",
+    title: "Thermal Imaging Camera",
+    desc: "Detects VRM hotspots, short circuits, and uneven cooler contact across motherboards and graphics cards.",
+    res: "Thermal Scan",
+    cal: "VERIFIED: LAB BENCH",
     image:
       "https://lh3.googleusercontent.com/aida-public/AB6AXuBzS0OV_GjMRxC5RSUeXfo3lNcFq8Vvts_5cT4tZ7OwKuUkR7IEGHhHwLxLvkvmQeXuUmQUWrGn6gnsf5HYn972wdgs0PoK5aZ1IheThPc2OoMu1LIT5JkAZDJQxm9FiZI1rh7JB5X9JersJ9ljXEOPiQWkGtCZUsMt7Z6_CTBPho6PYCF-1VJM9Dua-amja62E6qR2CzRrSsQbeuHkb797Z5ys2nKWSXMA2h6nKjWv",
     color: "text-primary",
   },
   {
-    category: "Bus Verification",
-    title: "Rigol 4-Channel Oscilloscopes",
-    desc: "Analyzes clock signal jitter, SMBus handshakes, and PCIe lane signal integrity at nano-second resolution.",
-    res: "1 GHz / 5 GSa/s",
-    cal: "TRACE: BUS 0..3",
+    category: "Signal Verification",
+    title: "Digital Bench Oscilloscope",
+    desc: "Checks power-on sequencing, clock stability, and voltage regulation behavior during no-boot troubleshooting.",
+    res: "Rail & Signal Trace",
+    cal: "ACTIVE DIAGNOSTICS",
     image:
       "https://lh3.googleusercontent.com/aida-public/AB6AXuA0GCc5lvH47moTUGucnRkAX24g5RkUIyG-Q0FCsFaMv0dU9YpTMg62s7Zy82sP0GA-6t90obCy2mebDUAGjrI67agMGplXcE_8TcG7vUGhugW1ckOEzZ1669a3FszNpC-t45nH6SBoRFYjjX7ZmpmeprqNxRbdbjFDE-oKqqVX1VwfbqFKKaoMP78dtnAfAebN3eVCGQzK-9Xn7fRLYQuI1cYpnWwxPk3CtWMv4vyT",
     color: "text-secondary",
   },
   {
-    category: "Decontamination",
-    title: "Ultrasonic Cavitation Baths",
-    desc: "Removes sub-micron flux residue, corrosion oxide, and particulate matter from intricate micro-fin channels.",
-    res: "40 kHz Sweep",
-    cal: "SOLVENT: LAB-GRADE",
+    category: "PCB Restoration",
+    title: "Ultrasonic Cleaning Station",
+    desc: "Gently removes dust oxidation, flux residue, and humidity corrosion from PCB surfaces and cooling fins.",
+    res: "Deep PCB Clean",
+    cal: "PRECISION CLEANING",
     image:
       "https://lh3.googleusercontent.com/aida-public/AB6AXuDsDcSJyCjEDKn-NL8IVOr_XuENglq7HbnYtYef3h4y1G-BQZ7EwHejc58vWjlBn-iRkoNUY4hhJWksmr8YIT_oHsKw9GvEft3Nsfylz7lSHSwFg2LssIJxyvRyGGACa7KipLRflOabPqF2aVzE7lxiKcEBJKHx0DkvyJNauYFZ3d58bNMYaCeannAemSmqdWFoaP3M0E3qF1HmYzfAYSFdPqn3-9trXJZtTO6O6j1v",
     color: "text-tertiary",
   },
   {
-    category: "Pneumatic Seal",
-    title: "Dry Nitrogen Testing Chambers",
-    desc: "Pre-fill zero-moisture pressure retention chamber prevents hydro-leak contamination before liquid ever touches circuitry.",
-    res: "N2 Gas Cert",
-    cal: "SENSOR: DIGITAL BARO",
+    category: "Loop Safety",
+    title: "Air & Pressure Leak Testing",
+    desc: "Validates radiator, block, and fitting seals with controlled air pressure before any liquid coolant is introduced.",
+    res: "Zero-Leak Check",
+    cal: "PRE-FILL VERIFIED",
     image:
       "https://lh3.googleusercontent.com/aida-public/AB6AXuCN8UTLwD73J0AWYyu8-ZSrF8As2wjQY6d1v06xRPR0jdoQsz7iuoZVhyghZxpX6HpeW6OL5rU1GxPspprDmrn9rqjW1ZN57wj8v2jmenccTTYZS5Sdq2_3gPPTSwy6uCvfB4Lr6IJQw2_9bRKug9zr7ZkDQSfiI-lceU80rJfl14LTWq_KOsn8J1w2Fl-b-GrpLHoLbQASuj0eMFMJ0I1NfAFR913_8ZlGGfIFve5Z",
     color: "text-primary",
@@ -177,37 +178,37 @@ const PIPELINE_STEPS = [
   {
     step: "01",
     title: "Intake & Visual Audit",
-    desc: "High-resolution 360° macro photographic cataloging and ESD containment bagging.",
+    desc: "Serial inspection, condition logging, and ESD-safe handling from arrival.",
     color: "text-primary",
   },
   {
     step: "02",
-    title: "Telemetry Diagnostic",
-    desc: "Thermal scanning, oscilloscope rail traces, and memory parity checks run in parallel.",
+    title: "Bench Diagnostics",
+    desc: "Power rail testing, component isolation, and thermal hotspot scans.",
     color: "text-primary",
   },
   {
     step: "03",
-    title: "Transparent Quote",
-    desc: "Itemized lab scope including part serial numbers and guaranteed flat-rate pricing.",
+    title: "Clear LKR Quote",
+    desc: "Upfront cost breakdown via WhatsApp or email before any paid work begins.",
     color: "text-secondary",
   },
   {
     step: "04",
-    title: "Precision Engineering",
-    desc: "Micro-soldering, delidding, CNC tube routing, and thermal interface reconstruction.",
+    title: "Precision Work",
+    desc: "Clean hardware repair, upgrade installation, repasting, or custom assembly.",
     color: "text-secondary",
   },
   {
     step: "05",
-    title: "Burn-in Stress Test",
-    desc: "24-hour AIDA64 / FurMark / Karhu RAM burn-in with continuous thermocouple tracking.",
+    title: "24h Stress Test",
+    desc: "Continuous CPU, GPU, memory, and thermal load checks until 100% stable.",
     color: "text-tertiary",
   },
   {
     step: "06",
-    title: "Delivery & Certification",
-    desc: "Detailed telemetry dossier certificate and zero-leak verification documentation.",
+    title: "Quality Delivery",
+    desc: "Workshop pickup in Embilipitiya or shockproof island-wide courier dispatch.",
     color: "text-primary",
   },
 ];
@@ -233,18 +234,19 @@ export default function ServicesPage() {
               >
                 <span className="w-2 h-2 rounded-full bg-primary shadow-[0_0_8px_rgba(76,215,246,0.8)] animate-pulse" />
                 <span className="font-mono text-label-tech text-primary uppercase tracking-widest">
-                  ISO-4 Standard Certified Clean Bench
+                  ESD-SAFE DIAGNOSTIC LAB // {SITE_LOCATION.toUpperCase()}
                 </span>
               </motion.div>
               <h1 className="font-syne text-display-hero-mobile lg:text-display-hero text-on-surface tracking-tight uppercase">
-                <MaskedReveal delay={0.05}>Comprehensive PC Repair,</MaskedReveal> <br />
+                <MaskedReveal delay={0.05}>PC Repair, Custom Builds</MaskedReveal>{" "}
+                <br />
                 <MaskedReveal delay={0.16}>
                   <span className="text-shimmer">
-                    Custom Architecture
+                    &amp; Thermal Engineering
                   </span>
                 </MaskedReveal>{" "}
                 <br />
-                <MaskedReveal delay={0.26}>&amp; Expert Advisory</MaskedReveal>
+                <MaskedReveal delay={0.26}>For Every Setup</MaskedReveal>
               </h1>
               <motion.p
                 variants={fadeUpVariants}
@@ -253,7 +255,7 @@ export default function ServicesPage() {
                 custom={2}
                 className="text-body-lg text-on-surface-variant mt-space-md max-w-2xl"
               >
-                Specialized micro-soldering labs, calibrated fluid dynamics testing, and component-level triage executed by master hardware engineers. Every rig is treated as mission-critical infrastructure.
+                From component-level motherboard triage and thermal repasting to full bespoke gaming and workstation builds — every service is bench-tested in {SITE_LOCATION} and backed by transparent LKR quotes.
               </motion.p>
               <motion.div
                 variants={fadeUpVariants}
@@ -270,7 +272,7 @@ export default function ServicesPage() {
                   <span className="material-symbols-outlined text-[20px] relative z-10">
                     calendar_today
                   </span>
-                  <span className="relative z-10">Reserve Lab Slot</span>
+                  <span className="relative z-10">Book Service Slot</span>
                 </Link>
                 <a
                   href="#lab-tech"
@@ -279,12 +281,12 @@ export default function ServicesPage() {
                   <span className="material-symbols-outlined text-[20px] text-secondary">
                     biotech
                   </span>
-                  <span>Inspect Lab Telemetry</span>
+                  <span>Inspect Lab Equipment</span>
                 </a>
               </motion.div>
             </div>
 
-            {/* Hero Telemetry Matrix HUD */}
+            {/* Hero Workshop Benchmark Card */}
             <motion.div
               variants={scaleInVariants}
               initial="hidden"
@@ -301,70 +303,70 @@ export default function ServicesPage() {
               >
                 <div className="flex items-center justify-between relative z-10">
                   <span className="font-syne text-headline-sm text-on-surface">
-                    Lab Active Status
+                    Workshop Standards
                   </span>
-                  <span className="px-space-xs py-0.5 rounded bg-surface-container font-mono text-label-tech text-secondary border border-secondary/30 animate-pulse">
-                    ALL SYSTEMS LIVE
+                  <span className="px-space-xs py-0.5 rounded bg-surface-container font-mono text-label-tech text-secondary border border-secondary/30">
+                    {SITE_EST}
                   </span>
                 </div>
 
                 <div className="grid grid-cols-2 gap-space-sm relative z-10">
                   <div className="bg-surface-container p-space-sm rounded-lg flex flex-col border border-outline-variant/15 hover:border-primary/30 transition-colors">
                     <span className="font-mono text-[10px] text-on-surface-variant uppercase">
-                      Current Queue
+                      Catalog Parts
                     </span>
                     <span className="font-mono text-telemetry-num text-primary mt-1">
-                      4 Triage Units
+                      <AnimatedNumber value={`${TOTAL_SHOP_ITEMS} Items`} />
                     </span>
                   </div>
                   <div className="bg-surface-container p-space-sm rounded-lg flex flex-col border border-outline-variant/15 hover:border-secondary/30 transition-colors">
                     <span className="font-mono text-[10px] text-on-surface-variant uppercase">
-                      Ambient Loop Temp
+                      Standard Triage
                     </span>
                     <span className="font-mono text-telemetry-num text-secondary mt-1">
-                      19.4 °C Stable
+                      24–48 Hours
                     </span>
                   </div>
                   <div className="bg-surface-container p-space-sm rounded-lg flex flex-col border border-outline-variant/15 hover:border-tertiary/30 transition-colors">
                     <span className="font-mono text-[10px] text-on-surface-variant uppercase">
-                      Nitrogen Press.
+                      Burn-In Check
                     </span>
                     <span className="font-mono text-telemetry-num text-tertiary mt-1">
-                      1.82 BAR Test
+                      24h Load Run
                     </span>
                   </div>
                   <div className="bg-surface-container p-space-sm rounded-lg flex flex-col border border-outline-variant/15 hover:border-primary/30 transition-colors">
                     <span className="font-mono text-[10px] text-on-surface-variant uppercase">
-                      Soldering Station
+                      Testing Warranty
                     </span>
                     <span className="font-mono text-telemetry-num text-primary mt-1">
-                      360 °C Calibrated
+                      06 Months
                     </span>
                   </div>
                 </div>
 
-                {/* Dynamic Load Gauge + Live Oscilloscope */}
+                {/* Stability Benchmark Meter */}
                 <div className="bg-surface-container p-space-md rounded-lg flex flex-col gap-space-xs border border-outline-variant/15 relative z-10">
                   <div className="flex items-center justify-between text-body-sm">
                     <span className="text-on-surface">
-                      Thermal Dissipation Capacity
+                      Pre-Delivery Verification Score
                     </span>
                     <span className="font-mono text-telemetry-num text-primary">
-                      <AnimatedNumber value="88.4%" />
+                      <AnimatedNumber value="100%" />
                     </span>
                   </div>
                   <LiveOscilloscope mode="secondary" className="my-1" />
                   <div className="w-full h-2 bg-surface-container-lowest rounded-full overflow-hidden">
                     <motion.div
                       initial={{ width: "0%" }}
-                      animate={{ width: "88.4%" }}
+                      animate={{ width: "100%" }}
                       transition={{ duration: 1.1, delay: 0.3, ease: EASE_PREMIUM }}
                       className="h-full bg-gradient-to-r from-secondary via-primary to-tertiary rounded-full shadow-[0_0_10px_rgba(76,215,246,0.5)]"
                     />
                   </div>
                   <div className="flex items-center justify-between text-on-surface-variant font-mono text-label-tech mt-1">
-                    <span>0 W</span>
-                    <span>Load: 2400 W Max</span>
+                    <span>Thermal Tested</span>
+                    <span>Zero Shortcut Policy</span>
                   </div>
                 </div>
 
@@ -373,7 +375,7 @@ export default function ServicesPage() {
                     verified_user
                   </span>
                   <span className="text-body-sm text-on-surface-variant">
-                    Class 100 ESD-Grounding Certified
+                    ESD-Safe Workbench · {SITE_LOCATION}
                   </span>
                 </div>
               </TiltSpotlightCard>
@@ -391,14 +393,14 @@ export default function ServicesPage() {
         >
           <div>
             <span className="font-mono text-label-tech text-primary uppercase tracking-widest">
-              // DEPT_SERVICES_CATALOG
+              // SERVICES_CATALOG
             </span>
             <h2 className="font-syne text-headline-lg text-on-surface mt-space-xs uppercase">
-              Core Engineering Modules
+              Core Engineering Services
             </h2>
           </div>
           <p className="text-body-md text-on-surface-variant max-w-md">
-            Transparent flat-rate diagnostic baselines paired with surgical component-level interventions. Select an active module to view testing criteria.
+            Honest LKR baselines and clear turnaround windows. Every job is approved with you upfront before we begin bench work.
           </p>
         </motion.div>
 
@@ -499,9 +501,9 @@ export default function ServicesPage() {
                   )}
                 </div>
 
-                <div className="mt-space-lg pt-space-sm flex items-center justify-between bg-surface-container-lowest/50 p-space-sm rounded-lg border-t border-outline-variant/10 relative z-10">
+                <div className="mt-space-lg pt-space-sm flex flex-wrap items-center justify-between gap-2 bg-surface-container-lowest/50 p-space-sm rounded-lg border-t border-outline-variant/10 relative z-10">
                   <span className="font-mono text-label-tech text-on-surface-variant">
-                    {srv.footer || "Priority laboratory bench queuing."}
+                    {srv.footer || "Transparent bench workflow & warranty coverage."}
                   </span>
                   <Link
                     href="/contact"
@@ -519,7 +521,7 @@ export default function ServicesPage() {
         </div>
       </RevealSection>
 
-      {/* ── Section 3: Diagnostic Laboratory Technology Showcase ── */}
+      {/* ── Section 3: Diagnostic Bench Equipment Showcase ── */}
       <RevealSection
         className="max-w-[1440px] mx-auto px-gutter-lg py-space-2xl w-full"
         id="lab-tech"
@@ -530,13 +532,13 @@ export default function ServicesPage() {
           className="flex flex-col gap-space-xs mb-space-xl"
         >
           <span className="font-mono text-label-tech text-secondary uppercase tracking-widest">
-            // INSTRUMENTATION_ARRAY
+            // BENCH_EQUIPMENT
           </span>
           <h2 className="font-syne text-headline-lg text-on-surface uppercase">
-            Certified Diagnostic Bench Architecture
+            Precision Diagnostic Bench Setup
           </h2>
           <p className="text-body-lg text-on-surface-variant max-w-2xl">
-            We operate military-spec diagnostic apparatus inside an ESD-controlled containment suite. Precision diagnosis eliminates guesswork.
+            Proper bench instrumentation takes the guesswork out of repairs and ensures every custom PC leaves cooled, verified, and reliable.
           </p>
         </motion.div>
 
@@ -593,13 +595,13 @@ export default function ServicesPage() {
             className="flex flex-col gap-space-xs mb-space-2xl text-center items-center"
           >
             <span className="font-mono text-label-tech text-primary uppercase tracking-widest">
-              // THE_AQUA_PROTOCOL
+              // WORKSHOP_PROCESS
             </span>
             <h2 className="font-syne text-headline-lg text-on-surface uppercase">
-              Engineering Lifecycle Pipeline
+              Service &amp; Build Pipeline
             </h2>
             <p className="text-body-md text-on-surface-variant max-w-xl">
-              From arrival to unboxing, your system is tracked by encrypted unique telemetry logs with live bench camera monitoring.
+              From intake inspection to 24-hour stability checks, every step is documented and shared transparently with you.
             </p>
           </motion.div>
 
@@ -645,10 +647,10 @@ export default function ServicesPage() {
           className="max-w-[1440px] mx-auto text-center flex flex-col items-center gap-space-md py-space-xl px-space-md rounded-2xl bg-surface-container border border-primary/20 relative overflow-hidden"
         >
           <h2 className="font-syne text-headline-lg text-on-surface">
-            Ready to Schedule Your Hardware Diagnostic?
+            Need PC Repair, Upgrades, or a Custom Build?
           </h2>
           <p className="text-body-lg text-on-surface-variant max-w-xl">
-            Our Austin laboratory processes emergency triage in under 24 hours. Submit your symptom profile online.
+            Visit our {SITE_LOCATION} workshop, submit an online intake ticket, or reach out directly on WhatsApp for fast quotes across Sri Lanka.
           </p>
           <div className="flex flex-wrap justify-center gap-space-md pt-space-xs">
             <Link
@@ -656,13 +658,21 @@ export default function ServicesPage() {
               className="relative overflow-hidden group px-space-xl py-space-md rounded-xl bg-gradient-to-r from-primary to-secondary text-surface font-syne text-title-md font-bold shadow-cyan-glow hover:shadow-cyan-glow-lg hover:-translate-y-0.5 transition-all"
             >
               <span className="absolute inset-0 animate-shimmer opacity-0 group-hover:opacity-100 transition-opacity" />
-              <span className="relative z-10">Start Intake Requisition</span>
+              <span className="relative z-10">Start Intake Ticket</span>
             </Link>
+            <a
+              href={SITE_WHATSAPP_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-space-xl py-space-md rounded-xl bg-[#25D366] hover:bg-[#1ebe5a] text-white font-syne text-title-md font-bold transition-all hover:-translate-y-0.5"
+            >
+              Chat on WhatsApp
+            </a>
             <Link
               href="/pricing"
               className="px-space-xl py-space-md rounded-xl bg-surface-container-high hover:bg-surface-bright text-on-surface font-syne text-title-md border border-outline-variant/30 transition-all hover:-translate-y-0.5"
             >
-              Review Rate Card
+              View LKR Rate Card
             </Link>
           </div>
         </motion.div>

@@ -7,19 +7,21 @@ import LocalBusinessSchema from "@/components/seo/LocalBusinessSchema";
 import { ThemeProvider } from "@/components/theme/ThemeProvider";
 import { AuthProvider } from "@/components/auth/AuthContext";
 import { isGoogleOAuthConfigured } from "@/auth.config";
+import { SITE_NAME, SITE_TAGLINE, SITE_URL } from "@/lib/constants";
 
 export const metadata: Metadata = {
-  title: "Aqua PC Parts & Services | Precision Liquid Engineering",
+  metadataBase: new URL(SITE_URL),
+  title: `${SITE_NAME} | ${SITE_TAGLINE}`,
   description:
-    "Expert custom PC builds, precision liquid cooling solutions, micro-soldering repairs, and professional diagnostics. Aqua PC Parts & Services — where performance meets craftsmanship.",
+    "Certified Grade-A PC components, custom gaming & workstation builds, liquid & thermal cooling solutions, and board-level diagnostics in Embilipitiya, Sri Lanka.",
   keywords: [
+    "Aqua PC Solutions",
+    "PC parts Sri Lanka",
+    "Embilipitiya PC shop",
     "custom PC builds",
     "liquid cooling",
-    "PC repair",
-    "micro-soldering",
-    "PC parts",
-    "diagnostics",
-    "water cooling",
+    "PC repair Sri Lanka",
+    "micro-soldering diagnostics",
     "gaming PC",
   ],
 };

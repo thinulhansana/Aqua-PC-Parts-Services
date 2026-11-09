@@ -1,5 +1,9 @@
 export const WHATSAPP_LINK = "https://wa.me/message/CYZRQDEHLIRZF1";
 
+export function buildWhatsAppUrl(message: string): string {
+  return `${WHATSAPP_LINK}?text=${encodeURIComponent(message)}`;
+}
+
 export interface ShopItem {
   id: string;
   name: string;
@@ -89,10 +93,10 @@ export const SHOP_SECTIONS: ShopSection[] = [
         name: "Basic / Entry-Level VGA",
         icon: "developer_board",
         items: [
-          { id: "vga-512mb-pci-ex", name: "512 MB PCI EX:" },
-          { id: "vga-1gb-pci-ex", name: "1 GB PCI EX:" },
-          { id: "vga-1gb-pci-ex-dx11", name: "1 GB PCI EX: (DX: 11)" },
-          { id: "vga-2gb-pci-ex", name: "2 GB PCI EX:" },
+          { id: "vga-512mb-pci-ex", name: "512 MB PCIe" },
+          { id: "vga-1gb-pci-ex", name: "1 GB PCIe" },
+          { id: "vga-1gb-pci-ex-dx11", name: "1 GB PCIe (DX 11)" },
+          { id: "vga-2gb-pci-ex", name: "2 GB PCIe" },
           { id: "vga-1gb-ati-hd5000", name: "1GB ATI HD 5000 Series" },
           { id: "vga-1gb-ati-hd6000", name: "1GB ATI HD 6000 Series" },
           { id: "vga-1gb-ati-hd7000", name: "1GB ATI HD 7000 Series" },
@@ -103,7 +107,7 @@ export const SHOP_SECTIONS: ShopSection[] = [
           { id: "vga-1gb-gtx550ti", name: "1 GB GTX 550 Ti" },
           { id: "vga-1gb-gtx560", name: "1 GB GTX 560" },
           { id: "vga-1gb-gtx560ti", name: "1 GB GTX 560 TI" },
-          { id: "vga-2gb-gtx550ti", name: "2GB GTX 550TI" },
+          { id: "vga-2gb-gtx550ti", name: "2 GB GTX 550 Ti" },
           { id: "vga-2gb-gtx650", name: "2 GB GTX 650" },
           { id: "vga-2gb-gtx650ti", name: "2 GB GTX 650 TI" },
           { id: "vga-2gb-gtx660", name: "2 GB GTX 660" },
@@ -131,12 +135,12 @@ export const SHOP_SECTIONS: ShopSection[] = [
         items: [
           { id: "vga-4gb-gtx1050ti", name: "4 GB GTX 1050 TI" },
           { id: "vga-6gb-gtx1060", name: "6 GB GTX 1060" },
-          { id: "vga-6gb-gtx1060supper", name: "6 GB GTX 1060 SUPER" },
+          { id: "vga-6gb-gtx1060-super", name: "6 GB GTX 1060 SUPER" },
           { id: "vga-8gb-gtx1070", name: "8 GB GTX 1070" },
           { id: "vga-8gb-gtx1070ti", name: "8 GB GTX 1070 TI" },
-          { id: "vga-8gb-gtx1070supper", name: "8 GB GTX 1070 SUPER" },
+          { id: "vga-8gb-gtx1070-super", name: "8 GB GTX 1070 SUPER" },
           { id: "vga-8gb-gtx1080", name: "8 GB GTX 1080" },
-          { id: "vga-8gb-gtx1080supper", name: "8 GB GTX 1080 SUPER" },
+          { id: "vga-8gb-gtx1080-super", name: "8 GB GTX 1080 SUPER" },
           { id: "vga-11gb-gtx1080ti", name: "11 GB GTX 1080 TI" },
         ],
       },
@@ -145,7 +149,7 @@ export const SHOP_SECTIONS: ShopSection[] = [
         name: "GTX 1600 Series",
         icon: "developer_board",
         items: [
-          { id: "vga-6gb-gtx1660supper", name: "6 GB GTX 1660 SUPER" },
+          { id: "vga-6gb-gtx1660-super", name: "6 GB GTX 1660 SUPER" },
           { id: "vga-6gb-gtx1660ti", name: "6 GB GTX 1660 TI" },
         ],
       },
@@ -181,7 +185,7 @@ export const SHOP_SECTIONS: ShopSection[] = [
         icon: "developer_board",
         items: [
           { id: "vga-12gb-rtx4060ti", name: "12GB RTX 4060 TI" },
-          { id: "vga-12gb-rtx4070supper", name: "12GB RTX 4070 SUPER" },
+          { id: "vga-12gb-rtx4070-super", name: "12GB RTX 4070 SUPER" },
           { id: "vga-12gb-rtx4070ti", name: "12GB RTX 4070 TI" },
         ],
       },
@@ -356,8 +360,8 @@ export const SHOP_SECTIONS: ShopSection[] = [
           { id: "mb-b75-d3-gaming", name: "B 75 D3 ON BOARD GAMING" },
           { id: "mb-h77-d3", name: "H 77 D3 ON BOARD" },
           { id: "mb-z77-d3", name: "Z77 D3 ON BOARD" },
-          { id: "mb-h81-d3", name: "H 81 D3 ON BOARD" },
-          { id: "mb-h81-d3-asus-msi", name: "H81 D3 ON B; (Giga,Asus,Msi)" },
+          { id: "mb-h81-d3", name: "H81 D3 ON BOARD" },
+          { id: "mb-h81-d3-asus-msi", name: "H81 D3 ON BOARD (Giga, Asus, MSI)" },
           { id: "mb-b85-d3", name: "B 85 D3 ON BOARD" },
           { id: "mb-b85-d3-gaming", name: "B 85 D3 ON BOARD GAMING" },
           { id: "mb-h87-d3", name: "H 87 D3 ON BOARD" },
@@ -375,8 +379,8 @@ export const SHOP_SECTIONS: ShopSection[] = [
         items: [
           { id: "mb-h110-d4d3", name: "H 110 D4/D3 ON BOARD" },
           { id: "mb-h110-d4-m2", name: "H 110 D4 ON BOARD M.2" },
-          { id: "mb-h110-d4-asus", name: "H110 D4 ON (Asus,Giga,Msi)" },
-          { id: "mb-h110-d4-m2-asus", name: "H110 D4 ON (Asus,Giga,Msi) M.2" },
+          { id: "mb-h110-d4-asus", name: "H110 D4 ON BOARD (Asus, Giga, MSI)" },
+          { id: "mb-h110-d4-m2-asus", name: "H110 D4 ON BOARD M.2 (Asus, Giga, MSI)" },
           { id: "mb-b150-d4", name: "B 150 D4 ON BOARD" },
           { id: "mb-b150-d4-m2", name: "B 150 D4 ON BOARD M.2" },
           { id: "mb-h170-d4", name: "H 170 D4 ON BOARD" },
@@ -647,4 +651,20 @@ export const SHOP_SECTIONS: ShopSection[] = [
     ],
   },
 ];
+
+export const SECTION_ITEM_COUNTS: Record<string, number> = Object.fromEntries(
+  SHOP_SECTIONS.map((section) => [
+    section.id,
+    section.categories.reduce((sum, cat) => sum + cat.items.length, 0),
+  ])
+);
+
+export const TOTAL_SHOP_ITEMS: number = SHOP_SECTIONS.reduce(
+  (sum, section) => sum + (SECTION_ITEM_COUNTS[section.id] ?? 0),
+  0
+);
+
+export function getSectionItemCount(sectionId: string): number {
+  return SECTION_ITEM_COUNTS[sectionId] ?? 0;
+}
 

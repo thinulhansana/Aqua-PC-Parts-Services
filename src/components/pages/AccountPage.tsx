@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { signOut, useSession } from "next-auth/react";
 import { motion, AnimatePresence } from "framer-motion";
 import type { PublicUserProfile } from "@/lib/auth-users";
+import { TOTAL_SHOP_ITEMS } from "@/lib/shopData";
 import {
   CircuitFlowBackdrop,
   MaskedReveal,
@@ -268,7 +269,7 @@ export default function AccountPage({ initialProfile }: AccountPageProps) {
                   Trace Repair Ticket
                 </h2>
                 <p className="text-body-sm text-on-surface-variant mt-1">
-                  Inspect live cleanroom bench stages, thermal tests, and diagnostic checkpoints.
+                  Check repair ticket status references, bench stages, and direct workshop updates.
                 </p>
               </div>
             </SpotlightCard>
@@ -294,7 +295,7 @@ export default function AccountPage({ initialProfile }: AccountPageProps) {
                   Browse Builds &amp; Components
                 </h2>
                 <p className="text-body-sm text-on-surface-variant mt-1">
-                  Explore binned GPUs, hard-line water-cooling kits, and custom workstations.
+                  Explore {TOTAL_SHOP_ITEMS} quality-tested GPUs, processors, motherboards, monitors, and cooling gear.
                 </p>
               </div>
             </SpotlightCard>
@@ -402,7 +403,7 @@ export default function AccountPage({ initialProfile }: AccountPageProps) {
                       id="account-specs"
                       rows={3}
                       maxLength={300}
-                      placeholder="e.g. Ryzen 9 7950X3D / ASUS ROG Crosshair Hero / RTX 4090 / Dual 360mm EKWB Hardline Loop"
+                      placeholder="e.g. Ryzen 7 5700X / B550 Board / RTX 3060 12GB / 32GB DDR4 / 650W PSU"
                       disabled={isSaving}
                       value={rigSpecs}
                       onChange={(e) => setRigSpecs(e.target.value)}

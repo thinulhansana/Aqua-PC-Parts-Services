@@ -2,7 +2,7 @@
 
 import React, { useState, useMemo, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { SHOP_SECTIONS, WHATSAPP_LINK } from "@/lib/shopData";
+import { SHOP_SECTIONS, TOTAL_SHOP_ITEMS, WHATSAPP_LINK } from "@/lib/shopData";
 import {
   MaskedReveal,
   CircuitFlowBackdrop,
@@ -178,9 +178,10 @@ export default function ShopPage() {
               custom={2}
               className="text-body-lg text-on-surface-variant max-w-2xl"
             >
-              Browse our wide range of quality-tested PC parts including
-              monitors, VGA cards, processors, motherboards, storage, RAM and
-              more. Contact us via WhatsApp for current availability and pricing.
+              Browse all {TOTAL_SHOP_ITEMS} quality-tested PC parts including
+              monitors, VGA cards, processors, motherboards, storage, RAM, power
+              supplies, cooling, and accessories. Contact us via WhatsApp for
+              current availability and LKR pricing.
             </motion.p>
 
             {/* Trust Chips */}

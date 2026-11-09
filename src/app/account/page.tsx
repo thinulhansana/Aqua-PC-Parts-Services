@@ -5,9 +5,9 @@ import { getUserProfileByEmail, type PublicUserProfile } from "@/lib/auth-users"
 import AccountPage from "@/components/pages/AccountPage";
 
 export const metadata: Metadata = {
-  title: "Customer Account Portal | Aqua PC Parts & Services",
+  title: "Customer Account Portal | Aqua PC Solutions",
   description:
-    "Manage your Aqua PC Parts & Services account, saved rig blueprint, and diagnostic consultations.",
+    "Manage your Aqua PC Solutions profile, saved PC specification blueprint, and service requests.",
 };
 
 export default async function AccountRoutePage() {

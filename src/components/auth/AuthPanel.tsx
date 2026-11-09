@@ -21,13 +21,13 @@ const AUTH_ERROR_MESSAGES: Record<string, string> = {
   OAuthAccountNotLinked:
     "This email is already registered with another sign-in method. Please sign in with Email & Password.",
   OAuthSignin:
-    "Could not initialize Google sign-in. Verify Google OAuth credentials in .env.local.",
+    "Google Sign-In could not be started right now. Please sign in with Email & Password below.",
   OAuthCallbackError:
     "Google sign-in callback was canceled or rejected. Please try again.",
   AccessDenied: "Access denied. Please try again or use Email & Password.",
   CredentialsSignin: "Invalid email or password. Please verify your credentials.",
   Configuration:
-    "Authentication provider needs configuration. Check AUTH_SECRET and Google credentials in .env.local.",
+    "Google Sign-In is temporarily unavailable. Please use Email & Password.",
   Default: "Authentication failed. Please try again.",
 };
 
@@ -114,8 +114,6 @@ export default function AuthPanel({
 
   const [isLoading, setIsLoading] = useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
-  const [showGoogleSetup, setShowGoogleSetup] = useState(false);
-  const [copiedCallback, setCopiedCallback] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(
     initialError ? AUTH_ERROR_MESSAGES[initialError] || AUTH_ERROR_MESSAGES.Default : null
   );
@@ -144,7 +142,7 @@ export default function AuthPanel({
     setSuccessMsg(null);
 
     if (!googleEnabled) {
-      setShowGoogleSetup((prev) => !prev);
+      setErrorMsg("Google Sign-In is currently unavailable. Please continue with Email & Password below.");
       return;
     }
 
@@ -155,18 +153,6 @@ export default function AuthPanel({
       setIsGoogleLoading(false);
       setErrorMsg("Unable to start Google Sign-In. Please try again.");
     }
-  };
-
-  const handleCopyRedirectUri = () => {
-    const uri =
-      typeof window !== "undefined"
-        ? `${window.location.origin}/api/auth/callback/google`
-        : "http://localhost:3000/api/auth/callback/google";
-    if (typeof navigator !== "undefined" && navigator.clipboard) {
-      navigator.clipboard.writeText(uri);
-    }
-    setCopiedCallback(true);
-    setTimeout(() => setCopiedCallback(false), 2000);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -290,105 +276,62 @@ export default function AuthPanel({
       </div>
 
       {/* Continue with Google Button */}
-      <div className="flex flex-col gap-2">
-        <motion.button
-          type="button"
-          onClick={handleGoogleLogin}
-          disabled={busy}
-          whileTap={{ scale: 0.99 }}
-          className="w-full py-3 px-4 rounded-xl bg-surface-container hover:bg-surface-container-high border border-outline-variant/40 hover:border-primary/45 text-on-surface font-jakarta font-semibold text-body-md flex items-center justify-center gap-3 shadow-sm hover:shadow-cyan-glow transition-all duration-200 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
-        >
-          {isGoogleLoading ? (
-            <span className="material-symbols-outlined text-[20px] text-primary animate-spin">
-              progress_activity
-            </span>
-          ) : (
-            <svg
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              aria-hidden="true"
-              className="shrink-0"
+      {googleEnabled && (
+        <>
+          <div className="flex flex-col gap-2">
+            <motion.button
+              type="button"
+              onClick={handleGoogleLogin}
+              disabled={busy}
+              whileTap={{ scale: 0.99 }}
+              className="w-full py-3 px-4 rounded-xl bg-surface-container hover:bg-surface-container-high border border-outline-variant/40 hover:border-primary/45 text-on-surface font-jakarta font-semibold text-body-md flex items-center justify-center gap-3 shadow-sm hover:shadow-cyan-glow transition-all duration-200 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
             >
-              <path
-                fill="#4285F4"
-                d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17Z"
-              />
-              <path
-                fill="#34A853"
-                d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.11-6.72-4.96H1.29v3.14C3.26 21.3 7.31 24 12 24Z"
-              />
-              <path
-                fill="#FBBC05"
-                d="M5.28 14.24c-.24-.72-.38-1.49-.38-2.24s.14-1.52.38-2.24V6.62H1.29C.47 8.24 0 10.06 0 12s.47 3.76 1.29 5.38l3.99-3.14Z"
-              />
-              <path
-                fill="#EA4335"
-                d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.31 0 3.26 2.7 1.29 6.62l3.99 3.14c.95-2.85 3.6-4.96 6.72-4.96Z"
-              />
-            </svg>
-          )}
-          <span>
-            {isGoogleLoading ? "Connecting to Google..." : "Continue with Google"}
-          </span>
-          {!googleEnabled && (
-            <span className="ml-auto font-mono text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full bg-surface-container-highest text-on-surface-variant border border-outline-variant/30">
-              Setup Needed
+              {isGoogleLoading ? (
+                <span className="material-symbols-outlined text-[20px] text-primary animate-spin">
+                  progress_activity
+                </span>
+              ) : (
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                  className="shrink-0"
+                >
+                  <path
+                    fill="#4285F4"
+                    d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17Z"
+                  />
+                  <path
+                    fill="#34A853"
+                    d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.11-6.72-4.96H1.29v3.14C3.26 21.3 7.31 24 12 24Z"
+                  />
+                  <path
+                    fill="#FBBC05"
+                    d="M5.28 14.24c-.24-.72-.38-1.49-.38-2.24s.14-1.52.38-2.24V6.62H1.29C.47 8.24 0 10.06 0 12s.47 3.76 1.29 5.38l3.99-3.14Z"
+                  />
+                  <path
+                    fill="#EA4335"
+                    d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.31 0 3.26 2.7 1.29 6.62l3.99 3.14c.95-2.85 3.6-4.96 6.72-4.96Z"
+                  />
+                </svg>
+              )}
+              <span>
+                {isGoogleLoading ? "Connecting to Google..." : "Continue with Google"}
+              </span>
+            </motion.button>
+          </div>
+
+          {/* Divider */}
+          <div className="flex items-center gap-3">
+            <div className="h-px flex-1 bg-outline-variant/30" />
+            <span className="font-mono text-[10px] uppercase tracking-widest text-outline">
+              OR CONTINUE WITH EMAIL
             </span>
-          )}
-        </motion.button>
-
-        {/* Friendly inline setup instructions if Google OAuth env keys aren't set yet */}
-        <AnimatePresence>
-          {showGoogleSetup && !googleEnabled && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.28, ease: EASE_PREMIUM }}
-              className="overflow-hidden"
-            >
-              <div className="p-3.5 rounded-xl bg-surface-container border border-primary/30 text-body-sm flex flex-col gap-2">
-                <div className="flex items-start gap-2">
-                  <span className="material-symbols-outlined text-primary text-[18px] shrink-0 mt-0.5">
-                    key
-                  </span>
-                  <div className="flex flex-col gap-1">
-                    <span className="font-semibold text-on-surface">
-                      Add Google OAuth Credentials in <code className="font-mono text-primary">.env.local</code>
-                    </span>
-                    <span className="text-on-surface-variant text-xs leading-relaxed">
-                      Set <code className="font-mono text-on-surface">AUTH_GOOGLE_ID</code> and{" "}
-                      <code className="font-mono text-on-surface">AUTH_GOOGLE_SECRET</code> from Google Cloud Console, then restart <code className="font-mono text-on-surface">npm run dev</code>. Email &amp; Password login works immediately below.
-                    </span>
-                  </div>
-                </div>
-                <div className="flex items-center justify-between gap-2 px-2.5 py-1.5 rounded-lg bg-surface-container-lowest border border-outline-variant/20">
-                  <code className="font-mono text-[11px] text-secondary truncate">
-                    http://localhost:3000/api/auth/callback/google
-                  </code>
-                  <button
-                    type="button"
-                    onClick={handleCopyRedirectUri}
-                    className="font-mono text-[10px] uppercase tracking-wider text-primary hover:underline shrink-0 cursor-pointer"
-                  >
-                    {copiedCallback ? "Copied" : "Copy URI"}
-                  </button>
-                </div>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
-
-      {/* Divider */}
-      <div className="flex items-center gap-3">
-        <div className="h-px flex-1 bg-outline-variant/30" />
-        <span className="font-mono text-[10px] uppercase tracking-widest text-outline">
-          OR CONTINUE WITH EMAIL
-        </span>
-        <div className="h-px flex-1 bg-outline-variant/30" />
-      </div>
+            <div className="h-px flex-1 bg-outline-variant/30" />
+          </div>
+        </>
+      )}
 
       {/* Segmented Pill Toggle */}
       <div

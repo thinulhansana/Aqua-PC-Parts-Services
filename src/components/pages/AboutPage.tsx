@@ -4,6 +4,17 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { TOTAL_SHOP_ITEMS } from "@/lib/shopData";
+import {
+  SITE_NAME,
+  SITE_EST,
+  SITE_FOUNDED_DATE,
+  SITE_FOUNDER,
+  SITE_LOCATION,
+  SITE_PHONE_DISPLAY,
+  SITE_PHONE_HREF,
+  SITE_WHATSAPP_URL,
+} from "@/lib/constants";
 import {
   RevealSection,
   SpotlightCard,
@@ -60,7 +71,7 @@ const CORE_PILLARS = [
 const LAB_CAPABILITIES = [
   {
     title: "Extensive Hardware Catalog",
-    desc: "Over 300+ processors, motherboards, GPUs, SSDs, and accessories in stock, ready for immediate dispatch across Sri Lanka.",
+    desc: `${TOTAL_SHOP_ITEMS} processors, motherboards, GPUs, SSDs, and accessories cataloged and quality-tested, ready for delivery across Sri Lanka.`,
     icon: "memory",
   },
   {
@@ -98,10 +109,10 @@ export default function AboutPage() {
             className="flex flex-wrap items-center gap-space-sm mb-space-md"
           >
             <span className="px-space-md py-1 rounded-full bg-surface-container-high text-primary font-mono text-label-tech tracking-wider uppercase border border-primary/20">
-              AQUA PC SOLUTIONS // ABOUT &amp; ORIGIN
+              {SITE_NAME.toUpperCase()} // ABOUT &amp; ORIGIN
             </span>
             <span className="text-outline font-mono text-label-tech">
-              // EST. 11.06.2026 • EMBILIPITIYA, SRI LANKA
+              // {SITE_EST} • {SITE_LOCATION.toUpperCase()}
             </span>
           </motion.div>
 
@@ -132,9 +143,9 @@ export default function AboutPage() {
               className="grid grid-cols-2 sm:grid-cols-4 gap-space-md pt-space-sm"
             >
               {[
-                { label: "FOUNDED DATE", value: "11.06.2026", sub: "November 6, 2026", labelColor: "text-primary", valueColor: "text-on-surface" },
+                { label: "FOUNDED DATE", value: "11.06.2026", sub: SITE_FOUNDED_DATE, labelColor: "text-primary", valueColor: "text-on-surface" },
                 { label: "HEADQUARTERS", value: "Embilipitiya", sub: "Sri Lanka", labelColor: "text-secondary", valueColor: "text-secondary" },
-                { label: "FOUNDER", value: "S.L.K Thinul", sub: "Lead Specialist", labelColor: "text-tertiary", valueColor: "text-on-surface" },
+                { label: "FOUNDER", value: SITE_FOUNDER, sub: "Lead Specialist", labelColor: "text-tertiary", valueColor: "text-on-surface" },
                 { label: "SUPPORT", value: "WhatsApp", sub: "Direct Founder Chat", labelColor: "text-primary", valueColor: "text-primary" },
               ].map((fact) => (
                 <div
@@ -144,7 +155,7 @@ export default function AboutPage() {
                   <span className={`font-mono text-label-tech ${fact.labelColor}`}>
                     {fact.label}
                   </span>
-                  <span className={`font-syne text-headline-sm ${fact.valueColor} truncate`}>
+                  <span className={`font-syne text-title-md sm:text-headline-sm ${fact.valueColor}`}>
                     {fact.value}
                   </span>
                   <span className="text-body-sm text-on-surface-variant">
@@ -211,7 +222,7 @@ export default function AboutPage() {
 
                 <div className="pt-space-xs flex flex-col sm:flex-row gap-space-xs">
                   <a
-                    href="https://wa.me/message/CYZRQDEHLIRZF1"
+                    href={SITE_WHATSAPP_URL}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex-1 py-2.5 px-space-md rounded-lg bg-[#25D366]/15 hover:bg-[#25D366]/25 text-[#25D366] font-syne text-body-md font-semibold flex items-center justify-center gap-2 border border-[#25D366]/30 transition-all hover:-translate-y-0.5"
@@ -227,13 +238,13 @@ export default function AboutPage() {
                     <span>Chat on WhatsApp</span>
                   </a>
                   <a
-                    href="tel:+94788194535"
+                    href={SITE_PHONE_HREF}
                     className="py-2.5 px-space-md rounded-lg bg-surface-container-high hover:bg-surface-bright text-on-surface font-syne text-body-md font-semibold flex items-center justify-center gap-1.5 border border-outline-variant/30 transition-all hover:-translate-y-0.5"
                   >
                     <span className="material-symbols-outlined text-[16px] text-primary">
                       call
                     </span>
-                    <span>+94 78 819 4535</span>
+                    <span>{SITE_PHONE_DISPLAY}</span>
                   </a>
                 </div>
               </div>
@@ -269,7 +280,7 @@ export default function AboutPage() {
               </p>
 
               <p>
-                Today, Aqua PC Solutions supplies over 300+ rigorously categorized components—from high-clock Intel and AMD processors to motherboards, graphics cards, solid-state storage, and cooling loops—all backed by direct technical support and personal warranty verification.
+                Today, {SITE_NAME} supplies {TOTAL_SHOP_ITEMS} rigorously categorized components—from Intel Core and AMD Ryzen processors to motherboards, graphics cards, solid-state storage, power supplies, monitors, and cooling—all backed by direct technical support and personal warranty verification.
               </p>
             </div>
 
@@ -301,7 +312,7 @@ export default function AboutPage() {
                 </div>
                 <div>
                   <span className="block font-mono text-[11px] text-on-surface-variant uppercase">Founder</span>
-                  <span className="font-syne text-body-md text-on-surface font-bold">S.L.K Thinul</span>
+                  <span className="font-syne text-body-md text-on-surface font-bold">{SITE_FOUNDER}</span>
                 </div>
               </div>
             </div>
@@ -429,7 +440,7 @@ export default function AboutPage() {
           </p>
           <div className="flex flex-wrap justify-center gap-space-md pt-space-xs">
             <a
-              href="https://wa.me/message/CYZRQDEHLIRZF1"
+              href={SITE_WHATSAPP_URL}
               target="_blank"
               rel="noopener noreferrer"
               className="px-space-xl py-space-md rounded-xl bg-[#25D366] hover:bg-[#20ba59] text-white font-syne text-title-md font-bold shadow-lg hover:-translate-y-0.5 transition-all flex items-center gap-2"

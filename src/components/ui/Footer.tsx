@@ -1,18 +1,23 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { motion, AnimatePresence } from "framer-motion";
 import {
   SITE_NAME,
-  SITE_TAGLINE,
+  SITE_LOCATION,
+  SITE_PHONE_DISPLAY,
+  SITE_PHONE_HREF,
+  SITE_EMAIL,
+  SITE_EMAIL_HREF,
+  SITE_WHATSAPP_URL,
+  SITE_MAPS_URL,
+  SITE_HOURS,
   LOGO_SRC,
   FOOTER_LINKS,
   TRUST_BADGES,
   TECH_SPECS_LINE,
 } from "@/lib/constants";
-import { WHATSAPP_LINK } from "@/lib/shopData";
 
 function FooterLinkColumn({
   title,
@@ -59,34 +64,33 @@ function FooterLinkColumn({
 }
 
 export default function Footer() {
-  const [email, setEmail] = useState("");
-  const [subscribed, setSubscribed] = useState(false);
-
-  const handleSubscribe = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!email.trim()) return;
-    setSubscribed(true);
-    setEmail("");
-    setTimeout(() => setSubscribed(false), 5000);
-  };
-
-  const socialChannels = [
+  const contactChannels = [
     {
-      name: "WhatsApp",
-      href: WHATSAPP_LINK,
+      name: "WhatsApp Inquiry",
+      href: SITE_WHATSAPP_URL,
+      external: true,
       iconType: "whatsapp",
       color: "hover:text-[#25D366] hover:border-[#25D366]/40",
     },
     {
-      name: "GitHub",
-      href: "https://github.com/thinulhansana/Aqua-PC-Parts-Services",
-      icon: "code",
+      name: `Call ${SITE_PHONE_DISPLAY}`,
+      href: SITE_PHONE_HREF,
+      external: false,
+      icon: "call",
       color: "hover:text-primary hover:border-primary/40",
     },
     {
-      name: "YouTube",
-      href: "https://youtube.com",
-      icon: "play_circle",
+      name: `Email ${SITE_EMAIL}`,
+      href: SITE_EMAIL_HREF,
+      external: false,
+      icon: "mail",
+      color: "hover:text-secondary hover:border-secondary/40",
+    },
+    {
+      name: `Maps — ${SITE_LOCATION}`,
+      href: SITE_MAPS_URL,
+      external: true,
+      icon: "location_on",
       color: "hover:text-primary hover:border-primary/40",
     },
   ];
@@ -95,10 +99,11 @@ export default function Footer() {
     <footer className="relative bg-surface-container-lowest border-t border-outline-variant/20 overflow-hidden">
       {/* Subtle Top Luminous Hairline */}
       <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-primary/45 to-transparent pointer-events-none" />
+
       {/* ── Main Footer Content ── */}
       <div className="max-w-7xl mx-auto px-4 md:px-margin-md lg:px-margin-lg pt-16 pb-10">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 lg:gap-8">
-          {/* Brand Column */}
+          {/* Brand & Direct Workshop Contact Column */}
           <div className="lg:col-span-2">
             <Link href="/" className="flex items-center gap-3 mb-4">
               <Image
@@ -112,20 +117,19 @@ export default function Footer() {
                 {SITE_NAME}
               </span>
             </Link>
-            <p className="text-body-md text-on-surface-variant max-w-sm mb-6">
-              Expert custom PC builds, precision liquid cooling, and
-              professional repair services. Where performance meets
-              craftsmanship.
+            <p className="text-body-md text-on-surface-variant max-w-sm mb-5">
+              Certified Grade-A PC parts, custom gaming builds, thermal &amp; liquid cooling, and board-level repair diagnostics in{" "}
+              <span className="text-on-surface font-medium">{SITE_LOCATION}</span>.
             </p>
 
-            {/* Social & Contact Icons */}
-            <div className="flex items-center gap-3 mb-8">
-              {socialChannels.map((item) => (
+            {/* Quick Contact Channels */}
+            <div className="flex items-center gap-3 mb-6">
+              {contactChannels.map((item) => (
                 <a
                   key={item.name}
                   href={item.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  target={item.external ? "_blank" : undefined}
+                  rel={item.external ? "noopener noreferrer" : undefined}
                   className={`w-9 h-9 rounded-lg bg-surface-container border border-outline-variant/30 flex items-center justify-center text-on-surface-variant transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md ${item.color}`}
                   aria-label={item.name}
                   title={item.name}
@@ -148,53 +152,42 @@ export default function Footer() {
               ))}
             </div>
 
-            {/* Newsletter */}
-            <div>
-              <p className="font-mono text-label-tech uppercase text-primary tracking-widest mb-3">
-                Newsletter
-              </p>
-              <AnimatePresence mode="wait">
-                {subscribed ? (
-                  <motion.div
-                    key="subscribed"
-                    initial={{ opacity: 0, y: 6, scale: 0.98 }}
-                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={{ opacity: 0, y: -6 }}
-                    transition={{ duration: 0.25 }}
-                    className="flex items-center gap-2 p-3 rounded-lg bg-primary/10 border border-primary/30 text-primary text-body-sm"
-                  >
-                    <span className="material-symbols-outlined text-[18px]">
-                      check_circle
-                    </span>
-                    <span>Thank you for subscribing to telemetry updates!</span>
-                  </motion.div>
-                ) : (
-                  <motion.form
-                    key="form"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    className="flex gap-2"
-                    onSubmit={handleSubscribe}
-                  >
-                    <input
-                      type="email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      placeholder="your@email.com"
-                      required
-                      className="flex-1 bg-surface-container border border-outline-variant/30 rounded-lg px-4 py-2.5 text-body-md text-on-surface placeholder:text-on-surface-variant/50 focus:outline-none focus:border-primary/50 transition-colors"
-                      aria-label="Email for newsletter"
-                    />
-                    <button
-                      type="submit"
-                      className="glass px-4 py-2.5 rounded-lg text-primary text-body-md font-semibold hover:bg-primary/10 hover:border-primary/40 hover:-translate-y-0.5 transition-all"
-                    >
-                      Subscribe
-                    </button>
-                  </motion.form>
-                )}
-              </AnimatePresence>
+            {/* Verified Workshop Details */}
+            <div className="p-4 rounded-xl bg-surface-container border border-outline-variant/20 max-w-sm flex flex-col gap-2 text-body-sm">
+              <div className="flex items-center justify-between gap-2">
+                <span className="font-mono text-label-tech uppercase text-primary tracking-wider">
+                  Workshop &amp; Hours
+                </span>
+                <span className="font-mono text-[10px] text-secondary uppercase">
+                  {SITE_LOCATION}
+                </span>
+              </div>
+              <div className="flex items-center justify-between gap-2 text-on-surface-variant">
+                <span>Mon – Fri</span>
+                <span className="font-mono text-label-tech text-on-surface">
+                  {SITE_HOURS.weekdays}
+                </span>
+              </div>
+              <div className="flex items-center justify-between gap-2 text-on-surface-variant">
+                <span>Saturday</span>
+                <span className="font-mono text-label-tech text-on-surface">
+                  {SITE_HOURS.saturday}
+                </span>
+              </div>
+              <div className="pt-2 mt-1 border-t border-outline-variant/15 flex flex-wrap items-center justify-between gap-2">
+                <a
+                  href={SITE_PHONE_HREF}
+                  className="font-mono text-label-tech text-primary hover:underline"
+                >
+                  {SITE_PHONE_DISPLAY}
+                </a>
+                <a
+                  href={SITE_EMAIL_HREF}
+                  className="font-mono text-[11px] text-on-surface-variant hover:text-primary transition-colors truncate"
+                >
+                  {SITE_EMAIL}
+                </a>
+              </div>
             </div>
           </div>
 

@@ -4,9 +4,9 @@ import { isGoogleOAuthConfigured } from "@/auth.config";
 import LoginPage from "@/components/pages/LoginPage";
 
 export const metadata: Metadata = {
-  title: "Sign In & Create Account | Aqua PC Parts & Services",
+  title: "Sign In & Create Account | Aqua PC Solutions",
   description:
-    "Sign in with Google or Email & Password to access your Aqua PC Parts & Services account, save hardware blueprints, and manage repair requests.",
+    "Sign in with Google or Email & Password to access your Aqua PC Solutions client portal, save rig specifications, and prefill consultation requests.",
 };
 
 export default function LoginRoutePage() {

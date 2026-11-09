@@ -4,6 +4,7 @@ import React from "react";
 import Link from "next/link";
 import dynamic from "next/dynamic";
 import { motion } from "framer-motion";
+import { buildWhatsAppUrl } from "@/lib/shopData";
 import {
   RevealSection,
   SpotlightCard,
@@ -24,7 +25,7 @@ const InteractiveCatalog = dynamic(
           <span className="material-symbols-outlined text-[32px] text-primary animate-spin">
             progress_activity
           </span>
-          <span>Loading Inventory Lab Telemetry...</span>
+          <span>Loading Verified Parts Catalog...</span>
         </div>
       </div>
     ),
@@ -47,20 +48,20 @@ export default function PricingPage() {
               initial="hidden"
               animate="visible"
               custom={0}
-              className="flex items-center gap-space-xs"
+              className="flex flex-wrap items-center gap-space-xs"
             >
               <span className="inline-flex items-center gap-1.5 px-space-sm py-0.5 rounded-full bg-surface-container-high text-secondary font-mono text-label-tech border border-secondary/30">
                 <span className="w-1.5 h-1.5 rounded-full bg-secondary shadow-[0_0_8px_rgba(79,219,200,0.9)] animate-pulse" />
-                ZERO ARBITRARY MARKUPS
+                HONEST SRI LANKAN LKR RATES
               </span>
               <span className="font-mono text-label-tech text-outline tracking-wider uppercase">
-                Telemetry Verified Rates
+                No Hidden Bench Markups
               </span>
             </motion.div>
             <h1 className="font-syne text-display-hero-mobile lg:text-headline-lg text-on-surface tracking-tight">
-              <MaskedReveal delay={0.05}>Transparent Tiered Pricing for</MaskedReveal>{" "}
+              <MaskedReveal delay={0.05}>Transparent Service Rates for</MaskedReveal>{" "}
               <MaskedReveal delay={0.18}>
-                <span className="text-shimmer">Parts, Repairs &amp; Consultations</span>
+                <span className="text-shimmer">Repairs, Builds &amp; Parts</span>
               </MaskedReveal>
             </h1>
             <motion.p
@@ -70,7 +71,7 @@ export default function PricingPage() {
               custom={2}
               className="text-body-lg text-on-surface-variant"
             >
-              Engineered for enthusiasts and workstations. Certified retail component sourcing, flat-rate precision labor, and verified zero-diagnostic penalty billing.
+              Built for gamers, creators, and workstations across Sri Lanka. Clear flat-rate service tiers, upfront repair quotes, and direct live parts pricing via WhatsApp.
             </motion.p>
           </div>
 
@@ -86,13 +87,13 @@ export default function PricingPage() {
               <span className="material-symbols-outlined text-primary text-[18px]">
                 verified
               </span>
-              <span>$0 Diagnostic Fee With Any Repair</span>
+              <span>Rs. 0 Inspection When Repair Proceeds</span>
             </div>
             <div className="px-space-md py-space-xs rounded-xl bg-surface-container text-on-surface flex items-center gap-space-sm shadow-sm border border-outline-variant/20 hover:border-secondary/40 transition-colors">
               <span className="material-symbols-outlined text-secondary text-[18px]">
                 price_check
               </span>
-              <span>Official Authorized MSRP Benchmark</span>
+              <span>06-Month Testing Warranty Coverage</span>
             </div>
           </motion.div>
         </div>
@@ -108,20 +109,20 @@ export default function PricingPage() {
           >
             <div>
               <span className="font-mono text-label-badge text-primary uppercase tracking-widest">
-                Fixed Labor Schedule
+                Standard LKR Labor Schedule
               </span>
               <h2 className="font-syne text-headline-md text-on-surface mt-space-xs">
-                Service Packages &amp; Diagnostic Tiers
+                Service Packages &amp; Build Tiers
               </h2>
             </div>
             <p className="text-body-md text-on-surface-variant max-w-md">
-              Standardized service times logged on automated thermal test-benches. No hidden line-items or open-ended hourly creep.
+              Every diagnostic report and build quote is approved with you upfront before any paid work starts.
             </p>
           </motion.div>
 
-          {/* 4 Tier Bento Grid with Smooth Hover-Lift Effects */}
+          {/* 4 Tier Bento Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-gutter items-stretch">
-            {/* Tier 1: Essential */}
+            {/* Tier 1: Thermal Service & Checkup */}
             <motion.div variants={fadeUpVariants} custom={0} className="flex">
               <SpotlightCard className="w-full flex flex-col justify-between p-space-lg rounded-xl bg-surface-container-low hover:bg-surface-container shadow-md hover:shadow-[0_20px_45px_-12px_rgba(6,182,212,0.35)] transition-all duration-300 ease-out hover:-translate-y-2.5 border border-outline-variant/15 hover:border-primary/50">
                 <div className="flex flex-col relative z-10">
@@ -130,18 +131,18 @@ export default function PricingPage() {
                       TIER 01
                     </span>
                     <span className="px-space-xs py-0.5 rounded-full bg-surface-container-high text-on-surface-variant font-mono text-[10px]">
-                      RAPID TURNOVER
+                      SAME-DAY SERVICE
                     </span>
                   </div>
                   <h3 className="font-syne text-headline-sm text-on-surface">
-                    Essential Checkup
+                    Thermal Overhaul &amp; Checkup
                   </h3>
                   <p className="text-body-sm text-on-surface-variant mt-space-xs min-h-[36px]">
-                    Full thermal audit and baseline stability stress testing for unstable or dusty systems.
+                    Full cleaning, thermal repasting, and full-load stress audit for hot or noisy PCs.
                   </p>
                   <div className="my-space-md flex items-baseline gap-space-xs">
                     <span className="font-syne text-headline-lg text-primary">
-                      $49
+                      Rs. 2,500
                     </span>
                     <span className="font-mono text-label-tech text-outline">
                       / flat rate
@@ -152,25 +153,25 @@ export default function PricingPage() {
                       <span className="material-symbols-outlined text-secondary text-[16px]">
                         check_circle
                       </span>
-                      <span>Hardware Stress-Testing</span>
+                      <span>Deep Chassis &amp; Fan Dust Clean</span>
                     </li>
                     <li className="flex items-center gap-space-xs text-on-surface">
                       <span className="material-symbols-outlined text-secondary text-[16px]">
                         check_circle
                       </span>
-                      <span>Malware Sanitization Audit</span>
+                      <span>High-Conductivity CPU Repaste</span>
                     </li>
                     <li className="flex items-center gap-space-xs text-on-surface">
                       <span className="material-symbols-outlined text-secondary text-[16px]">
                         check_circle
                       </span>
-                      <span>Thermal Flir Auditing</span>
+                      <span>Full-Load Thermal Benchmark</span>
                     </li>
                     <li className="flex items-center gap-space-xs text-on-surface">
                       <span className="material-symbols-outlined text-secondary text-[16px]">
                         check_circle
                       </span>
-                      <span>High-Pressure Dust Blowout</span>
+                      <span>Fan Curve &amp; Airflow Optimization</span>
                     </li>
                   </ul>
                 </div>
@@ -179,13 +180,13 @@ export default function PricingPage() {
                     href="/contact"
                     className="block text-center w-full py-space-sm rounded-lg bg-surface-container-high hover:bg-surface-bright text-on-surface font-syne text-title-md transition-all shadow-sm border border-outline-variant/30 hover:border-primary/40"
                   >
-                    Select Package
+                    Book Tier 01
                   </Link>
                 </div>
               </SpotlightCard>
             </motion.div>
 
-            {/* Tier 2: Pro (Featured with Conic Liquid Border & 3D Spring Tilt) */}
+            {/* Tier 2: Hardware Repair & Tuning */}
             <motion.div variants={fadeUpVariants} custom={1} className="flex">
               <TiltSpotlightCard
                 conicBorder
@@ -204,17 +205,17 @@ export default function PricingPage() {
                     </span>
                   </div>
                   <h3 className="font-syne text-headline-sm text-on-surface">
-                    Pro Hardware Repair &amp; Tuning
+                    Hardware Repair &amp; Tuning
                   </h3>
                   <p className="text-body-sm text-on-surface-variant mt-space-xs min-h-[36px]">
-                    Micro-precision fixes, component swaps, BIOS re-flashes, and clean cable architecture.
+                    Fault diagnostics, board-level repairs, BIOS recovery, and component upgrades.
                   </p>
                   <div className="my-space-md flex items-baseline gap-space-xs">
                     <span className="font-syne text-headline-lg text-primary">
-                      $129
+                      From Rs. 4,500
                     </span>
                     <span className="font-mono text-label-tech text-outline">
-                      / flat rate
+                      / service
                     </span>
                   </div>
                   <ul className="flex flex-col gap-space-xs text-body-sm text-on-surface-variant">
@@ -222,32 +223,32 @@ export default function PricingPage() {
                       <span className="material-symbols-outlined text-secondary text-[16px]">
                         check_circle
                       </span>
-                      <span>Component Swap &amp; Diagnostic Lab</span>
+                      <span>Power Rail &amp; POST Diagnostics</span>
                     </li>
                     <li className="flex items-center gap-space-xs text-on-surface">
                       <span className="material-symbols-outlined text-secondary text-[16px]">
                         check_circle
                       </span>
-                      <span>Custom BIOS Flash &amp; Curve Tuning</span>
+                      <span>Board-Level Component Rework</span>
                     </li>
                     <li className="flex items-center gap-space-xs text-on-surface">
                       <span className="material-symbols-outlined text-secondary text-[16px]">
                         check_circle
                       </span>
-                      <span>Thermal Grizzly Kryonaut Repaste</span>
+                      <span>BIOS Flash, XMP &amp; Driver Tuning</span>
                     </li>
                     <li className="flex items-center gap-space-xs text-on-surface">
                       <span className="material-symbols-outlined text-secondary text-[16px]">
                         check_circle
                       </span>
-                      <span>Chassis Cable Routing Refactor</span>
+                      <span>Thermal Paste &amp; Cable Cleanup</span>
                     </li>
                     <li className="flex items-center gap-space-xs text-on-surface">
                       <span className="material-symbols-outlined text-primary text-[16px]">
                         verified
                       </span>
                       <span className="text-primary font-medium">
-                        30-Day Aqua Lab Warranty
+                        06-Month Testing Warranty (Parts)
                       </span>
                     </li>
                   </ul>
@@ -257,13 +258,13 @@ export default function PricingPage() {
                     href="/contact"
                     className="relative sheen-hover block text-center w-full py-space-sm rounded-lg bg-primary hover:bg-primary-fixed-dim text-on-primary font-syne text-title-md transition-all shadow-cyan-glow"
                   >
-                    <span className="relative z-10">Book Pro Service</span>
+                    <span className="relative z-10">Book Repair Service</span>
                   </Link>
                 </div>
               </TiltSpotlightCard>
             </motion.div>
 
-            {/* Tier 3: Custom Loop */}
+            {/* Tier 3: Custom PC Build & Cooling */}
             <motion.div variants={fadeUpVariants} custom={2} className="flex">
               <SpotlightCard className="w-full flex flex-col justify-between p-space-lg rounded-xl bg-surface-container-low hover:bg-surface-container shadow-md hover:shadow-[0_20px_45px_-12px_rgba(6,182,212,0.35)] transition-all duration-300 ease-out hover:-translate-y-2.5 border border-outline-variant/15 hover:border-primary/50">
                 <div className="flex flex-col relative z-10">
@@ -272,21 +273,21 @@ export default function PricingPage() {
                       TIER 03
                     </span>
                     <span className="px-space-xs py-0.5 rounded-full bg-surface-container-high text-secondary font-mono text-[10px]">
-                      HYDRO LAB
+                      CUSTOM RIG LAB
                     </span>
                   </div>
                   <h3 className="font-syne text-headline-sm text-on-surface">
-                    Enthusiast Custom Loop
+                    Custom PC Build &amp; Cooling
                   </h3>
                   <p className="text-body-sm text-on-surface-variant mt-space-xs min-h-[36px]">
-                    Complete custom open liquid assembly, drain/flush service, pressure leak-testing.
+                    Complete desktop assembly, AIO or liquid cooling setup, OS installation, and burn-in validation.
                   </p>
                   <div className="my-space-md flex items-baseline gap-space-xs">
                     <span className="font-syne text-headline-lg text-primary">
-                      $299
+                      From Rs. 8,500
                     </span>
                     <span className="font-mono text-label-tech text-outline">
-                      / build cycle
+                      / build
                     </span>
                   </div>
                   <ul className="flex flex-col gap-space-xs text-body-sm text-on-surface-variant">
@@ -294,32 +295,32 @@ export default function PricingPage() {
                       <span className="material-symbols-outlined text-secondary text-[16px]">
                         check_circle
                       </span>
-                      <span>Full Hardline / Softline Assembly</span>
+                      <span>Clean Airflow &amp; Cable Architecture</span>
                     </li>
                     <li className="flex items-center gap-space-xs text-on-surface">
                       <span className="material-symbols-outlined text-secondary text-[16px]">
                         check_circle
                       </span>
-                      <span>24-Hour Pneumatic Leak Test</span>
+                      <span>AIO / Custom Liquid Leak Testing</span>
                     </li>
                     <li className="flex items-center gap-space-xs text-on-surface">
                       <span className="material-symbols-outlined text-secondary text-[16px]">
                         check_circle
                       </span>
-                      <span>Direct-Die Block Fitting Optional</span>
+                      <span>BIOS, Drivers &amp; Windows Setup</span>
                     </li>
                     <li className="flex items-center gap-space-xs text-on-surface">
                       <span className="material-symbols-outlined text-secondary text-[16px]">
                         check_circle
                       </span>
-                      <span>Bespoke Sleeved Cable Routing</span>
+                      <span>24-Hour Stress &amp; Thermal Validation</span>
                     </li>
                     <li className="flex items-center gap-space-xs text-on-surface">
                       <span className="material-symbols-outlined text-primary text-[16px]">
                         verified
                       </span>
                       <span className="text-primary font-medium">
-                        90-Day Zero-Leak Guarantee
+                        06-Month Build Testing Warranty
                       </span>
                     </li>
                   </ul>
@@ -329,13 +330,13 @@ export default function PricingPage() {
                     href="/contact"
                     className="block text-center w-full py-space-sm rounded-lg bg-surface-container-high hover:bg-surface-bright text-on-surface font-syne text-title-md transition-all shadow-sm border border-outline-variant/30 hover:border-primary/40"
                   >
-                    Schedule Loop Build
+                    Schedule Custom Build
                   </Link>
                 </div>
               </SpotlightCard>
             </motion.div>
 
-            {/* Tier 4: Enterprise Retainer */}
+            {/* Tier 4: Business & Studio Support */}
             <motion.div variants={fadeUpVariants} custom={3} className="flex">
               <SpotlightCard className="w-full flex flex-col justify-between p-space-lg rounded-xl bg-surface-container-low hover:bg-surface-container shadow-md hover:shadow-[0_20px_45px_-12px_rgba(6,182,212,0.35)] transition-all duration-300 ease-out hover:-translate-y-2.5 border border-outline-variant/15 hover:border-primary/50">
                 <div className="flex flex-col relative z-10">
@@ -344,21 +345,18 @@ export default function PricingPage() {
                       TIER 04
                     </span>
                     <span className="px-space-xs py-0.5 rounded-full bg-surface-container-high text-tertiary font-mono text-[10px]">
-                      SLA BACKED
+                      PRIORITY SLA
                     </span>
                   </div>
                   <h3 className="font-syne text-headline-sm text-on-surface">
-                    Enterprise Retainer
+                    Business &amp; Studio Fleet Support
                   </h3>
                   <p className="text-body-sm text-on-surface-variant mt-space-xs min-h-[36px]">
-                    Continuous mission-critical hardware assurance for 3D render farms and studio workstations.
+                    Bulk hardware sourcing, studio editing PCs, and ongoing office workstation care.
                   </p>
                   <div className="my-space-md flex items-baseline gap-space-xs">
                     <span className="font-syne text-headline-lg text-primary">
-                      $499
-                    </span>
-                    <span className="font-mono text-label-tech text-outline">
-                      / month
+                      Custom Quote
                     </span>
                   </div>
                   <ul className="flex flex-col gap-space-xs text-body-sm text-on-surface-variant">
@@ -366,35 +364,39 @@ export default function PricingPage() {
                       <span className="material-symbols-outlined text-secondary text-[16px]">
                         check_circle
                       </span>
-                      <span>Priority 4-Hour On-Site Dispatch</span>
+                      <span>Multi-PC Spec &amp; Budget Planning</span>
                     </li>
                     <li className="flex items-center gap-space-xs text-on-surface">
                       <span className="material-symbols-outlined text-secondary text-[16px]">
                         check_circle
                       </span>
-                      <span>Up to 5 Full Rig Diagnostics / Mo</span>
+                      <span>Bulk Part &amp; Monitor Sourcing</span>
                     </li>
                     <li className="flex items-center gap-space-xs text-on-surface">
                       <span className="material-symbols-outlined text-secondary text-[16px]">
                         check_circle
                       </span>
-                      <span>Volume Procurement Tier Discounts</span>
+                      <span>Scheduled Preventive Servicing</span>
                     </li>
                     <li className="flex items-center gap-space-xs text-on-surface">
                       <span className="material-symbols-outlined text-secondary text-[16px]">
                         check_circle
                       </span>
-                      <span>Hot-Swap Spare Component Bank</span>
+                      <span>Priority Workshop Turnaround</span>
                     </li>
                   </ul>
                 </div>
                 <div className="pt-space-lg mt-space-md relative z-10">
-                  <Link
-                    href="/contact"
+                  <a
+                    href={buildWhatsAppUrl(
+                      "Hi Aqua PC Solutions, I'd like a custom quote for Business / Studio PC fleet sourcing or maintenance."
+                    )}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="block text-center w-full py-space-sm rounded-lg bg-surface-container-high hover:bg-surface-bright text-on-surface font-syne text-title-md transition-all shadow-sm border border-outline-variant/30 hover:border-primary/40"
                   >
-                    Contact Enterprise
-                  </Link>
+                    Request Fleet Quote
+                  </a>
                 </div>
               </SpotlightCard>
             </motion.div>
@@ -402,7 +404,7 @@ export default function PricingPage() {
         </div>
       </RevealSection>
 
-      {/* ── Consultation Hourly Rates & Diagnostic Policy Bento ── */}
+      {/* ── Consultation & Diagnostic Ethics Policy Bento ── */}
       <RevealSection className="w-full px-gutter-lg py-space-xl bg-surface-container-lowest border-y border-outline-variant/15">
         <div className="max-w-[1440px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-gutter-lg items-center">
           {/* Left side: Diagnostic policy */}
@@ -415,19 +417,19 @@ export default function PricingPage() {
               Diagnostic Ethics Policy
             </span>
             <h2 className="font-syne text-headline-md text-on-surface">
-              Transparent Benchmarks. Honest Billing.
+              Clear Testing. Zero Surprise Fees.
             </h2>
             <p className="text-body-lg text-on-surface-variant">
-              We despise arbitrary $100 diagnostic fees that leave clients empty-handed. If we find an issue and you approve the repair, your diagnosis is strictly $0. If you choose not to proceed, our comprehensive bench report is just $30 flat.
+              We inspect your system thoroughly and explain the root cause before you spend a rupee on repair work. If we find an issue and you proceed with the repair, your inspection fee is Rs. 0. If you decide not to go ahead, you only pay a flat Rs. 1,500 bench report fee.
             </p>
 
-            {/* Animated Sparkline Visual */}
+            {/* Thermal Stability Benchmark Visual */}
             <div className="p-space-lg rounded-xl bg-surface-container-low flex flex-col gap-space-sm shadow-inner border border-outline-variant/15">
               <div className="flex items-center justify-between font-mono text-label-tech">
                 <span className="text-on-surface-variant">
-                  Lab Sensor Telemetry Output
+                  Post-Service Thermal Curve Sample
                 </span>
-                <span className="text-secondary font-bold">Delta T: 8.4°C</span>
+                <span className="text-secondary font-bold">24h Burn-In Logged</span>
               </div>
               <div className="w-full h-16 flex items-center">
                 <svg
@@ -464,14 +466,14 @@ export default function PricingPage() {
                 </svg>
               </div>
               <div className="flex items-center justify-between text-outline font-mono text-[11px]">
-                <span>Ambient: 21.0°C</span>
-                <span>Loop Flow: 220 L/h</span>
-                <span>Acoustic: 24.1 dBA</span>
+                <span>Idle Check</span>
+                <span>Sustained Full Load</span>
+                <span>06-Month Testing Warranty</span>
               </div>
             </div>
           </motion.div>
 
-          {/* Right side: Hourly Consultation Rate Cards with Hover-Lift */}
+          {/* Right side: Advisory & Upgrade Cards */}
           <div className="lg:col-span-6 flex flex-col sm:flex-row gap-gutter">
             <motion.div variants={scaleInVariants} custom={1} className="flex-1 flex">
               <SpotlightCard className="flex-1 p-space-lg rounded-xl bg-surface-container flex flex-col justify-between shadow-lg hover:shadow-cyan-glow hover:-translate-y-2 transition-all duration-300 ease-out border border-outline-variant/15 hover:border-primary/50">
@@ -482,24 +484,24 @@ export default function PricingPage() {
                     </span>
                   </div>
                   <h3 className="font-syne text-title-md text-on-surface">
-                    Virtual PC Build Architect
+                    PC Build Planning &amp; Advice
                   </h3>
                   <p className="text-body-sm text-on-surface-variant mt-space-xs">
-                    45-minute live screen share to optimize your PCPartPicker list, component clearance, and radiator airflow before spending a dime.
+                    Not sure which CPU, GPU, board, or PSU matches your LKR budget without bottlenecks? We review and optimize your complete parts list directly.
                   </p>
                   <div className="mt-space-md mb-space-xs flex items-baseline gap-space-xs">
                     <span className="font-syne text-headline-md text-on-surface">
-                      $45
+                      Free (Rs. 0)
                     </span>
                     <span className="font-mono text-label-tech text-outline">
-                      / 45 min
+                      with parts / build
                     </span>
                   </div>
                   <div className="inline-flex items-center gap-1.5 px-space-sm py-1 rounded bg-surface-container-highest text-secondary font-mono text-[10px]">
                     <span className="material-symbols-outlined text-[14px]">
                       redeem
                     </span>
-                    <span>100% credited toward parts purchase</span>
+                    <span>Rs. 1,500 standalone (100% credited to order)</span>
                   </div>
                 </div>
                 <div className="pt-space-lg relative z-10">
@@ -507,7 +509,7 @@ export default function PricingPage() {
                     href="/contact"
                     className="block text-center w-full py-space-sm rounded-lg bg-surface-container-high hover:bg-surface-bright text-on-surface font-syne text-title-md transition-all border border-outline-variant/30 hover:border-primary/40"
                   >
-                    Schedule Architect
+                    Book Build Advice
                   </Link>
                 </div>
               </SpotlightCard>
@@ -525,24 +527,24 @@ export default function PricingPage() {
                     </span>
                   </div>
                   <h3 className="font-syne text-title-md text-on-surface">
-                    In-Lab Hardware Engineering
+                    Component Install &amp; Upgrade
                   </h3>
                   <p className="text-body-sm text-on-surface-variant mt-space-xs">
-                    Bespoke micro-soldering, delidding, custom loop tubing bending, and extreme overclocking conducted on our ISO-certified test bench.
+                    Purchased a new GPU, SSD, RAM kit, PSU, or cooler? We handle clean mounting, BIOS verification, and thermal stability checking in our workshop.
                   </p>
                   <div className="mt-space-md mb-space-xs flex items-baseline gap-space-xs">
                     <span className="font-syne text-headline-md text-on-surface">
-                      $95
+                      From Rs. 1,500
                     </span>
                     <span className="font-mono text-label-tech text-outline">
-                      / hour
+                      / per component
                     </span>
                   </div>
                   <div className="inline-flex items-center gap-1.5 px-space-sm py-1 rounded bg-surface-container-highest text-tertiary font-mono text-[10px]">
                     <span className="material-symbols-outlined text-[14px]">
-                      timer
+                      verified_user
                     </span>
-                    <span>Billed in granular 15-minute blocks</span>
+                    <span>Includes POST &amp; temperature verification</span>
                   </div>
                 </div>
                 <div className="pt-space-lg relative z-10">
@@ -550,7 +552,7 @@ export default function PricingPage() {
                     href="/contact"
                     className="block text-center w-full py-space-sm rounded-lg bg-surface-container-high hover:bg-surface-bright text-on-surface font-syne text-title-md transition-all border border-outline-variant/30 hover:border-secondary/40"
                   >
-                    Book Bench Time
+                    Schedule Install
                   </Link>
                 </div>
               </SpotlightCard>
@@ -559,7 +561,7 @@ export default function PricingPage() {
         </div>
       </RevealSection>
 
-      {/* ── Interactive PC Parts Catalog (Code-Split via dynamic import) ── */}
+      {/* ── Interactive Verified Parts Catalog (Code-Split via dynamic import) ── */}
       <section className="w-full px-gutter-lg py-space-2xl bg-surface" id="parts-catalog">
         <div className="max-w-[1440px] mx-auto">
           <InteractiveCatalog />

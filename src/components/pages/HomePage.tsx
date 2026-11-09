@@ -20,7 +20,22 @@ import {
   EASE_PREMIUM,
 } from "@/components/ui/MotionPrimitives";
 
-const WHATSAPP_BASE = "https://wa.me/message/CYZRQDEHLIRZF1";
+import {
+  WHATSAPP_LINK,
+  TOTAL_SHOP_ITEMS,
+  SECTION_ITEM_COUNTS,
+  buildWhatsAppUrl,
+} from "@/lib/shopData";
+import {
+  SITE_NAME,
+  SITE_FOUNDED_DATE,
+  SITE_FOUNDER,
+  SITE_LOCATION,
+  SITE_PHONE_DISPLAY,
+  SITE_PHONE_HREF,
+} from "@/lib/constants";
+
+const WHATSAPP_BASE = WHATSAPP_LINK;
 
 // ── Floating Orbs (decorative background) ────────────────────────────────────
 function FloatingOrbs() {
@@ -35,12 +50,12 @@ function FloatingOrbs() {
 
 // ── Scroll Ticker ─────────────────────────────────────────────────────────────
 const TICKER_ITEMS = [
-  { icon: "inventory_2", text: "300+ Grade-A Components", color: "text-primary" },
+  { icon: "inventory_2", text: `${TOTAL_SHOP_ITEMS} Grade-A Components`, color: "text-primary" },
   { icon: "sports_esports", text: "NVIDIA RTX 30/40 Series", color: "text-secondary" },
   { icon: "memory", text: "Intel & AMD Processors", color: "text-tertiary" },
   { icon: "storage", text: "High-Speed NVMe SSDs", color: "text-primary" },
   { icon: "monitor", text: "Frameless FHD IPS Displays", color: "text-secondary" },
-  { icon: "water_drop", text: "Custom Liquid Cooling Loops", color: "text-tertiary" },
+  { icon: "water_drop", text: "Custom Cooling & Tuning", color: "text-tertiary" },
   { icon: "verified_user", text: "06-Month Testing Warranty", color: "text-primary" },
   { icon: "local_shipping", text: "Island-wide Safe Delivery", color: "text-secondary" },
 ];
@@ -75,7 +90,7 @@ const CATEGORIES = [
     id: "processors",
     name: "Processors",
     desc: "Intel Core i3/i5/i7 & AMD Ryzen 3/5/7/9",
-    count: "60+ Models",
+    count: `${SECTION_ITEM_COUNTS.processors} Models`,
     icon: "memory",
     color: "from-cyan-500/20 to-blue-500/10",
     border: "border-cyan-500/30",
@@ -84,8 +99,8 @@ const CATEGORIES = [
   {
     id: "vga-cards",
     name: "Graphics Cards",
-    desc: "NVIDIA RTX 30/40 Series & AMD Radeon RX",
-    count: "40+ Models",
+    desc: "NVIDIA RTX 20/30/40, GTX Series & AMD Radeon RX",
+    count: `${SECTION_ITEM_COUNTS["vga-cards"]} Models`,
     icon: "sports_esports",
     color: "from-emerald-500/20 to-teal-500/10",
     border: "border-emerald-500/30",
@@ -94,8 +109,8 @@ const CATEGORIES = [
   {
     id: "motherboards",
     name: "Motherboards",
-    desc: "Intel H61/H110/B460/Z790 & AMD A320/B450/B550",
-    count: "50+ Boards",
+    desc: "Intel G41–Z790 & AMD A320/B450/B550/B650/B850",
+    count: `${SECTION_ITEM_COUNTS.motherboards} Boards`,
     icon: "developer_board",
     color: "from-purple-500/20 to-indigo-500/10",
     border: "border-purple-500/30",
@@ -103,19 +118,39 @@ const CATEGORIES = [
   },
   {
     id: "storage",
-    name: "SSD & NVMe Storage",
-    desc: "High-speed M.2 NVMe, SATA SSDs & HDDs",
-    count: "30+ Drives",
+    name: "SSD & HDD Storage",
+    desc: "High-speed M.2 NVMe, SATA SSDs & Desktop/Laptop HDDs",
+    count: `${SECTION_ITEM_COUNTS.storage} Drives`,
     icon: "storage",
     color: "from-blue-500/20 to-cyan-500/10",
     border: "border-blue-500/30",
     iconColor: "text-primary",
   },
   {
+    id: "monitors",
+    name: "Monitors & Displays",
+    desc: "Frameless FHD IPS, LED & LCD Grade-A Panels",
+    count: `${SECTION_ITEM_COUNTS.monitors} Screens`,
+    icon: "monitor",
+    color: "from-teal-500/20 to-cyan-500/10",
+    border: "border-teal-500/30",
+    iconColor: "text-secondary",
+  },
+  {
+    id: "cables",
+    name: "Cables & Accessories",
+    desc: "VGA/SATA/Power Cables, LCD Adapters & DVD Writers",
+    count: `${SECTION_ITEM_COUNTS.cables} Items`,
+    icon: "cable",
+    color: "from-indigo-500/20 to-sky-500/10",
+    border: "border-indigo-500/30",
+    iconColor: "text-tertiary",
+  },
+  {
     id: "ram",
     name: "RAM Memory",
-    desc: "DDR3 & DDR4 High-Performance Gaming Kits",
-    count: "20+ Options",
+    desc: "DDR2, DDR3 & DDR4 Desktop & Laptop Modules",
+    count: `${SECTION_ITEM_COUNTS.ram} Options`,
     icon: "dns",
     color: "from-amber-500/20 to-orange-500/10",
     border: "border-amber-500/30",
@@ -125,27 +160,17 @@ const CATEGORIES = [
     id: "power-supply",
     name: "Power Supplies",
     desc: "450W to 850W Branded Continuous Power Units",
-    count: "15+ Units",
+    count: `${SECTION_ITEM_COUNTS["power-supply"]} Units`,
     icon: "bolt",
     color: "from-yellow-500/20 to-amber-500/10",
     border: "border-yellow-500/30",
     iconColor: "text-yellow-400",
   },
   {
-    id: "monitors",
-    name: "Monitors & Displays",
-    desc: "Frameless FHD IPS, LED & LCD Grade-A Panels",
-    count: "25+ Screens",
-    icon: "monitor",
-    color: "from-teal-500/20 to-cyan-500/10",
-    border: "border-teal-500/30",
-    iconColor: "text-secondary",
-  },
-  {
     id: "cooling",
-    name: "Cooling & Fans",
-    desc: "CPU Coolers, Copper Heat Sinks & Thermal Gear",
-    count: "40+ Items",
+    name: "CPU Cooling Fans",
+    desc: "Intel Socket & AMD AM4 Copper & Stock Coolers",
+    count: `${SECTION_ITEM_COUNTS.cooling} Models`,
     icon: "mode_fan",
     color: "from-sky-500/20 to-blue-500/10",
     border: "border-sky-500/30",
@@ -219,20 +244,20 @@ const FEATURED_HIGHLIGHTS = [
       "Hi Aqua PC Solutions, could you let me know the price and brands available for the 512GB M.2 NVMe SSD?",
   },
   {
-    id: "intel-i5-10400",
-    name: "Intel Core i5-10400 / 10400F",
+    id: "intel-i7-9700",
+    name: "Intel Core i7-9700",
     category: "Processor",
-    platform: "LGA1200 · 6 Cores / 12 Threads · 4.30 GHz",
-    badge: "Budget King",
+    platform: "LGA1151 · 8 Cores / 8 Threads · Up to 4.70 GHz",
+    badge: "Intel Power Pick",
     badgeType: "popular",
     specs: [
-      { label: "Base/Boost", value: "2.90 / 4.30 GHz" },
-      { label: "Cores/Threads", value: "6C / 12T" },
+      { label: "Base/Boost", value: "3.00 / 4.70 GHz" },
+      { label: "Cores/Threads", value: "8C / 8T" },
       { label: "Cache", value: "12MB Intel Smart" },
-      { label: "Socket", value: "LGA1200" },
+      { label: "Socket", value: "LGA1151 (9th Gen)" },
     ],
     inquiryText:
-      "Hi Aqua PC Solutions, I want to inquire about the Intel Core i5 10th Gen processor. What is the current price?",
+      "Hi Aqua PC Solutions, I want to inquire about the Intel Core i7-9700 (9th Gen) processor. What is the current price?",
   },
   {
     id: "rx-6600-8gb",
@@ -254,7 +279,7 @@ const FEATURED_HIGHLIGHTS = [
 
 const TRUST_METRICS = [
   {
-    value: "300+",
+    value: `${TOTAL_SHOP_ITEMS}`,
     title: "Cataloged Parts",
     sub: "Processors, GPUs, boards, SSDs & more",
     icon: "inventory_2",
@@ -285,53 +310,53 @@ const SERVICES_PREVIEW = [
     desc: "Bespoke desktop computers crafted for esports gaming, 4K video rendering, and engineering CAD workstations with balanced airflow.",
     icon: "desktop_windows",
     tag: "GAMING & WORKSTATIONS",
-    link: "/services",
+    link: "/services#srv-02",
   },
   {
     title: "Diagnostics & Repairs",
-    desc: "Rapid triage for no-power, no-display, blue-screens, and overheating. Board-level micro-soldering to rescue expensive parts.",
+    desc: "Rapid triage for no-power, no-display, blue-screens, and overheating. Board-level diagnostics and component rework to rescue valuable parts.",
     icon: "build_circle",
     tag: "BOARD-LEVEL REPAIR",
-    link: "/contact",
+    link: "/services#srv-01",
   },
   {
-    title: "Liquid Cooling & Upgrades",
-    desc: "Custom water loop flushes, AIO installations, thermal repasting with high-conductivity compounds, and hardware component upgrades.",
+    title: "Thermal & Cooling Upgrades",
+    desc: "AIO & liquid loop servicing, deep dust cleaning, Kryonaut-class thermal repasting, and hardware component upgrades.",
     icon: "water_drop",
     tag: "THERMAL OPTIMIZATION",
-    link: "/services",
+    link: "/services#srv-03",
   },
 ];
 
 const RIG_TELEMETRY = {
   specs: {
     overlayIcon: "speed",
-    overlayLabel: "Zero Throttle Loop",
-    overlayMetric: "< 58°C Full Load",
+    overlayLabel: "Zero Throttle Profile",
+    overlayMetric: "< 65°C Full Load",
     barLabel: "Silicon Clock Stability",
     barValue: "99.8%",
     barWidth: "96%",
-    signalLabel: "VCore Ripple Telemetry",
-    signalValue: "1.24V SYNC",
+    signalLabel: "Voltage Rail Verification",
+    signalValue: "STABLE LOAD",
     stats: [
-      { label: "Burn-In", value: "24h Pass", sub: "AIDA64 / 3DMark", color: "text-primary" },
+      { label: "Burn-In", value: "24h Pass", sub: "Prime95 / 3DMark", color: "text-primary" },
       { label: "Grade", value: "Class-A", sub: "Verified Silicon", color: "text-secondary" },
       { label: "Support", value: "WhatsApp", sub: "Direct Chat", color: "text-[#25D366]" },
     ],
   },
   cooling: {
     overlayIcon: "water_drop",
-    overlayLabel: "Dual 360mm Hydro Loop",
-    overlayMetric: "220 L/h Flow",
+    overlayLabel: "AIO & Liquid Cooling Lab",
+    overlayMetric: "Leak Verified",
     barLabel: "Thermal Dissipation Headroom",
     barValue: "88.4%",
     barWidth: "88%",
-    signalLabel: "Coolant Flow Curve",
-    signalValue: "29.4°C EQ",
+    signalLabel: "Sustained Load Curve",
+    signalValue: "BALANCED",
     stats: [
-      { label: "Coolant", value: "29.4°C", sub: "Ambient Equilibrium", color: "text-secondary" },
-      { label: "Delta-T", value: "-18.4°C", sub: "Kryonaut / Direct", color: "text-primary" },
-      { label: "Acoustic", value: "24.1 dBA", sub: "Whisper Pump Curve", color: "text-tertiary" },
+      { label: "Warranty", value: "06 Mo.", sub: "Testing Coverage", color: "text-secondary" },
+      { label: "Delta-T", value: "-10 to -18°C", sub: "Kryonaut Repaste", color: "text-primary" },
+      { label: "Fan Tune", value: "Custom", sub: "Low-Noise Curve", color: "text-tertiary" },
     ],
   },
 } as const;
@@ -350,9 +375,9 @@ const RIG_BLUEPRINTS = [
       { value: 96, label: "Rail Stability", display: "96%" },
     ],
     specs: [
-      { icon: "memory", label: "Processor", value: "Intel Core i5-10400F / Ryzen 5" },
+      { icon: "memory", label: "Processor", value: "AMD Ryzen 5 5600 / Intel i5-9400F" },
       { icon: "sports_esports", label: "Graphics", value: "AMD Radeon RX 6600 8GB" },
-      { icon: "dns", label: "Memory", value: "16GB DDR4 Dual-Channel XMP" },
+      { icon: "dns", label: "Memory", value: "16GB DDR4 Dual-Channel" },
       { icon: "storage", label: "Storage", value: "512GB High-Speed M.2 NVMe" },
     ],
     whatsappText:
@@ -373,7 +398,7 @@ const RIG_BLUEPRINTS = [
     specs: [
       { icon: "memory", label: "Processor", value: "AMD Ryzen 7 5700X (8C / 16T)" },
       { icon: "sports_esports", label: "Graphics", value: "NVIDIA RTX 3060 12GB GDDR6" },
-      { icon: "dns", label: "Memory", value: "32GB DDR4 High-Frequency Kit" },
+      { icon: "dns", label: "Memory", value: "32GB DDR4 Memory Configuration" },
       { icon: "mode_fan", label: "Cooling", value: "High-Airflow Dual Tower Thermal" },
     ],
     whatsappText:
@@ -385,16 +410,16 @@ const RIG_BLUEPRINTS = [
     tag: "4K LIQUID LAB",
     title: "Zero-Compromise Custom Loop Enthusiast Rig",
     summary:
-      "Bespoke CNC manifold cooling, pressure-tested hardline loops, Kryonaut thermal tuning, and 24-hour Karhu / AIDA64 stress validation.",
+      "Precision liquid & AIO cooling architecture, Kryonaut thermal tuning, clean cable management, and 24-hour stability burn-in validation.",
     gauges: [
       { value: 99, label: "Peak Class", display: "4K" },
       { value: 95, label: "Thermal Margin", display: "49°C" },
       { value: 99, label: "Clock Sustain", display: "99.8%" },
     ],
     specs: [
-      { icon: "memory", label: "Processor", value: "Flagship Multi-Core Ryzen / Core i9" },
-      { icon: "sports_esports", label: "Graphics", value: "NVIDIA RTX 40 Series Flagship" },
-      { icon: "water_drop", label: "Cooling", value: "Custom Dual-360mm Hydro Loop" },
+      { icon: "memory", label: "Processor", value: "AMD Ryzen 9 5900X / Custom Flagship" },
+      { icon: "sports_esports", label: "Graphics", value: "NVIDIA RTX 4070 Ti 12GB / 40 Series" },
+      { icon: "water_drop", label: "Cooling", value: "Custom Liquid / AIO Loop Tuning" },
       { icon: "verified_user", label: "Validation", value: "24h Burn-In + 06 Mo. Warranty" },
     ],
     whatsappText:
@@ -492,7 +517,7 @@ export default function HomePage() {
                     <span className="material-symbols-outlined text-[20px] relative z-10 group-hover:rotate-12 transition-transform duration-300">
                       grid_view
                     </span>
-                    <span className="relative z-10">Browse 300+ Parts</span>
+                    <span className="relative z-10">Browse {TOTAL_SHOP_ITEMS} Parts</span>
                   </Link>
                 </MagneticWrap>
 
@@ -707,7 +732,9 @@ export default function HomePage() {
                       Need a custom rig quotation?
                     </span>
                     <a
-                      href={`${WHATSAPP_BASE}?text=Hi%20Aqua%20PC%20Solutions,%20I%20would%20like%20a%20quotation%20for%20a%20custom%20gaming%20PC.`}
+                      href={buildWhatsAppUrl(
+                        "Hi Aqua PC Solutions, I would like a quotation for a custom gaming PC."
+                      )}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-[#25D366] hover:text-[#20ba59] font-syne text-body-sm font-bold flex items-center gap-1 transition-colors group/cta"
@@ -785,7 +812,7 @@ export default function HomePage() {
                 href="/shop"
                 className="inline-flex items-center gap-space-xs text-primary hover:text-primary-fixed font-syne text-title-md transition-colors group"
               >
-                <span>View Full 300+ Item Shop Catalog</span>
+                <span>View Full {TOTAL_SHOP_ITEMS}-Item Shop Catalog</span>
                 <span className="material-symbols-outlined text-[18px] group-hover:translate-x-1 transition-transform">
                   arrow_forward
                 </span>
@@ -793,8 +820,8 @@ export default function HomePage() {
             </motion.div>
           </div>
 
-          {/* 8-Card Category Grid with 3D Spring Tilt & Metallic Sheen */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-gutter">
+          {/* 9-Card Category Grid covering all shop sections */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-gutter">
             {CATEGORIES.map((cat, i) => (
               <motion.div key={cat.id} variants={scaleInVariants} custom={i}>
                 <TiltSpotlightCard
@@ -865,7 +892,7 @@ export default function HomePage() {
                 href="/shop"
                 className="px-space-md py-space-sm rounded-xl bg-surface-container-high hover:bg-surface-bright text-on-surface font-syne text-body-md font-semibold border border-outline-variant/30 transition-all flex items-center gap-2 self-start md:self-auto hover:border-primary/40 hover:-translate-y-0.5"
               >
-                <span>View All 300+ Products</span>
+                <span>View All {TOTAL_SHOP_ITEMS} Products</span>
                 <span className="material-symbols-outlined text-[16px]">arrow_forward</span>
               </Link>
             </motion.div>
@@ -1243,9 +1270,9 @@ export default function HomePage() {
               </h2>
 
               <p className="text-body-md text-on-surface-variant leading-relaxed">
-                Founded on <strong className="text-on-surface">November 6, 2026</strong> in{" "}
-                <strong className="text-on-surface">Embilipitiya, Sri Lanka</strong> by{" "}
-                <strong className="text-on-surface">S.L.K Thinul Hansana</strong>, Aqua PC Solutions is built on an unwavering commitment to authenticity. We reject overpriced inferior hardware and unreliable repairs.
+                Founded on <strong className="text-on-surface">{SITE_FOUNDED_DATE}</strong> in{" "}
+                <strong className="text-on-surface">{SITE_LOCATION}</strong> by{" "}
+                <strong className="text-on-surface">{SITE_FOUNDER}</strong>, {SITE_NAME} is built on an unwavering commitment to authenticity. We reject overpriced inferior hardware and unreliable repairs.
               </p>
 
               <p className="text-body-md text-on-surface-variant leading-relaxed">
@@ -1272,11 +1299,11 @@ export default function HomePage() {
                 </a>
 
                 <a
-                  href="tel:+94788194535"
+                  href={SITE_PHONE_HREF}
                   className="px-space-lg py-space-sm rounded-xl bg-surface-container-high hover:bg-surface-bright text-on-surface font-syne text-body-md font-semibold border border-outline-variant/30 transition-all flex items-center gap-1.5 hover:-translate-y-0.5"
                 >
                   <span className="material-symbols-outlined text-[18px] text-primary">call</span>
-                  <span>+94 78 819 4535</span>
+                  <span>{SITE_PHONE_DISPLAY}</span>
                 </a>
               </div>
             </motion.div>
@@ -1350,7 +1377,7 @@ export default function HomePage() {
                 href="/shop"
                 className="relative sheen-hover px-space-xl py-space-md rounded-xl bg-gradient-to-r from-primary to-secondary text-surface font-syne text-title-md font-bold shadow-cyan-glow hover:shadow-cyan-glow-lg hover:-translate-y-0.5 transition-all duration-300 inline-block"
               >
-                <span className="relative z-10">Browse 300+ Parts Shop</span>
+                <span className="relative z-10">Browse {TOTAL_SHOP_ITEMS} Parts Shop</span>
               </Link>
             </MagneticWrap>
 

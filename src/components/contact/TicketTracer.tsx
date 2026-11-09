@@ -1,39 +1,60 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { buildWhatsAppUrl } from "@/lib/shopData";
+import { SITE_NAME, SITE_EMAIL } from "@/lib/constants";
 import { EASE_PREMIUM } from "@/components/ui/MotionPrimitives";
 
-export default function TicketTracer() {
-  const [ticketSearch, setTicketSearch] = useState("AQ-88204");
-  const [ticketResult, setTicketResult] = useState<{
-    id: string;
-    stage: string;
-    progress: number;
-    bench: string;
-    tech: string;
-    details: string;
-  } | null>({
-    id: "AQ-88204",
-    stage: "STRESS TEST STAGE 3/4",
-    progress: 78,
-    bench: "Bench #02",
-    tech: "Sarah Jenkins",
-    details: "Karhu RAM burn-in at 7,800% coverage. 0 WHEA errors detected.",
-  });
+interface TicketTracerProps {
+  initialTicketId?: string;
+}
 
-  const handleQueryTicket = () => {
-    if (!ticketSearch.trim()) return;
-    const query = ticketSearch.toUpperCase();
-    setTicketResult({
-      id: query,
-      stage: "TRIAGE VERIFICATION COMPLETE",
-      progress: 92,
-      bench: "Tech Lab Bay #01",
-      tech: "Dr. Elena Vance",
-      details: "Oscilloscope voltage rails confirmed stable. Thermal paste reapplied with liquid metal.",
-    });
+const WORKSHOP_STAGES = [
+  { num: "01", label: "Intake Logged", note: "Serials & visual check recorded" },
+  { num: "02", label: "Bench Diagnosis", note: "Fault isolation & thermal check" },
+  { num: "03", label: "LKR Quote Approval", note: "Confirmed with you before work" },
+  { num: "04", label: "Repair / Assembly", note: "Parts fitted & cable managed" },
+  { num: "05", label: "24h Stress Test", note: "Continuous load verification" },
+  { num: "06", label: "Ready / Dispatched", note: "Workshop pickup or Sri Lanka courier" },
+];
+
+export default function TicketTracer({ initialTicketId }: TicketTracerProps) {
+  const [ticketInput, setTicketInput] = useState(initialTicketId || "");
+  const [queriedId, setQueriedId] = useState<string | null>(
+    initialTicketId || null
+  );
+
+  useEffect(() => {
+    if (initialTicketId) {
+      setTicketInput(initialTicketId);
+      setQueriedId(initialTicketId);
+    }
+  }, [initialTicketId]);
+
+  const handlePrepareInquiry = (e: React.FormEvent) => {
+    e.preventDefault();
+    const cleaned = ticketInput.trim().toUpperCase();
+    if (!cleaned) return;
+    setQueriedId(cleaned);
   };
+
+  const activeTicket = queriedId || ticketInput.trim().toUpperCase();
+  const whatsappStatusUrl = buildWhatsAppUrl(
+    activeTicket
+      ? `Hi ${SITE_NAME}, I'd like a workshop status update for my Ticket ID: ${activeTicket}.`
+      : `Hi ${SITE_NAME}, I'd like to check the status of my repair / custom build.`
+  );
+  const emailSubject = encodeURIComponent(
+    activeTicket
+      ? `[Ticket Status] ${activeTicket} - ${SITE_NAME}`
+      : `[Ticket Status Inquiry] - ${SITE_NAME}`
+  );
+  const emailBody = encodeURIComponent(
+    activeTicket
+      ? `Hello ${SITE_NAME},\n\nPlease share the current workshop stage for my Ticket ID: ${activeTicket}.\n\nThank you.`
+      : `Hello ${SITE_NAME},\n\nPlease share a status update for my repair / build.\n\nThank you.`
+  );
 
   return (
     <div className="bg-surface-container-low rounded-xl p-space-lg sm:p-space-xl shadow-xl flex flex-col justify-between gap-space-lg relative overflow-hidden border border-outline-variant/20 h-full">
@@ -44,73 +65,93 @@ export default function TicketTracer() {
             query_stats
           </span>
           <span className="font-mono text-label-tech text-primary uppercase">
-            REAL-TIME TELEMETRY QUERY
+            TICKET STATUS INQUIRY
           </span>
         </div>
         <h3 className="font-syne text-headline-md text-on-surface">
-          Track Diagnostics &amp; Rig State
+          Check Your Repair or Build Status
         </h3>
         <p className="text-body-md text-on-surface-variant mt-space-xs">
-          Enter your ticket ID (from your drop-off receipt or intake email) to check pump pressure tests, memory stress iteration counts, and thermal sensor graphs.
+          Enter your ticket reference (e.g. <span className="font-mono text-primary">AQ-XXXXX</span> from your online requisition or drop-off receipt) to request an instant status photo or update via WhatsApp or email.
         </p>
       </div>
 
-      {/* Ticket Search Input */}
-      <div className="flex flex-col gap-space-sm">
-        <div className="flex gap-space-xs">
+      <div className="flex flex-col gap-space-md">
+        <form onSubmit={handlePrepareInquiry} className="flex gap-space-xs">
           <input
             className="w-full px-space-md py-space-sm rounded-lg bg-surface-container text-on-surface font-mono text-label-tech placeholder:text-outline focus:outline-none focus:ring-2 focus:ring-primary uppercase border border-outline-variant/20"
-            placeholder="e.g. AQ-94821 or AQ-88204"
+            placeholder="e.g. AQ-48219"
             type="text"
-            value={ticketSearch}
-            onChange={(e) => setTicketSearch(e.target.value)}
+            value={ticketInput}
+            onChange={(e) => setTicketInput(e.target.value)}
           />
           <motion.button
             whileTap={{ scale: 0.96 }}
-            onClick={handleQueryTicket}
             className="px-space-lg py-space-sm rounded-lg bg-primary text-on-primary hover:bg-primary-fixed-dim font-syne text-title-md transition-all shrink-0"
-            type="button"
+            type="submit"
           >
-            Trace Rig
+            Prepare Check
           </motion.button>
-        </div>
+        </form>
 
-        {/* Dynamic Result Slot */}
         <AnimatePresence mode="wait">
-          {ticketResult && (
-            <motion.div
-              key={ticketResult.id + ticketResult.progress}
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -6 }}
-              transition={{ duration: 0.25, ease: EASE_PREMIUM }}
-              className="p-space-md rounded-lg bg-surface-container flex flex-col gap-space-xs border border-outline-variant/20"
-            >
-              <div className="flex items-center justify-between">
-                <span className="font-mono text-label-tech text-on-surface font-bold">
-                  TICKET #{ticketResult.id}
+          <motion.div
+            key={activeTicket || "workflow"}
+            initial={{ opacity: 0, y: 6 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.25, ease: EASE_PREMIUM }}
+            className="p-space-md rounded-lg bg-surface-container flex flex-col gap-space-sm border border-outline-variant/20"
+          >
+            <div className="flex items-center justify-between flex-wrap gap-2 pb-space-xs border-b border-outline-variant/15">
+              <span className="font-mono text-label-tech text-on-surface font-bold">
+                {activeTicket
+                  ? `REFERENCE READY: ${activeTicket}`
+                  : "6-STAGE WORKSHOP PROCESS"}
+              </span>
+              <span className="px-space-xs py-0.5 rounded bg-secondary/15 text-secondary font-mono text-[10px] font-bold">
+                EMBILIPITIYA BENCH
+              </span>
+            </div>
+
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-space-xs">
+              {WORKSHOP_STAGES.map((stage) => (
+                <div
+                  key={stage.num}
+                  className="p-2 rounded bg-surface-container-high/60 border border-outline-variant/10 flex flex-col gap-0.5"
+                >
+                  <span className="font-mono text-[10px] text-primary font-bold">
+                    {stage.num} // {stage.label}
+                  </span>
+                  <span className="text-[11px] text-on-surface-variant leading-tight">
+                    {stage.note}
+                  </span>
+                </div>
+              ))}
+            </div>
+
+            <div className="flex flex-wrap items-center gap-space-xs pt-space-xs">
+              <a
+                href={whatsappStatusUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex-1 min-w-[160px] inline-flex items-center justify-center gap-1.5 px-space-md py-space-xs rounded-lg bg-[#25D366] hover:bg-[#1ebe5a] text-white font-syne text-body-sm font-bold transition-colors"
+              >
+                <span>Check on WhatsApp</span>
+                <span className="material-symbols-outlined text-[16px]">
+                  open_in_new
                 </span>
-                <span className="px-space-xs py-0.5 rounded bg-secondary/20 text-secondary font-mono text-[10px] font-bold">
-                  {ticketResult.stage}
+              </a>
+              <a
+                href={`mailto:${SITE_EMAIL}?subject=${emailSubject}&body=${emailBody}`}
+                className="inline-flex items-center justify-center gap-1.5 px-space-md py-space-xs rounded-lg bg-surface-container-high hover:bg-surface-bright text-on-surface font-syne text-body-sm border border-outline-variant/30 transition-colors"
+              >
+                <span className="material-symbols-outlined text-[16px] text-secondary">
+                  mail
                 </span>
-              </div>
-              <div className="w-full bg-surface-container-high h-2 rounded-full overflow-hidden mt-1">
-                <motion.div
-                  initial={{ width: "0%" }}
-                  animate={{ width: `${ticketResult.progress}%` }}
-                  transition={{ duration: 0.6, ease: EASE_PREMIUM }}
-                  className="bg-gradient-to-r from-primary to-secondary h-full rounded-full shadow-[0_0_8px_rgba(76,215,246,0.5)]"
-                />
-              </div>
-              <div className="flex justify-between items-center text-outline font-mono text-[11px] pt-1">
-                <span>Assigned: {ticketResult.tech}</span>
-                <span>Location: {ticketResult.bench}</span>
-              </div>
-              <p className="text-body-sm text-on-surface-variant pt-1 border-t border-outline-variant/10">
-                {ticketResult.details}
-              </p>
-            </motion.div>
-          )}
+                <span>Email Update</span>
+              </a>
+            </div>
+          </motion.div>
         </AnimatePresence>
       </div>
     </div>

@@ -2,9 +2,9 @@ import PricingPage from "@/components/pages/PricingPage";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Pricing & Rate Card | Aqua PC Parts & Services",
+  title: "Pricing & Rate Card | Aqua PC Solutions",
   description:
-    "Transparent tiered pricing for PC parts, repair packages, consultations, and component lab installation add-ons.",
+    "Transparent LKR pricing for PC diagnostics, hardware repairs, custom build assembly, thermal service, and searchable PC parts inquiries at Aqua PC Solutions.",
 };
 
 export default function Page() {
