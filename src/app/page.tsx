@@ -2,9 +2,9 @@ import HomePage from "@/components/pages/HomePage";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Aqua PC Parts & Services | Precision Liquid Engineering",
+  title: "Aqua PC Solutions | Custom Gaming Rigs, PC Parts & Repairs in Sri Lanka",
   description:
-    "Liquid-cooled precision, elite PC hardware, custom loops, and certified diagnostic & repair services.",
+    "Explore certified Grade-A PC hardware, custom liquid-cooled gaming rigs, and micro-precision diagnostic & repair services in Sri Lanka by Aqua PC Solutions.",
 };
 
 export default function Page() {

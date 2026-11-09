@@ -4,6 +4,7 @@ export const SITE_EST = "EST. 2024";
 
 export const NAV_LINKS = [
   { label: "Home", href: "/" },
+  { label: "Shop", href: "/shop" },
   { label: "Services", href: "/services" },
   { label: "Pricing", href: "/pricing" },
   { label: "About", href: "/about" },
@@ -12,30 +13,35 @@ export const NAV_LINKS = [
 
 export const FOOTER_LINKS = {
   products: {
-    title: "Products",
+    title: "Shop Parts",
     links: [
-      { label: "CPUs", href: "/products/cpus" },
-      { label: "GPUs", href: "/products/gpus" },
-      { label: "Liquid Cooling", href: "/products/liquid-cooling" },
-      { label: "Memory", href: "/products/memory" },
+      { label: "Monitors", href: "/shop?category=monitors" },
+      { label: "VGA Cards", href: "/shop?category=vga-cards" },
+      { label: "Processors", href: "/shop?category=processors" },
+      { label: "Motherboards", href: "/shop?category=motherboards" },
+      { label: "Storage & SSDs", href: "/shop?category=storage" },
+      { label: "RAM & Accessories", href: "/shop?category=ram" },
     ],
   },
   services: {
     title: "Services",
     links: [
-      { label: "Diagnostics", href: "/services#diagnostics" },
-      { label: "Micro-Soldering", href: "/services#micro-soldering" },
-      { label: "Custom Builds", href: "/services#custom-builds" },
-      { label: "Data Recovery", href: "/services#data-recovery" },
+      { label: "Diagnostics & Repair", href: "/services#srv-01" },
+      { label: "Liquid Cooling Loops", href: "/services#srv-02" },
+      { label: "Thermal & Delidding", href: "/services#srv-03" },
+      { label: "Overclocking & BIOS", href: "/services#srv-04" },
+      { label: "Enterprise Clusters", href: "/services#srv-05" },
     ],
   },
   company: {
     title: "Company",
     links: [
-      { label: "About", href: "/about" },
-      { label: "Careers", href: "/careers" },
-      { label: "Press", href: "/press" },
-      { label: "Contact", href: "/contact" },
+      { label: "About Us", href: "/about" },
+      { label: "Pricing & Rates", href: "/pricing" },
+      { label: "Contact Lab", href: "/contact" },
+      { label: "Client Portal", href: "/account" },
+      { label: "Sign In", href: "/login" },
+      { label: "WhatsApp Support", href: "https://wa.me/message/CYZRQDEHLIRZF1" },
     ],
   },
 } as const;

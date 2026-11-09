@@ -2,9 +2,9 @@ import AboutPage from "@/components/pages/AboutPage";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "About Us & Craftsmanship | Aqua PC Parts & Services",
+  title: "About Us & Founder | Aqua PC Solutions",
   description:
-    "Engineered by enthusiasts, built for uncompromising performance. Meet our hardware architects and inspect our ISO-certified cleanroom assembly facility.",
+    "Founded on November 6, 2026 by S.L.K Thinul Hansana in Embilipitiya, Sri Lanka. Aqua PC Solutions delivers certified Grade-A PC hardware, custom builds, and micro-precision diagnostics.",
 };
 
 export default function Page() {

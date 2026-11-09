@@ -1,8 +1,21 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { motion } from "framer-motion";
+import {
+  RevealSection,
+  SpotlightCard,
+  TiltSpotlightCard,
+  MaskedReveal,
+  CircuitFlowBackdrop,
+  LiveOscilloscope,
+  AnimatedNumber,
+  fadeUpVariants,
+  scaleInVariants,
+  EASE_PREMIUM,
+} from "@/components/ui/MotionPrimitives";
 
 const SERVICES = [
   {
@@ -200,138 +213,182 @@ const PIPELINE_STEPS = [
 ];
 
 export default function ServicesPage() {
-  const [selectedService, setSelectedService] = useState("srv-01");
-
   return (
     <div className="flex flex-col w-full">
       {/* ── Section 1: Hero Header ── */}
       <section className="relative w-full overflow-hidden bg-surface-container-lowest -mt-20 pt-28 pb-space-2xl">
-        <div className="absolute -top-40 left-1/4 w-[600px] h-[600px] bg-primary-container/10 rounded-full blur-[140px] pointer-events-none" />
-        <div className="absolute top-20 right-10 w-[450px] h-[450px] bg-secondary-container/10 rounded-full blur-[120px] pointer-events-none" />
+        <CircuitFlowBackdrop className="absolute inset-0 w-full h-full opacity-55" />
+        <div className="absolute -top-40 left-1/4 w-[600px] h-[600px] bg-primary-container/10 rounded-full blur-[140px] animate-orb-drift pointer-events-none" />
+        <div className="absolute top-20 right-10 w-[450px] h-[450px] bg-secondary-container/10 rounded-full blur-[120px] animate-orb-drift-delay pointer-events-none" />
 
         <div className="max-w-[1440px] mx-auto px-gutter-lg relative z-10">
           <div className="flex flex-col lg:flex-row items-start justify-between gap-space-xl">
             <div className="flex flex-col max-w-3xl">
-              <div className="inline-flex items-center gap-space-sm px-space-md py-space-xs rounded-full bg-surface-container-high w-fit mb-space-md shadow-sm border border-primary/20">
+              <motion.div
+                variants={fadeUpVariants}
+                initial="hidden"
+                animate="visible"
+                custom={0}
+                className="inline-flex items-center gap-space-sm px-space-md py-space-xs rounded-full bg-surface-container-high w-fit mb-space-md shadow-sm border border-primary/20"
+              >
                 <span className="w-2 h-2 rounded-full bg-primary shadow-[0_0_8px_rgba(76,215,246,0.8)] animate-pulse" />
                 <span className="font-mono text-label-tech text-primary uppercase tracking-widest">
                   ISO-4 Standard Certified Clean Bench
                 </span>
-              </div>
+              </motion.div>
               <h1 className="font-syne text-display-hero-mobile lg:text-display-hero text-on-surface tracking-tight uppercase">
-                Comprehensive PC Repair, <br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-tertiary to-secondary">
-                  Custom Architecture
-                </span>{" "}
+                <MaskedReveal delay={0.05}>Comprehensive PC Repair,</MaskedReveal> <br />
+                <MaskedReveal delay={0.16}>
+                  <span className="text-shimmer">
+                    Custom Architecture
+                  </span>
+                </MaskedReveal>{" "}
                 <br />
-                &amp; Expert Advisory
+                <MaskedReveal delay={0.26}>&amp; Expert Advisory</MaskedReveal>
               </h1>
-              <p className="text-body-lg text-on-surface-variant mt-space-md max-w-2xl">
+              <motion.p
+                variants={fadeUpVariants}
+                initial="hidden"
+                animate="visible"
+                custom={2}
+                className="text-body-lg text-on-surface-variant mt-space-md max-w-2xl"
+              >
                 Specialized micro-soldering labs, calibrated fluid dynamics testing, and component-level triage executed by master hardware engineers. Every rig is treated as mission-critical infrastructure.
-              </p>
-              <div className="flex flex-wrap items-center gap-space-md mt-space-xl">
+              </motion.p>
+              <motion.div
+                variants={fadeUpVariants}
+                initial="hidden"
+                animate="visible"
+                custom={3}
+                className="flex flex-wrap items-center gap-space-md mt-space-xl"
+              >
                 <Link
                   href="/contact"
-                  className="inline-flex items-center gap-space-xs px-space-lg py-space-md rounded-lg bg-primary hover:bg-primary-fixed-dim text-on-primary font-syne text-title-md transition-all shadow-cyan-glow hover:shadow-cyan-glow-lg"
+                  className="relative overflow-hidden group inline-flex items-center gap-space-xs px-space-lg py-space-md rounded-lg bg-primary hover:bg-primary-fixed-dim text-on-primary font-syne text-title-md transition-all shadow-cyan-glow hover:shadow-cyan-glow-lg hover:-translate-y-0.5"
                 >
-                  <span className="material-symbols-outlined text-[20px]">
+                  <span className="absolute inset-0 animate-shimmer opacity-0 group-hover:opacity-100 transition-opacity" />
+                  <span className="material-symbols-outlined text-[20px] relative z-10">
                     calendar_today
                   </span>
-                  <span>Reserve Lab Slot</span>
+                  <span className="relative z-10">Reserve Lab Slot</span>
                 </Link>
                 <a
                   href="#lab-tech"
-                  className="inline-flex items-center gap-space-xs px-space-lg py-space-md rounded-lg bg-surface-container-high hover:bg-surface-bright text-on-surface font-syne text-title-md border border-outline-variant/30 transition-all"
+                  className="inline-flex items-center gap-space-xs px-space-lg py-space-md rounded-lg bg-surface-container-high hover:bg-surface-bright text-on-surface font-syne text-title-md border border-outline-variant/30 transition-all hover:border-primary/40 hover:-translate-y-0.5"
                 >
-                  <span className="material-symbols-outlined text-[20px]">
+                  <span className="material-symbols-outlined text-[20px] text-secondary">
                     biotech
                   </span>
                   <span>Inspect Lab Telemetry</span>
                 </a>
-              </div>
+              </motion.div>
             </div>
 
             {/* Hero Telemetry Matrix HUD */}
-            <div className="w-full lg:w-[420px] bg-surface-container-low p-space-lg rounded-xl flex flex-col gap-space-md shadow-xl border border-primary/20 relative">
-              <div className="flex items-center justify-between">
-                <span className="font-syne text-headline-sm text-on-surface">
-                  Lab Active Status
-                </span>
-                <span className="px-space-xs py-0.5 rounded bg-surface-container font-mono text-label-tech text-secondary border border-secondary/30">
-                  ALL SYSTEMS LIVE
-                </span>
-              </div>
+            <motion.div
+              variants={scaleInVariants}
+              initial="hidden"
+              animate="visible"
+              custom={2}
+              className="w-full lg:w-[420px]"
+            >
+              <TiltSpotlightCard
+                conicBorder
+                sheen
+                maxTilt={3}
+                className="rounded-xl shadow-xl card-glow"
+                innerClassName="bg-surface-container-low p-space-lg flex flex-col gap-space-md"
+              >
+                <div className="flex items-center justify-between relative z-10">
+                  <span className="font-syne text-headline-sm text-on-surface">
+                    Lab Active Status
+                  </span>
+                  <span className="px-space-xs py-0.5 rounded bg-surface-container font-mono text-label-tech text-secondary border border-secondary/30 animate-pulse">
+                    ALL SYSTEMS LIVE
+                  </span>
+                </div>
 
-              <div className="grid grid-cols-2 gap-space-sm">
-                <div className="bg-surface-container p-space-sm rounded-lg flex flex-col border border-outline-variant/15">
-                  <span className="font-mono text-[10px] text-on-surface-variant uppercase">
-                    Current Queue
-                  </span>
-                  <span className="font-mono text-telemetry-num text-primary mt-1">
-                    4 Triage Units
-                  </span>
+                <div className="grid grid-cols-2 gap-space-sm relative z-10">
+                  <div className="bg-surface-container p-space-sm rounded-lg flex flex-col border border-outline-variant/15 hover:border-primary/30 transition-colors">
+                    <span className="font-mono text-[10px] text-on-surface-variant uppercase">
+                      Current Queue
+                    </span>
+                    <span className="font-mono text-telemetry-num text-primary mt-1">
+                      4 Triage Units
+                    </span>
+                  </div>
+                  <div className="bg-surface-container p-space-sm rounded-lg flex flex-col border border-outline-variant/15 hover:border-secondary/30 transition-colors">
+                    <span className="font-mono text-[10px] text-on-surface-variant uppercase">
+                      Ambient Loop Temp
+                    </span>
+                    <span className="font-mono text-telemetry-num text-secondary mt-1">
+                      19.4 °C Stable
+                    </span>
+                  </div>
+                  <div className="bg-surface-container p-space-sm rounded-lg flex flex-col border border-outline-variant/15 hover:border-tertiary/30 transition-colors">
+                    <span className="font-mono text-[10px] text-on-surface-variant uppercase">
+                      Nitrogen Press.
+                    </span>
+                    <span className="font-mono text-telemetry-num text-tertiary mt-1">
+                      1.82 BAR Test
+                    </span>
+                  </div>
+                  <div className="bg-surface-container p-space-sm rounded-lg flex flex-col border border-outline-variant/15 hover:border-primary/30 transition-colors">
+                    <span className="font-mono text-[10px] text-on-surface-variant uppercase">
+                      Soldering Station
+                    </span>
+                    <span className="font-mono text-telemetry-num text-primary mt-1">
+                      360 °C Calibrated
+                    </span>
+                  </div>
                 </div>
-                <div className="bg-surface-container p-space-sm rounded-lg flex flex-col border border-outline-variant/15">
-                  <span className="font-mono text-[10px] text-on-surface-variant uppercase">
-                    Ambient Loop Temp
-                  </span>
-                  <span className="font-mono text-telemetry-num text-secondary mt-1">
-                    19.4 °C Stable
-                  </span>
-                </div>
-                <div className="bg-surface-container p-space-sm rounded-lg flex flex-col border border-outline-variant/15">
-                  <span className="font-mono text-[10px] text-on-surface-variant uppercase">
-                    Nitrogen Press.
-                  </span>
-                  <span className="font-mono text-telemetry-num text-tertiary mt-1">
-                    1.82 BAR Test
-                  </span>
-                </div>
-                <div className="bg-surface-container p-space-sm rounded-lg flex flex-col border border-outline-variant/15">
-                  <span className="font-mono text-[10px] text-on-surface-variant uppercase">
-                    Soldering Station
-                  </span>
-                  <span className="font-mono text-telemetry-num text-primary mt-1">
-                    360 °C Calibrated
-                  </span>
-                </div>
-              </div>
 
-              {/* Dynamic Load Gauge */}
-              <div className="bg-surface-container p-space-md rounded-lg flex flex-col gap-space-xs border border-outline-variant/15">
-                <div className="flex items-center justify-between text-body-sm font-body-sm">
-                  <span className="text-on-surface">
-                    Thermal Dissipation Capacity
-                  </span>
-                  <span className="font-mono text-telemetry-num text-primary">
-                    88.4%
-                  </span>
+                {/* Dynamic Load Gauge + Live Oscilloscope */}
+                <div className="bg-surface-container p-space-md rounded-lg flex flex-col gap-space-xs border border-outline-variant/15 relative z-10">
+                  <div className="flex items-center justify-between text-body-sm">
+                    <span className="text-on-surface">
+                      Thermal Dissipation Capacity
+                    </span>
+                    <span className="font-mono text-telemetry-num text-primary">
+                      <AnimatedNumber value="88.4%" />
+                    </span>
+                  </div>
+                  <LiveOscilloscope mode="secondary" className="my-1" />
+                  <div className="w-full h-2 bg-surface-container-lowest rounded-full overflow-hidden">
+                    <motion.div
+                      initial={{ width: "0%" }}
+                      animate={{ width: "88.4%" }}
+                      transition={{ duration: 1.1, delay: 0.3, ease: EASE_PREMIUM }}
+                      className="h-full bg-gradient-to-r from-secondary via-primary to-tertiary rounded-full shadow-[0_0_10px_rgba(76,215,246,0.5)]"
+                    />
+                  </div>
+                  <div className="flex items-center justify-between text-on-surface-variant font-mono text-label-tech mt-1">
+                    <span>0 W</span>
+                    <span>Load: 2400 W Max</span>
+                  </div>
                 </div>
-                <div className="w-full h-2 bg-surface-container-lowest rounded-full overflow-hidden">
-                  <div className="h-full bg-gradient-to-r from-secondary via-primary to-tertiary w-[88%] rounded-full shadow-[0_0_10px_rgba(76,215,246,0.5)]" />
-                </div>
-                <div className="flex items-center justify-between text-on-surface-variant font-mono text-label-tech mt-1">
-                  <span>0 W</span>
-                  <span>Load: 2400 W Max</span>
-                </div>
-              </div>
 
-              <div className="flex items-center gap-space-sm pt-space-xs">
-                <span className="material-symbols-outlined text-secondary text-[18px]">
-                  verified_user
-                </span>
-                <span className="text-body-sm text-on-surface-variant">
-                  Class 100 ESD-Grounding Certified
-                </span>
-              </div>
-            </div>
+                <div className="flex items-center gap-space-sm pt-space-xs relative z-10">
+                  <span className="material-symbols-outlined text-secondary text-[18px]">
+                    verified_user
+                  </span>
+                  <span className="text-body-sm text-on-surface-variant">
+                    Class 100 ESD-Grounding Certified
+                  </span>
+                </div>
+              </TiltSpotlightCard>
+            </motion.div>
           </div>
         </div>
       </section>
 
       {/* ── Section 2: Core Service Offerings (Bento Grid) ── */}
-      <section className="max-w-[1440px] mx-auto px-gutter-lg py-space-2xl w-full">
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-space-md mb-space-xl">
+      <RevealSection className="max-w-[1440px] mx-auto px-gutter-lg py-space-2xl w-full">
+        <motion.div
+          variants={fadeUpVariants}
+          custom={0}
+          className="flex flex-col md:flex-row md:items-end justify-between gap-space-md mb-space-xl"
+        >
           <div>
             <span className="font-mono text-label-tech text-primary uppercase tracking-widest">
               // DEPT_SERVICES_CATALOG
@@ -343,126 +400,135 @@ export default function ServicesPage() {
           <p className="text-body-md text-on-surface-variant max-w-md">
             Transparent flat-rate diagnostic baselines paired with surgical component-level interventions. Select an active module to view testing criteria.
           </p>
-        </div>
+        </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-gutter-lg">
-          {SERVICES.map((srv) => (
-            <div
+          {SERVICES.map((srv, idx) => (
+            <motion.div
               key={srv.id}
-              className={`${srv.span} bg-surface-container-low rounded-xl p-space-lg flex flex-col justify-between shadow-lg relative overflow-hidden group hover:bg-surface-container transition-all border border-outline-variant/15 hover:border-primary/40`}
+              id={srv.id}
+              variants={fadeUpVariants}
+              custom={idx}
+              className={`${srv.span} scroll-mt-28`}
             >
-              <div className="flex flex-col gap-space-md">
-                <div className="flex items-center justify-between flex-wrap gap-space-sm">
-                  <div className="flex items-center gap-space-sm">
-                    <span
-                      className={`p-space-xs ${srv.bgColor} ${srv.color} rounded-lg flex items-center justify-center`}
-                    >
-                      <span className="material-symbols-outlined text-[24px]">
-                        {srv.icon}
-                      </span>
-                    </span>
-                    <span className={`font-mono text-label-tech ${srv.color}`}>
-                      {srv.code}
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-space-xs">
-                    <span className="px-space-sm py-0.5 rounded-full bg-surface-container-high font-mono text-[10px] text-secondary uppercase border border-secondary/20">
-                      {srv.tat}
-                    </span>
-                    <span className="px-space-sm py-0.5 rounded-full bg-primary-container text-on-primary-container font-mono text-telemetry-num font-bold">
-                      {srv.price}
-                    </span>
-                  </div>
-                </div>
-
-                <h3 className="font-syne text-headline-sm text-on-surface mt-space-xs">
-                  {srv.title}
-                </h3>
-                <p className="text-body-md text-on-surface-variant">
-                  {srv.desc}
-                </p>
-
-                {/* Sub-specs if available */}
-                {srv.specs && (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-space-sm mt-space-xs">
-                    {srv.specs.map((item, i) => (
-                      <div
-                        key={i}
-                        className="bg-surface-container-high p-space-sm rounded-lg flex items-start gap-space-xs border border-outline-variant/10"
+              <SpotlightCard className="bg-surface-container-low rounded-xl p-space-lg flex flex-col justify-between shadow-lg hover:bg-surface-container transition-all duration-300 border border-outline-variant/15 hover:border-primary/40 hover:-translate-y-1 card-glow h-full">
+                <div className="flex flex-col gap-space-md relative z-10">
+                  <div className="flex items-center justify-between flex-wrap gap-space-sm">
+                    <div className="flex items-center gap-space-sm">
+                      <span
+                        className={`p-space-xs ${srv.bgColor} ${srv.color} rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform duration-300`}
                       >
-                        <span className="material-symbols-outlined text-primary text-[18px] shrink-0 mt-0.5">
-                          check_circle
+                        <span className="material-symbols-outlined text-[24px]">
+                          {srv.icon}
                         </span>
-                        <div className="flex flex-col">
-                          <span className="font-syne text-title-md text-on-surface">
-                            {item.title}
+                      </span>
+                      <span className={`font-mono text-label-tech ${srv.color}`}>
+                        {srv.code}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-space-xs">
+                      <span className="px-space-sm py-0.5 rounded-full bg-surface-container-high font-mono text-[10px] text-secondary uppercase border border-secondary/20">
+                        {srv.tat}
+                      </span>
+                      <span className="px-space-sm py-0.5 rounded-full bg-primary-container text-on-primary-container font-mono text-telemetry-num font-bold">
+                        {srv.price}
+                      </span>
+                    </div>
+                  </div>
+
+                  <h3 className="font-syne text-headline-sm text-on-surface mt-space-xs group-hover:text-primary transition-colors">
+                    {srv.title}
+                  </h3>
+                  <p className="text-body-md text-on-surface-variant">
+                    {srv.desc}
+                  </p>
+
+                  {srv.specs && (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-space-sm mt-space-xs">
+                      {srv.specs.map((item, i) => (
+                        <div
+                          key={i}
+                          className="bg-surface-container-high p-space-sm rounded-lg flex items-start gap-space-xs border border-outline-variant/10 hover:border-primary/25 transition-colors"
+                        >
+                          <span className="material-symbols-outlined text-primary text-[18px] shrink-0 mt-0.5">
+                            check_circle
                           </span>
-                          <span className="text-body-sm text-on-surface-variant">
-                            {item.desc}
+                          <div className="flex flex-col">
+                            <span className="font-syne text-title-md text-on-surface">
+                              {item.title}
+                            </span>
+                            <span className="text-body-sm text-on-surface-variant">
+                              {item.desc}
+                            </span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  {srv.rows && (
+                    <div className="flex flex-col gap-space-xs mt-space-xs">
+                      {srv.rows.map((row, i) => (
+                        <div
+                          key={i}
+                          className="flex items-center justify-between text-body-sm p-space-xs rounded bg-surface-container-high border border-outline-variant/10"
+                        >
+                          <span className="text-on-surface">{row.label}</span>
+                          <span className="font-mono text-label-tech text-secondary font-bold">
+                            {row.value}
                           </span>
                         </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
+                      ))}
+                    </div>
+                  )}
 
-                {/* Spec rows if available */}
-                {srv.rows && (
-                  <div className="flex flex-col gap-space-xs mt-space-xs">
-                    {srv.rows.map((row, i) => (
-                      <div
-                        key={i}
-                        className="flex items-center justify-between text-body-sm p-space-xs rounded bg-surface-container-high"
+                  {srv.highlight && (
+                    <div className="bg-surface-container-high p-space-sm rounded-lg flex flex-col gap-1 border border-outline-variant/10">
+                      <span className="font-mono text-[10px] text-on-surface-variant uppercase">
+                        {srv.highlight.label}
+                      </span>
+                      <span
+                        className={`font-syne text-[32px] ${srv.color} font-bold tracking-tight`}
                       >
-                        <span className="text-on-surface">{row.label}</span>
-                        <span className="font-mono text-label-tech text-secondary font-bold">
-                          {row.value}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                )}
+                        {srv.highlight.metric}
+                      </span>
+                      <span className="text-body-sm text-outline">
+                        {srv.highlight.note}
+                      </span>
+                    </div>
+                  )}
+                </div>
 
-                {/* Highlight metric if available */}
-                {srv.highlight && (
-                  <div className="bg-surface-container-high p-space-sm rounded-lg flex flex-col gap-1 border border-outline-variant/10">
-                    <span className="font-mono text-[10px] text-on-surface-variant uppercase">
-                      {srv.highlight.label}
-                    </span>
-                    <span
-                      className={`font-syne text-[32px] ${srv.color} font-bold tracking-tight`}
-                    >
-                      {srv.highlight.metric}
-                    </span>
-                    <span className="text-body-sm text-outline">
-                      {srv.highlight.note}
-                    </span>
-                  </div>
-                )}
-              </div>
-
-              <div className="mt-space-lg pt-space-sm flex items-center justify-between bg-surface-container-lowest/50 p-space-sm rounded-lg border-t border-outline-variant/10">
-                <span className="font-mono text-label-tech text-on-surface-variant">
-                  {srv.footer || "Priority laboratory bench queuing."}
-                </span>
-                <Link
-                  href="/contact"
-                  className={`inline-flex items-center gap-space-xs ${srv.color} font-syne text-title-md hover:underline`}
-                >
-                  <span>{srv.action}</span>
-                  <span className="material-symbols-outlined text-[18px]">
-                    arrow_forward
+                <div className="mt-space-lg pt-space-sm flex items-center justify-between bg-surface-container-lowest/50 p-space-sm rounded-lg border-t border-outline-variant/10 relative z-10">
+                  <span className="font-mono text-label-tech text-on-surface-variant">
+                    {srv.footer || "Priority laboratory bench queuing."}
                   </span>
-                </Link>
-              </div>
-            </div>
+                  <Link
+                    href="/contact"
+                    className={`inline-flex items-center gap-space-xs ${srv.color} font-syne text-title-md hover:underline group/link`}
+                  >
+                    <span>{srv.action}</span>
+                    <span className="material-symbols-outlined text-[18px] group-hover/link:translate-x-1 transition-transform">
+                      arrow_forward
+                    </span>
+                  </Link>
+                </div>
+              </SpotlightCard>
+            </motion.div>
           ))}
         </div>
-      </section>
+      </RevealSection>
 
       {/* ── Section 3: Diagnostic Laboratory Technology Showcase ── */}
-      <section className="max-w-[1440px] mx-auto px-gutter-lg py-space-2xl w-full" id="lab-tech">
-        <div className="flex flex-col gap-space-xs mb-space-xl">
+      <RevealSection
+        className="max-w-[1440px] mx-auto px-gutter-lg py-space-2xl w-full"
+        id="lab-tech"
+      >
+        <motion.div
+          variants={fadeUpVariants}
+          custom={0}
+          className="flex flex-col gap-space-xs mb-space-xl"
+        >
           <span className="font-mono text-label-tech text-secondary uppercase tracking-widest">
             // INSTRUMENTATION_ARRAY
           </span>
@@ -472,57 +538,60 @@ export default function ServicesPage() {
           <p className="text-body-lg text-on-surface-variant max-w-2xl">
             We operate military-spec diagnostic apparatus inside an ESD-controlled containment suite. Precision diagnosis eliminates guesswork.
           </p>
-        </div>
+        </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter">
           {LAB_INSTRUMENTS.map((inst, i) => (
-            <div
-              key={i}
-              className="bg-surface-container-low p-space-lg rounded-xl flex flex-col justify-between shadow-md hover:shadow-xl transition-all border border-outline-variant/20 hover:border-primary/40"
-            >
-              <div className="flex flex-col gap-space-md">
-                <div className="w-full h-44 rounded-lg overflow-hidden relative bg-surface-container">
-                  <Image
-                    src={inst.image}
-                    alt={inst.title}
-                    fill
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
-                    className="object-cover"
-                  />
-                  <span className="absolute top-2 right-2 px-space-xs py-0.5 rounded bg-surface-container-lowest/80 backdrop-blur font-mono text-[10px] text-primary border border-primary/20">
-                    {inst.res}
-                  </span>
+            <motion.div key={i} variants={scaleInVariants} custom={i}>
+              <SpotlightCard className="bg-surface-container-low p-space-lg rounded-xl flex flex-col justify-between shadow-md hover:shadow-xl transition-all duration-300 border border-outline-variant/20 hover:border-primary/40 hover:-translate-y-1.5 card-glow h-full">
+                <div className="flex flex-col gap-space-md relative z-10">
+                  <div className="w-full h-44 rounded-lg overflow-hidden relative bg-surface-container scan-overlay">
+                    <Image
+                      src={inst.image}
+                      alt={inst.title}
+                      fill
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
+                      className="object-cover transition-transform duration-700 group-hover:scale-105"
+                    />
+                    <span className="absolute top-2 right-2 px-space-xs py-0.5 rounded bg-surface-container-lowest/80 backdrop-blur font-mono text-[10px] text-primary border border-primary/20">
+                      {inst.res}
+                    </span>
+                  </div>
+                  <div className="flex flex-col gap-1">
+                    <span className={`font-mono text-label-tech ${inst.color} uppercase`}>
+                      {inst.category}
+                    </span>
+                    <h4 className="font-syne text-title-md text-on-surface group-hover:text-primary transition-colors">
+                      {inst.title}
+                    </h4>
+                    <p className="text-body-sm text-on-surface-variant">
+                      {inst.desc}
+                    </p>
+                  </div>
                 </div>
-                <div className="flex flex-col gap-1">
-                  <span className={`font-mono text-label-tech ${inst.color} uppercase`}>
-                    {inst.category}
-                  </span>
-                  <h4 className="font-syne text-title-md text-on-surface">
-                    {inst.title}
-                  </h4>
-                  <p className="text-body-sm text-on-surface-variant">
-                    {inst.desc}
-                  </p>
-                </div>
-              </div>
 
-              <div className="mt-space-md pt-space-xs flex items-center justify-between text-body-sm border-t border-outline-variant/15">
-                <span className="font-mono text-label-tech text-outline">
-                  {inst.cal}
-                </span>
-                <span className="font-mono text-telemetry-num text-secondary font-bold">
-                  ACTIVE
-                </span>
-              </div>
-            </div>
+                <div className="mt-space-md pt-space-xs flex items-center justify-between text-body-sm border-t border-outline-variant/15 relative z-10">
+                  <span className="font-mono text-label-tech text-outline">
+                    {inst.cal}
+                  </span>
+                  <span className="font-mono text-telemetry-num text-secondary font-bold">
+                    ACTIVE
+                  </span>
+                </div>
+              </SpotlightCard>
+            </motion.div>
           ))}
         </div>
-      </section>
+      </RevealSection>
 
       {/* ── Section 4: Engineering Lifecycle Pipeline ── */}
-      <section className="max-w-[1440px] mx-auto px-gutter-lg py-space-xl w-full">
+      <RevealSection className="max-w-[1440px] mx-auto px-gutter-lg py-space-xl w-full">
         <div className="bg-surface-container-low rounded-2xl p-space-xl md:p-space-2xl shadow-xl relative overflow-hidden border border-outline-variant/20">
-          <div className="flex flex-col gap-space-xs mb-space-2xl text-center items-center">
+          <motion.div
+            variants={fadeUpVariants}
+            custom={0}
+            className="flex flex-col gap-space-xs mb-space-2xl text-center items-center"
+          >
             <span className="font-mono text-label-tech text-primary uppercase tracking-widest">
               // THE_AQUA_PROTOCOL
             </span>
@@ -532,60 +601,72 @@ export default function ServicesPage() {
             <p className="text-body-md text-on-surface-variant max-w-xl">
               From arrival to unboxing, your system is tracked by encrypted unique telemetry logs with live bench camera monitoring.
             </p>
-          </div>
+          </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-gutter-sm relative">
-            {/* Connector line for desktop */}
-            <div className="hidden lg:block absolute top-10 left-12 right-12 h-0.5 bg-gradient-to-r from-primary via-secondary to-tertiary opacity-30 z-0" />
+            <motion.div
+              initial={{ scaleX: 0 }}
+              whileInView={{ scaleX: 1 }}
+              viewport={{ once: true, margin: "-60px" }}
+              transition={{ duration: 1.1, ease: EASE_PREMIUM }}
+              style={{ transformOrigin: "left" }}
+              className="hidden lg:block absolute top-10 left-12 right-12 h-0.5 bg-gradient-to-r from-primary via-secondary to-tertiary opacity-50 z-0"
+            />
 
-            {PIPELINE_STEPS.map((step) => (
-              <div
+            {PIPELINE_STEPS.map((step, i) => (
+              <motion.div
                 key={step.step}
-                className="flex flex-col items-center text-center relative z-10 gap-space-sm"
+                variants={fadeUpVariants}
+                custom={i}
+                className="flex flex-col items-center text-center relative z-10 gap-space-sm group"
               >
                 <div
-                  className={`w-16 h-16 rounded-xl bg-surface-container-high ${step.color} flex items-center justify-center font-mono text-[20px] font-bold shadow-[0_0_15px_rgba(76,215,246,0.2)] border border-outline-variant/20`}
+                  className={`w-16 h-16 rounded-xl bg-surface-container-high ${step.color} flex items-center justify-center font-mono text-[20px] font-bold shadow-[0_0_15px_rgba(76,215,246,0.2)] border border-outline-variant/20 group-hover:scale-110 group-hover:border-primary/50 group-hover:shadow-cyan-glow transition-all duration-300`}
                 >
                   {step.step}
                 </div>
-                <span className="font-syne text-title-md text-on-surface">
+                <span className="font-syne text-title-md text-on-surface group-hover:text-primary transition-colors">
                   {step.title}
                 </span>
                 <p className="text-body-sm text-on-surface-variant">
                   {step.desc}
                 </p>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
-      </section>
+      </RevealSection>
 
       {/* ── Section 5: CTA Strip ── */}
-      <section className="w-full py-space-xl px-gutter-lg bg-surface">
-        <div className="max-w-[1440px] mx-auto text-center flex flex-col items-center gap-space-md py-space-xl rounded-2xl bg-surface-container border border-primary/20">
+      <RevealSection className="w-full py-space-xl px-gutter-lg bg-surface">
+        <motion.div
+          variants={scaleInVariants}
+          custom={0}
+          className="max-w-[1440px] mx-auto text-center flex flex-col items-center gap-space-md py-space-xl px-space-md rounded-2xl bg-surface-container border border-primary/20 relative overflow-hidden"
+        >
           <h2 className="font-syne text-headline-lg text-on-surface">
             Ready to Schedule Your Hardware Diagnostic?
           </h2>
           <p className="text-body-lg text-on-surface-variant max-w-xl">
             Our Austin laboratory processes emergency triage in under 24 hours. Submit your symptom profile online.
           </p>
-          <div className="flex gap-space-md pt-space-xs">
+          <div className="flex flex-wrap justify-center gap-space-md pt-space-xs">
             <Link
               href="/contact"
-              className="px-space-xl py-space-md rounded-xl bg-gradient-to-r from-primary to-secondary text-surface font-syne text-title-md font-bold shadow-cyan-glow hover:shadow-cyan-glow-lg transition-all"
+              className="relative overflow-hidden group px-space-xl py-space-md rounded-xl bg-gradient-to-r from-primary to-secondary text-surface font-syne text-title-md font-bold shadow-cyan-glow hover:shadow-cyan-glow-lg hover:-translate-y-0.5 transition-all"
             >
-              Start Intake Requisition
+              <span className="absolute inset-0 animate-shimmer opacity-0 group-hover:opacity-100 transition-opacity" />
+              <span className="relative z-10">Start Intake Requisition</span>
             </Link>
             <Link
               href="/pricing"
-              className="px-space-xl py-space-md rounded-xl bg-surface-container-high hover:bg-surface-bright text-on-surface font-syne text-title-md border border-outline-variant/30 transition-colors"
+              className="px-space-xl py-space-md rounded-xl bg-surface-container-high hover:bg-surface-bright text-on-surface font-syne text-title-md border border-outline-variant/30 transition-all hover:-translate-y-0.5"
             >
               Review Rate Card
             </Link>
           </div>
-        </div>
-      </section>
+        </motion.div>
+      </RevealSection>
     </div>
   );
 }
-

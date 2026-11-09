@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { EASE_PREMIUM } from "@/components/ui/MotionPrimitives";
 
 export interface CatalogItem {
   id: string;
@@ -126,20 +128,30 @@ export default function InteractiveCatalog() {
             { id: "cpu", label: "CPUs" },
             { id: "gpu", label: "GPUs" },
             { id: "cooling", label: "Cooling & Storage" },
-          ].map((tab) => (
-            <button
-              key={tab.id}
-              onClick={() => setFilter(tab.id)}
-              className={`px-space-md py-space-xs rounded-lg font-syne text-title-md transition-all ${
-                filter === tab.id
-                  ? "bg-primary-container text-on-primary-container shadow-sm"
-                  : "text-on-surface-variant hover:text-on-surface"
-              }`}
-              type="button"
-            >
-              {tab.label}
-            </button>
-          ))}
+          ].map((tab) => {
+            const active = filter === tab.id;
+            return (
+              <button
+                key={tab.id}
+                onClick={() => setFilter(tab.id)}
+                className={`relative z-10 px-space-md py-space-xs rounded-lg font-syne text-title-md transition-colors whitespace-nowrap ${
+                  active
+                    ? "text-on-primary-container"
+                    : "text-on-surface-variant hover:text-on-surface"
+                }`}
+                type="button"
+              >
+                {active && (
+                  <motion.span
+                    layoutId="catalog-filter-pill"
+                    className="absolute inset-0 rounded-lg bg-primary-container shadow-sm -z-10"
+                    transition={{ type: "spring", stiffness: 360, damping: 32 }}
+                  />
+                )}
+                {tab.label}
+              </button>
+            );
+          })}
         </div>
       </div>
 
@@ -183,68 +195,78 @@ export default function InteractiveCatalog() {
             </tr>
           </thead>
           <tbody className="divide-y divide-outline-variant/10 text-body-md text-on-surface">
-            {filteredParts.map((part) => (
-              <tr
-                key={part.id}
-                className="hover:bg-surface-container-high/60 transition-colors"
-              >
-                <td className="py-space-md px-space-lg flex items-center gap-space-md">
-                  <div className="w-10 h-10 rounded-lg bg-surface-container-highest flex items-center justify-center text-primary shrink-0 border border-outline-variant/20">
-                    <span className="material-symbols-outlined text-[20px]">
-                      memory
-                    </span>
-                  </div>
-                  <div className="flex flex-col">
-                    <span className="font-syne text-title-md text-on-surface">
-                      {part.name}
-                    </span>
-                    <span className="font-mono text-label-tech text-outline">
-                      {part.specs}
-                    </span>
-                  </div>
-                </td>
-                <td className="py-space-md px-space-md">
-                  <span className="px-space-xs py-0.5 rounded bg-surface-container-highest font-mono text-[10px] text-on-surface-variant uppercase">
-                    {part.category}
-                  </span>
-                </td>
-                <td className="py-space-md px-space-md">
-                  <span className="inline-flex items-center gap-1.5 px-space-xs py-0.5 rounded-full bg-surface-container-lowest text-secondary font-mono text-[11px] border border-secondary/20">
-                    <span className="w-1.5 h-1.5 rounded-full bg-secondary" />{" "}
-                    {part.stock} IN STOCK
-                  </span>
-                </td>
-                <td className="py-space-md px-space-md font-mono text-telemetry-num text-primary">
-                  ${part.price.toFixed(2)}
-                </td>
-                <td className="py-space-md px-space-md">
-                  <label className="flex items-center gap-space-xs cursor-pointer select-none">
-                    <input
-                      type="checkbox"
-                      checked={!!mountOptions[part.id]}
-                      onChange={() => toggleMount(part.id)}
-                      className="w-4 h-4 rounded bg-surface-container border-0 accent-primary text-on-primary"
-                    />
-                    <span className="text-body-sm text-on-surface-variant">
-                      +Mount &amp; Test (+$35)
-                    </span>
-                  </label>
-                </td>
-                <td className="py-space-md px-space-lg text-right">
-                  <button
-                    onClick={() => handleAdd(part.id)}
-                    className={`px-space-md py-space-xs rounded-lg font-syne text-title-md transition-all shadow-sm ${
-                      addedItems[part.id]
-                        ? "bg-secondary text-surface font-bold"
-                        : "bg-primary hover:bg-primary-fixed-dim text-on-primary"
-                    }`}
-                    type="button"
+            <AnimatePresence initial={false}>
+              {filteredParts.map((part) => {
+                const effectivePrice = part.price + (mountOptions[part.id] ? 35 : 0);
+                return (
+                  <motion.tr
+                    key={part.id}
+                    initial={{ opacity: 0, y: 6 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.2, ease: EASE_PREMIUM }}
+                    className="hover:bg-surface-container-high/60 transition-colors group"
                   >
-                    {addedItems[part.id] ? "Added!" : "Add to Build"}
-                  </button>
-                </td>
-              </tr>
-            ))}
+                    <td className="py-space-md px-space-lg flex items-center gap-space-md">
+                      <div className="w-10 h-10 rounded-lg bg-surface-container-highest flex items-center justify-center text-primary shrink-0 border border-outline-variant/20 group-hover:scale-105 group-hover:border-primary/40 transition-all">
+                        <span className="material-symbols-outlined text-[20px]">
+                          memory
+                        </span>
+                      </div>
+                      <div className="flex flex-col">
+                        <span className="font-syne text-title-md text-on-surface group-hover:text-primary transition-colors">
+                          {part.name}
+                        </span>
+                        <span className="font-mono text-label-tech text-outline">
+                          {part.specs}
+                        </span>
+                      </div>
+                    </td>
+                    <td className="py-space-md px-space-md">
+                      <span className="px-space-xs py-0.5 rounded bg-surface-container-highest font-mono text-[10px] text-on-surface-variant uppercase">
+                        {part.category}
+                      </span>
+                    </td>
+                    <td className="py-space-md px-space-md">
+                      <span className="inline-flex items-center gap-1.5 px-space-xs py-0.5 rounded-full bg-surface-container-lowest text-secondary font-mono text-[11px] border border-secondary/20">
+                        <span className="w-1.5 h-1.5 rounded-full bg-secondary animate-pulse" />{" "}
+                        {part.stock} IN STOCK
+                      </span>
+                    </td>
+                    <td className="py-space-md px-space-md font-mono text-telemetry-num text-primary">
+                      ${effectivePrice.toFixed(2)}
+                    </td>
+                    <td className="py-space-md px-space-md">
+                      <label className="flex items-center gap-space-xs cursor-pointer select-none">
+                        <input
+                          type="checkbox"
+                          checked={!!mountOptions[part.id]}
+                          onChange={() => toggleMount(part.id)}
+                          className="w-4 h-4 rounded bg-surface-container border-0 accent-primary text-on-primary"
+                        />
+                        <span className="text-body-sm text-on-surface-variant">
+                          +Mount &amp; Test (+$35)
+                        </span>
+                      </label>
+                    </td>
+                    <td className="py-space-md px-space-lg text-right">
+                      <motion.button
+                        whileTap={{ scale: 0.94 }}
+                        onClick={() => handleAdd(part.id)}
+                        className={`px-space-md py-space-xs rounded-lg font-syne text-title-md transition-all shadow-sm ${
+                          addedItems[part.id]
+                            ? "bg-secondary text-surface font-bold shadow-[0_0_15px_rgba(79,219,200,0.4)]"
+                            : "bg-primary hover:bg-primary-fixed-dim text-on-primary"
+                        }`}
+                        type="button"
+                      >
+                        {addedItems[part.id] ? "Added!" : "Add to Build"}
+                      </motion.button>
+                    </td>
+                  </motion.tr>
+                );
+              })}
+            </AnimatePresence>
           </tbody>
         </table>
       </div>

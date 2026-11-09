@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { EASE_PREMIUM } from "@/components/ui/MotionPrimitives";
 
 export default function TicketTracer() {
   const [ticketSearch, setTicketSearch] = useState("AQ-88204");
@@ -27,7 +29,7 @@ export default function TicketTracer() {
       id: query,
       stage: "TRIAGE VERIFICATION COMPLETE",
       progress: 92,
-      bench: "Austin Bay #01",
+      bench: "Tech Lab Bay #01",
       tech: "Dr. Elena Vance",
       details: "Oscilloscope voltage rails confirmed stable. Thermal paste reapplied with liquid metal.",
     });
@@ -63,41 +65,53 @@ export default function TicketTracer() {
             value={ticketSearch}
             onChange={(e) => setTicketSearch(e.target.value)}
           />
-          <button
+          <motion.button
+            whileTap={{ scale: 0.96 }}
             onClick={handleQueryTicket}
             className="px-space-lg py-space-sm rounded-lg bg-primary text-on-primary hover:bg-primary-fixed-dim font-syne text-title-md transition-all shrink-0"
             type="button"
           >
             Trace Rig
-          </button>
+          </motion.button>
         </div>
 
         {/* Dynamic Result Slot */}
-        {ticketResult && (
-          <div className="p-space-md rounded-lg bg-surface-container flex flex-col gap-space-xs border border-outline-variant/20">
-            <div className="flex items-center justify-between">
-              <span className="font-mono text-label-tech text-on-surface font-bold">
-                TICKET #{ticketResult.id}
-              </span>
-              <span className="px-space-xs py-0.5 rounded bg-secondary/20 text-secondary font-mono text-[10px] font-bold">
-                {ticketResult.stage}
-              </span>
-            </div>
-            <div className="w-full bg-surface-container-high h-2 rounded-full overflow-hidden mt-1">
-              <div
-                className="bg-gradient-to-r from-primary to-secondary h-full rounded-full transition-all duration-500"
-                style={{ width: `${ticketResult.progress}%` }}
-              />
-            </div>
-            <div className="flex justify-between items-center text-outline font-mono text-[11px] pt-1">
-              <span>Assigned: {ticketResult.tech}</span>
-              <span>Location: {ticketResult.bench}</span>
-            </div>
-            <p className="text-body-sm text-on-surface-variant pt-1 border-t border-outline-variant/10">
-              {ticketResult.details}
-            </p>
-          </div>
-        )}
+        <AnimatePresence mode="wait">
+          {ticketResult && (
+            <motion.div
+              key={ticketResult.id + ticketResult.progress}
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -6 }}
+              transition={{ duration: 0.25, ease: EASE_PREMIUM }}
+              className="p-space-md rounded-lg bg-surface-container flex flex-col gap-space-xs border border-outline-variant/20"
+            >
+              <div className="flex items-center justify-between">
+                <span className="font-mono text-label-tech text-on-surface font-bold">
+                  TICKET #{ticketResult.id}
+                </span>
+                <span className="px-space-xs py-0.5 rounded bg-secondary/20 text-secondary font-mono text-[10px] font-bold">
+                  {ticketResult.stage}
+                </span>
+              </div>
+              <div className="w-full bg-surface-container-high h-2 rounded-full overflow-hidden mt-1">
+                <motion.div
+                  initial={{ width: "0%" }}
+                  animate={{ width: `${ticketResult.progress}%` }}
+                  transition={{ duration: 0.6, ease: EASE_PREMIUM }}
+                  className="bg-gradient-to-r from-primary to-secondary h-full rounded-full shadow-[0_0_8px_rgba(76,215,246,0.5)]"
+                />
+              </div>
+              <div className="flex justify-between items-center text-outline font-mono text-[11px] pt-1">
+                <span>Assigned: {ticketResult.tech}</span>
+                <span>Location: {ticketResult.bench}</span>
+              </div>
+              <p className="text-body-sm text-on-surface-variant pt-1 border-t border-outline-variant/10">
+                {ticketResult.details}
+              </p>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </div>
   );

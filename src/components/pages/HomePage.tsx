@@ -3,704 +3,1368 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  RevealSection,
+  SpotlightCard,
+  TiltSpotlightCard,
+  MagneticWrap,
+  MaskedReveal,
+  CircularGauge,
+  CircuitFlowBackdrop,
+  LiveOscilloscope,
+  AnimatedNumber,
+  fadeUpVariants,
+  fadeInVariants,
+  scaleInVariants,
+  EASE_PREMIUM,
+} from "@/components/ui/MotionPrimitives";
 
-interface Product {
-  id: string;
-  name: string;
-  category: "cpu" | "gpu" | "cooling" | "memory";
-  platform: string;
-  price: number;
-  badge: string;
-  badgeType: "stock" | "limited" | "exclusive";
-  featureTag: string;
-  image: string;
-  specs: { label: string; value: string }[];
+const WHATSAPP_BASE = "https://wa.me/message/CYZRQDEHLIRZF1";
+
+// ── Floating Orbs (decorative background) ────────────────────────────────────
+function FloatingOrbs() {
+  return (
+    <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      <div className="absolute top-10 left-1/4 w-96 h-96 bg-primary/15 rounded-full blur-[130px] animate-orb-drift" />
+      <div className="absolute bottom-10 right-1/4 w-[28rem] h-[28rem] bg-secondary/15 rounded-full blur-[140px] animate-orb-drift-delay" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-tertiary/10 rounded-full blur-[100px] animate-float-slow" />
+    </div>
+  );
 }
 
-const PRODUCTS: Product[] = [
-  {
-    id: "amd-7950x3d",
-    name: "AMD Ryzen 9 7950X3D",
-    category: "cpu",
-    platform: "Socket AM5 · Zen 4 V-Cache",
-    price: 599.0,
-    badge: "IN STOCK (4)",
-    badgeType: "stock",
-    featureTag: "BIN: GOLD GRADE",
-    image:
-      "https://lh3.googleusercontent.com/aida-public/AB6AXuBJCbPTu_N-WytQ-UtptENHzT27-mtjjj-B5M-Dd0wadhoIiMwdKDX-r9Emzwjc07HQDjteORB4TjOW66i-Y1Q-ZeJjkuivn52So6-WIpjHEb4wYPkWC34e9eBYn84Fb0dbzK25VxR0egzMRihyEMDUDHRoMwnD2sTz9ED0GxmM5kLr7O9S6-cAE4fmBjxicL_lXnXhyJKLDcdQuFKDAQ4r9fo66yD-KrLH9zRAvKRt",
-    specs: [
-      { label: "Boost", value: "5.70 GHz" },
-      { label: "Cores", value: "16C / 32T" },
-      { label: "TDP", value: "120W" },
-      { label: "L3", value: "128MB Cache" },
-    ],
-  },
-  {
-    id: "intel-14900ks",
-    name: "Intel Core i9-14900KS",
-    category: "cpu",
-    platform: "LGA1700 · Raptor Lake Refresh",
-    price: 689.99,
-    badge: "LIMITED BIN",
-    badgeType: "limited",
-    featureTag: "6.2 GHz RECORD",
-    image:
-      "https://lh3.googleusercontent.com/aida-public/AB6AXuCEnkge0rLgjvddL47p1TJB_Hb2oLQ_fe6az7ZZNnLRwaJBR85YK586z2KsgPwUlhCpD7l34ngwYWhCLyG0lMfkv2hf1nfbouawg9nZyJozaytJGhWHqT_PbKw0IHQQ40LipSHoV2A3ZuBfU0XkorcksEoJEZBeIdRhhmpA9UEq02R7DJMiYq8rzHdBzOGJEicUpgOg8rFFpkbFUa40LsBjDW4iBKM-OGFxcotPFjVt",
-    specs: [
-      { label: "Max", value: "6.20 GHz" },
-      { label: "Cores", value: "24C / 32T" },
-      { label: "TDP", value: "150W Base" },
-      { label: "Opt", value: "Delid Ready" },
-    ],
-  },
-  {
-    id: "rtx-4090-hydro",
-    name: "RTX 4090 Hydro Copper",
-    category: "gpu",
-    platform: "Ada Lovelace · 24GB GDDR6X",
-    price: 1799.99,
-    badge: "IN STOCK (2)",
-    badgeType: "stock",
-    featureTag: "4K ULTRA DLSS 3.5",
-    image:
-      "https://lh3.googleusercontent.com/aida-public/AB6AXuCXFQ2wLOb528u8nW8kIqjoC5iSHVmR-U9Oy58eCnnOF3EsXoTfgOBfltZu5jEGIkjkOMRYxlMWxxXO0OZkYdfAjhZ5xj3L3uaeLNmwA3pJqjal7FrcFUNMCheTG1RTbcEnpckuySVPG4Q8f-lZOzIDsUWNkAgypmh0XsWe2asNpvIjL5BrEkttvHOH2oPAD-nku8csetof9_sdI76UbgNKIt8A8l7Mbp-uRX-4XgJS",
-    specs: [
-      { label: "vRAM", value: "24GB 384b" },
-      { label: "Water", value: "G1/4\" Nickel" },
-      { label: "TGP", value: "450W Loop" },
-      { label: "RT", value: "3rd Gen Core" },
-    ],
-  },
-  {
-    id: "rx-7900-xtx",
-    name: "RX 7900 XTX AquaForce",
-    category: "gpu",
-    platform: "RDNA 3 · 24GB GDDR6",
-    price: 949.0,
-    badge: "IN STOCK (5)",
-    badgeType: "stock",
-    featureTag: "DISPLAYPORT 2.1",
-    image:
-      "https://lh3.googleusercontent.com/aida-public/AB6AXuDb6DDmG89bLfE5pBvVF4V01KlaZYoclQkulVwPhhOkM75nkdQJBaFpda4LKW5i9JJj_pMFknSIixmZMhmpmn5AXy6Z90x-XfoLjR9u-bosQWYij7yMJOC_BlDn81TLK_5zUnCya4flEQo4hIajtUESKfyyoggKpMGVY45BderR9dGQZqhovY3eFJhTZjILwAYTUxQaPIyZP9uJvWkSFjylZWtbJZJlM_w9MhqYC-Da",
-    specs: [
-      { label: "Clock", value: "2615 MHz" },
-      { label: "Memory", value: "24GB VRAM" },
-      { label: "Stream", value: "6144 Cores" },
-      { label: "Block", value: "Full Nickel" },
-    ],
-  },
-  {
-    id: "aqua-vortex-360",
-    name: "Aqua Vortex Pro 360 Liquid",
-    category: "cooling",
-    platform: "AIO · Triple 120mm Magnetic Fan",
-    price: 229.0,
-    badge: "IN STOCK",
-    badgeType: "stock",
-    featureTag: "IPS DISPLAY PUMP",
-    image:
-      "https://lh3.googleusercontent.com/aida-public/AB6AXuAJ843wJX7_Nb_hzXLIiVgqMn-loFiUKNkSdX5-d3fl0lU2M5AYvV7uLjZ_WXjx3bsAS4YMBJiG3NrhJ1Lnh7TzT0-AWIP89wvmwBnWm2nRvpTH7GZB15aIqrVRYKDtLvlIfAwU0CeFlgF04HYNkMUYxtacCBctjpdIRkI4KNWLGbA4Ndnt70kA7glEqHXSpnXkLQzGvQz6bQ790j_JuWFzoP5oAjDyc8XWsvYo78I9",
-    specs: [
-      { label: "Radiator", value: "397mm Copper" },
-      { label: "Pump", value: "3200 RPM" },
-      { label: "Noise", value: "18.2 dBA max" },
-      { label: "Socket", value: "LGA1700/AM5" },
-    ],
-  },
-  {
-    id: "direct-die-block",
-    name: "Direct-Die Mirror Copper Block",
-    category: "cooling",
-    platform: "Custom Loop · Direct Die Contact",
-    price: 119.0,
-    badge: "DELID OPTIMIZED",
-    badgeType: "limited",
-    featureTag: "PURE C1100 COPPER",
-    image:
-      "https://lh3.googleusercontent.com/aida-public/AB6AXuA-eFc0cxcHHxk884HOCMr8vpYIGMJxgDVXwYwH2irGHeG69xVs-trobjK_8OwWNsNTsFVefbetc2rIP9iVjZviYO9DS22S3z43V6VuQfI6vLJdG05l2iSMlItjF7yrqIlQzVCaIFNUtjcbBmBOkOm9-64PQY4Vn1FQ47ZauXQqq-eY7bhTsTgoDMA9lMyvshtmVh-27CchOx8KGx7fs6zLLhayXDANDQMR3RaB64Xg",
-    specs: [
-      { label: "Material", value: "C1100 Copper" },
-      { label: "Finish", value: "Mirror Polish" },
-      { label: "Delta T", value: "-14.2 °C" },
-      { label: "Fitting", value: "G1/4\" Standard" },
-    ],
-  },
-  {
-    id: "gskill-trident-64",
-    name: "G.Skill Trident Z5 RGB 64GB",
-    category: "memory",
-    platform: "DDR5 · Dual Channel Kit (2x32GB)",
-    price: 289.0,
-    badge: "IN STOCK",
-    badgeType: "stock",
-    featureTag: "CL30 LOW LATENCY",
-    image:
-      "https://lh3.googleusercontent.com/aida-public/AB6AXuBJCbPTu_N-WytQ-UtptENHzT27-mtjjj-B5M-Dd0wadhoIiMwdKDX-r9Emzwjc07HQDjteORB4TjOW66i-Y1Q-ZeJjkuivn52So6-WIpjHEb4wYPkWC34e9eBYn84Fb0dbzK25VxR0egzMRihyEMDUDHRoMwnD2sTz9ED0GxmM5kLr7O9S6-cAE4fmBjxicL_lXnXhyJKLDcdQuFKDAQ4r9fo66yD-KrLH9zRAvKRt",
-    specs: [
-      { label: "Speed", value: "DDR5-6400" },
-      { label: "Timings", value: "30-38-38-96" },
-      { label: "Voltage", value: "1.40V" },
-      { label: "Profile", value: "Intel XMP / AMD EXPO" },
-    ],
-  },
-  {
-    id: "asus-rog-hero",
-    name: "ROG Maximus Z790 Dark Hero",
-    category: "memory",
-    platform: "LGA1700 · Intel Z790 Chipset",
-    price: 699.0,
-    badge: "TIER-1 LAB SPEC",
-    badgeType: "exclusive",
-    featureTag: "20+1+2 POWER STAGES",
-    image:
-      "https://lh3.googleusercontent.com/aida-public/AB6AXuCEnkge0rLgjvddL47p1TJB_Hb2oLQ_fe6az7ZZNnLRwaJBR85YK586z2KsgPwUlhCpD7l34ngwYWhCLyG0lMfkv2hf1nfbouawg9nZyJozaytJGhWHqT_PbKw0IHQQ40LipSHoV2A3ZuBfU0XkorcksEoJEZBeIdRhhmpA9UEq02R7DJMiYq8rzHdBzOGJEicUpgOg8rFFpkbFUa40LsBjDW4iBKM-OGFxcotPFjVt",
-    specs: [
-      { label: "VRM", value: "90A Power Stages" },
-      { label: "PCIe", value: "Gen 5.0 x16" },
-      { label: "Network", value: "Wi-Fi 7 + 2.5G LAN" },
-      { label: "Audio", value: "SupremeFX ALC4082" },
-    ],
-  },
+// ── Scroll Ticker ─────────────────────────────────────────────────────────────
+const TICKER_ITEMS = [
+  { icon: "inventory_2", text: "300+ Grade-A Components", color: "text-primary" },
+  { icon: "sports_esports", text: "NVIDIA RTX 30/40 Series", color: "text-secondary" },
+  { icon: "memory", text: "Intel & AMD Processors", color: "text-tertiary" },
+  { icon: "storage", text: "High-Speed NVMe SSDs", color: "text-primary" },
+  { icon: "monitor", text: "Frameless FHD IPS Displays", color: "text-secondary" },
+  { icon: "water_drop", text: "Custom Liquid Cooling Loops", color: "text-tertiary" },
+  { icon: "verified_user", text: "06-Month Testing Warranty", color: "text-primary" },
+  { icon: "local_shipping", text: "Island-wide Safe Delivery", color: "text-secondary" },
 ];
 
-const TRUST_STATS = [
-  {
-    icon: "verified",
-    value: "99.4%",
-    title: "Repair Success Rate",
-    description: "Validated component micro-soldering level",
-    color: "text-primary",
-  },
-  {
-    icon: "desktop_windows",
-    value: "15,000+",
-    title: "Custom Builds Delivered",
-    description: "Bespoke hardline & extreme workstations",
-    color: "text-secondary",
-  },
-  {
-    icon: "timelapse",
-    value: "24h",
-    title: "Diagnostic Turnaround",
-    description: "Oscilloscope and stress load benchmarks",
-    color: "text-tertiary",
-  },
-  {
-    icon: "handshake",
-    value: "Tier-1",
-    title: "Authorized Partner",
-    description: "Direct OEM Intel, AMD & NVIDIA Allocation",
-    color: "text-primary-fixed-dim",
-  },
-];
-
-export default function HomePage() {
-  const [filter, setFilter] = useState<string>("all");
-  const [cartCount, setCartCount] = useState(3);
-  const [addedItem, setAddedItem] = useState<string | null>(null);
-
-  const filteredProducts =
-    filter === "all"
-      ? PRODUCTS
-      : PRODUCTS.filter((p) => p.category === filter);
-
-  const handleAddToCart = (id: string) => {
-    setCartCount((prev) => prev + 1);
-    setAddedItem(id);
-    setTimeout(() => setAddedItem(null), 1800);
-  };
+function ScrollTicker() {
+  const doubled = [...TICKER_ITEMS, ...TICKER_ITEMS];
 
   return (
-    <div className="flex flex-col w-full">
-      {/* ── Immersive Cyber-Aquatic Hero Section ── */}
-      <section className="relative w-full overflow-hidden bg-surface-container-lowest -mt-20 pt-28 pb-space-2xl">
-        {/* Ambient Bioluminescent Glow Elements */}
-        <div className="absolute top-10 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-[120px] pointer-events-none" />
-        <div className="absolute bottom-10 right-1/4 w-[30rem] h-[30rem] bg-secondary-container/15 rounded-full blur-[140px] pointer-events-none" />
+    <div className="w-full overflow-hidden bg-surface-container border-y border-outline-variant/20 py-3.5 relative group">
+      <div className="absolute left-0 top-0 h-full w-20 bg-gradient-to-r from-surface-container to-transparent z-10 pointer-events-none" />
+      <div className="absolute right-0 top-0 h-full w-20 bg-gradient-to-l from-surface-container to-transparent z-10 pointer-events-none" />
+      <div className="flex gap-12 pr-12 animate-ticker group-hover:[animation-play-state:paused] whitespace-nowrap w-max">
+        {doubled.map((item, i) => (
+          <span
+            key={i}
+            className="inline-flex items-center gap-2 font-mono text-label-tech text-on-surface-variant tracking-wider shrink-0"
+          >
+            <span className={`material-symbols-outlined text-[16px] ${item.color}`}>
+              {item.icon}
+            </span>
+            <span>{item.text}</span>
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+}
 
-        <div className="max-w-[1440px] mx-auto px-gutter-lg relative z-10 flex flex-col gap-space-2xl">
+// ── Data Constants ─────────────────────────────────────────────────────────────
+const CATEGORIES = [
+  {
+    id: "processors",
+    name: "Processors",
+    desc: "Intel Core i3/i5/i7 & AMD Ryzen 3/5/7/9",
+    count: "60+ Models",
+    icon: "memory",
+    color: "from-cyan-500/20 to-blue-500/10",
+    border: "border-cyan-500/30",
+    iconColor: "text-primary",
+  },
+  {
+    id: "vga-cards",
+    name: "Graphics Cards",
+    desc: "NVIDIA RTX 30/40 Series & AMD Radeon RX",
+    count: "40+ Models",
+    icon: "sports_esports",
+    color: "from-emerald-500/20 to-teal-500/10",
+    border: "border-emerald-500/30",
+    iconColor: "text-secondary",
+  },
+  {
+    id: "motherboards",
+    name: "Motherboards",
+    desc: "Intel H61/H110/B460/Z790 & AMD A320/B450/B550",
+    count: "50+ Boards",
+    icon: "developer_board",
+    color: "from-purple-500/20 to-indigo-500/10",
+    border: "border-purple-500/30",
+    iconColor: "text-tertiary",
+  },
+  {
+    id: "storage",
+    name: "SSD & NVMe Storage",
+    desc: "High-speed M.2 NVMe, SATA SSDs & HDDs",
+    count: "30+ Drives",
+    icon: "storage",
+    color: "from-blue-500/20 to-cyan-500/10",
+    border: "border-blue-500/30",
+    iconColor: "text-primary",
+  },
+  {
+    id: "ram",
+    name: "RAM Memory",
+    desc: "DDR3 & DDR4 High-Performance Gaming Kits",
+    count: "20+ Options",
+    icon: "dns",
+    color: "from-amber-500/20 to-orange-500/10",
+    border: "border-amber-500/30",
+    iconColor: "text-amber-400",
+  },
+  {
+    id: "power-supply",
+    name: "Power Supplies",
+    desc: "450W to 850W Branded Continuous Power Units",
+    count: "15+ Units",
+    icon: "bolt",
+    color: "from-yellow-500/20 to-amber-500/10",
+    border: "border-yellow-500/30",
+    iconColor: "text-yellow-400",
+  },
+  {
+    id: "monitors",
+    name: "Monitors & Displays",
+    desc: "Frameless FHD IPS, LED & LCD Grade-A Panels",
+    count: "25+ Screens",
+    icon: "monitor",
+    color: "from-teal-500/20 to-cyan-500/10",
+    border: "border-teal-500/30",
+    iconColor: "text-secondary",
+  },
+  {
+    id: "cooling",
+    name: "Cooling & Fans",
+    desc: "CPU Coolers, Copper Heat Sinks & Thermal Gear",
+    count: "40+ Items",
+    icon: "mode_fan",
+    color: "from-sky-500/20 to-blue-500/10",
+    border: "border-sky-500/30",
+    iconColor: "text-primary",
+  },
+];
+
+const FEATURED_HIGHLIGHTS = [
+  {
+    id: "amd-r7-5700x",
+    name: "AMD Ryzen 7 5700X",
+    category: "Processor",
+    platform: "Socket AM4 · 8 Cores / 16 Threads",
+    badge: "Enthusiast Pick",
+    badgeType: "hot",
+    specs: [
+      { label: "Base/Boost", value: "3.4 / 4.6 GHz" },
+      { label: "Cores/Threads", value: "8C / 16T" },
+      { label: "L3 Cache", value: "32MB" },
+      { label: "TDP Rating", value: "65W Efficient" },
+    ],
+    inquiryText:
+      "Hi Aqua PC Solutions, I am interested in the AMD Ryzen 7 5700X processor. Could you please share the current price and availability?",
+  },
+  {
+    id: "rtx-3060-12g",
+    name: "NVIDIA GeForce RTX 3060 12GB",
+    category: "Graphics Card",
+    platform: "12GB GDDR6 · Ray Tracing & DLSS",
+    badge: "Best Seller",
+    badgeType: "popular",
+    specs: [
+      { label: "vRAM", value: "12GB GDDR6" },
+      { label: "Memory Bus", value: "192-bit" },
+      { label: "Output", value: "HDMI 2.1 + 3x DP" },
+      { label: "Gaming Tier", value: "1080p / 1440p Ultra" },
+    ],
+    inquiryText:
+      "Hi Aqua PC Solutions, I am interested in the NVIDIA RTX 3060 12GB graphics card. Please provide the price and warranty details.",
+  },
+  {
+    id: "asus-b550-gaming",
+    name: "AMD B550 Gaming Motherboard",
+    category: "Motherboard",
+    platform: "AM4 Socket · PCIe 4.0 Ready · Dual M.2",
+    badge: "Grade-A Tested",
+    badgeType: "certified",
+    specs: [
+      { label: "Chipset", value: "AMD B550" },
+      { label: "Memory Support", value: "4x DDR4 Up to 4400MHz" },
+      { label: "Storage", value: "PCIe 4.0 M.2 + SATA3" },
+      { label: "Form Factor", value: "ATX / Micro-ATX" },
+    ],
+    inquiryText:
+      "Hi Aqua PC Solutions, I would like to inquire about the AMD B550 Gaming Motherboard. Is it in stock and what is the price?",
+  },
+  {
+    id: "nvme-m2-512gb",
+    name: "512GB High-Speed M.2 NVMe SSD",
+    category: "Storage",
+    platform: "PCIe Gen3/Gen4 x4 · 3D NAND Flash",
+    badge: "Speed Upgrade",
+    badgeType: "speed",
+    specs: [
+      { label: "Capacity", value: "512 GB" },
+      { label: "Form Factor", value: "M.2 2280" },
+      { label: "Interface", value: "NVMe PCIe" },
+      { label: "Health Check", value: "100% SMART Verified" },
+    ],
+    inquiryText:
+      "Hi Aqua PC Solutions, could you let me know the price and brands available for the 512GB M.2 NVMe SSD?",
+  },
+  {
+    id: "intel-i5-10400",
+    name: "Intel Core i5-10400 / 10400F",
+    category: "Processor",
+    platform: "LGA1200 · 6 Cores / 12 Threads · 4.30 GHz",
+    badge: "Budget King",
+    badgeType: "popular",
+    specs: [
+      { label: "Base/Boost", value: "2.90 / 4.30 GHz" },
+      { label: "Cores/Threads", value: "6C / 12T" },
+      { label: "Cache", value: "12MB Intel Smart" },
+      { label: "Socket", value: "LGA1200" },
+    ],
+    inquiryText:
+      "Hi Aqua PC Solutions, I want to inquire about the Intel Core i5 10th Gen processor. What is the current price?",
+  },
+  {
+    id: "rx-6600-8gb",
+    name: "AMD Radeon RX 6600 8GB",
+    category: "Graphics Card",
+    platform: "8GB GDDR6 · RDNA 2 Architecture",
+    badge: "High FPS Value",
+    badgeType: "hot",
+    specs: [
+      { label: "vRAM", value: "8GB GDDR6" },
+      { label: "Resolution", value: "1080p High FPS" },
+      { label: "Features", value: "FSR 3.0 & Direct X12" },
+      { label: "Efficiency", value: "Low Power 132W" },
+    ],
+    inquiryText:
+      "Hi Aqua PC Solutions, please share details and price for the AMD Radeon RX 6600 8GB graphic card.",
+  },
+];
+
+const TRUST_METRICS = [
+  {
+    value: "300+",
+    title: "Cataloged Parts",
+    sub: "Processors, GPUs, boards, SSDs & more",
+    icon: "inventory_2",
+  },
+  {
+    value: "06 Mo.",
+    title: "Testing Warranty",
+    sub: "Peace-of-mind coverage on selected parts",
+    icon: "verified_user",
+  },
+  {
+    value: "100%",
+    title: "Silicon Tested",
+    sub: "Cold boot & benchmark verified",
+    icon: "check_circle",
+  },
+  {
+    value: "Island-wide",
+    title: "Safe Delivery",
+    sub: "Secure courier across Sri Lanka",
+    icon: "local_shipping",
+  },
+];
+
+const SERVICES_PREVIEW = [
+  {
+    title: "Custom PC Builds",
+    desc: "Bespoke desktop computers crafted for esports gaming, 4K video rendering, and engineering CAD workstations with balanced airflow.",
+    icon: "desktop_windows",
+    tag: "GAMING & WORKSTATIONS",
+    link: "/services",
+  },
+  {
+    title: "Diagnostics & Repairs",
+    desc: "Rapid triage for no-power, no-display, blue-screens, and overheating. Board-level micro-soldering to rescue expensive parts.",
+    icon: "build_circle",
+    tag: "BOARD-LEVEL REPAIR",
+    link: "/contact",
+  },
+  {
+    title: "Liquid Cooling & Upgrades",
+    desc: "Custom water loop flushes, AIO installations, thermal repasting with high-conductivity compounds, and hardware component upgrades.",
+    icon: "water_drop",
+    tag: "THERMAL OPTIMIZATION",
+    link: "/services",
+  },
+];
+
+const RIG_TELEMETRY = {
+  specs: {
+    overlayIcon: "speed",
+    overlayLabel: "Zero Throttle Loop",
+    overlayMetric: "< 58°C Full Load",
+    barLabel: "Silicon Clock Stability",
+    barValue: "99.8%",
+    barWidth: "96%",
+    signalLabel: "VCore Ripple Telemetry",
+    signalValue: "1.24V SYNC",
+    stats: [
+      { label: "Burn-In", value: "24h Pass", sub: "AIDA64 / 3DMark", color: "text-primary" },
+      { label: "Grade", value: "Class-A", sub: "Verified Silicon", color: "text-secondary" },
+      { label: "Support", value: "WhatsApp", sub: "Direct Chat", color: "text-[#25D366]" },
+    ],
+  },
+  cooling: {
+    overlayIcon: "water_drop",
+    overlayLabel: "Dual 360mm Hydro Loop",
+    overlayMetric: "220 L/h Flow",
+    barLabel: "Thermal Dissipation Headroom",
+    barValue: "88.4%",
+    barWidth: "88%",
+    signalLabel: "Coolant Flow Curve",
+    signalValue: "29.4°C EQ",
+    stats: [
+      { label: "Coolant", value: "29.4°C", sub: "Ambient Equilibrium", color: "text-secondary" },
+      { label: "Delta-T", value: "-18.4°C", sub: "Kryonaut / Direct", color: "text-primary" },
+      { label: "Acoustic", value: "24.1 dBA", sub: "Whisper Pump Curve", color: "text-tertiary" },
+    ],
+  },
+} as const;
+
+const RIG_BLUEPRINTS = [
+  {
+    id: "esports",
+    label: "Esports Velocity",
+    tag: "1080P COMPETITIVE",
+    title: "High-FPS Competitive Gaming Architecture",
+    summary:
+      "Tuned for Valorant, CS2, Warzone, and Apex with ultra-low frametime variance, fast NVMe OS boot, and cool sustained boost clocks.",
+    gauges: [
+      { value: 86, label: "FPS Velocity", display: "240+" },
+      { value: 84, label: "Thermal Margin", display: "56°C" },
+      { value: 96, label: "Rail Stability", display: "96%" },
+    ],
+    specs: [
+      { icon: "memory", label: "Processor", value: "Intel Core i5-10400F / Ryzen 5" },
+      { icon: "sports_esports", label: "Graphics", value: "AMD Radeon RX 6600 8GB" },
+      { icon: "dns", label: "Memory", value: "16GB DDR4 Dual-Channel XMP" },
+      { icon: "storage", label: "Storage", value: "512GB High-Speed M.2 NVMe" },
+    ],
+    whatsappText:
+      "Hi Aqua PC Solutions, I'd like a quotation for the Esports Velocity (1080p Competitive) custom PC build.",
+  },
+  {
+    id: "creator",
+    label: "Creator Pro",
+    tag: "1440P WORKSTATION",
+    title: "2K Gaming, Rendering & Streaming Powerhouse",
+    summary:
+      "Balanced multi-core compute and 12GB VRAM headroom built for DaVinci Resolve, Blender CUDA acceleration, and 1440p Ultra gaming.",
+    gauges: [
+      { value: 92, label: "Render Speed", display: "1440p" },
+      { value: 89, label: "Thermal Margin", display: "54°C" },
+      { value: 98, label: "Rail Stability", display: "98%" },
+    ],
+    specs: [
+      { icon: "memory", label: "Processor", value: "AMD Ryzen 7 5700X (8C / 16T)" },
+      { icon: "sports_esports", label: "Graphics", value: "NVIDIA RTX 3060 12GB GDDR6" },
+      { icon: "dns", label: "Memory", value: "32GB DDR4 High-Frequency Kit" },
+      { icon: "mode_fan", label: "Cooling", value: "High-Airflow Dual Tower Thermal" },
+    ],
+    whatsappText:
+      "Hi Aqua PC Solutions, I'd like a quotation for the Creator Pro (Ryzen 7 + RTX 3060 12GB) custom PC build.",
+  },
+  {
+    id: "hydro",
+    label: "Hydro Flagship",
+    tag: "4K LIQUID LAB",
+    title: "Zero-Compromise Custom Loop Enthusiast Rig",
+    summary:
+      "Bespoke CNC manifold cooling, pressure-tested hardline loops, Kryonaut thermal tuning, and 24-hour Karhu / AIDA64 stress validation.",
+    gauges: [
+      { value: 99, label: "Peak Class", display: "4K" },
+      { value: 95, label: "Thermal Margin", display: "49°C" },
+      { value: 99, label: "Clock Sustain", display: "99.8%" },
+    ],
+    specs: [
+      { icon: "memory", label: "Processor", value: "Flagship Multi-Core Ryzen / Core i9" },
+      { icon: "sports_esports", label: "Graphics", value: "NVIDIA RTX 40 Series Flagship" },
+      { icon: "water_drop", label: "Cooling", value: "Custom Dual-360mm Hydro Loop" },
+      { icon: "verified_user", label: "Validation", value: "24h Burn-In + 06 Mo. Warranty" },
+    ],
+    whatsappText:
+      "Hi Aqua PC Solutions, I'd like to discuss a Hydro Flagship custom liquid-cooled PC build.",
+  },
+] as const;
+
+// ── WhatsApp SVG ───────────────────────────────────────────────────────────────
+const WhatsAppIcon = ({ className = "w-5 h-5 shrink-0" }: { className?: string }) => (
+  <svg viewBox="0 0 24 24" fill="currentColor" className={className} aria-hidden="true">
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+  </svg>
+);
+
+// ═══════════════════════════════════════════════════════════════════════════════
+export default function HomePage() {
+  const [activeTab, setActiveTab] = useState<"specs" | "cooling">("specs");
+  const activeTelemetry = RIG_TELEMETRY[activeTab];
+
+  const [blueprintId, setBlueprintId] = useState<(typeof RIG_BLUEPRINTS)[number]["id"]>("creator");
+  const activeBlueprint = RIG_BLUEPRINTS.find((b) => b.id === blueprintId) ?? RIG_BLUEPRINTS[1];
+
+  return (
+    <div className="flex flex-col w-full overflow-x-clip">
+      {/* ── 1. Hero Section ── */}
+      <section className="relative w-full bg-surface-container-lowest -mt-20 pt-28 pb-space-2xl px-gutter-lg overflow-hidden">
+        <FloatingOrbs />
+        <CircuitFlowBackdrop className="absolute inset-0 w-full h-full opacity-80" />
+
+        {/* Subtle precision tech grid pattern */}
+        <div
+          className="absolute inset-0 opacity-[0.035] pointer-events-none"
+          style={{
+            backgroundImage:
+              "linear-gradient(rgb(var(--color-primary)) 1px, transparent 1px), linear-gradient(90deg, rgb(var(--color-primary)) 1px, transparent 1px)",
+            backgroundSize: "60px 60px",
+          }}
+        />
+
+        <div className="max-w-[1440px] mx-auto relative z-10 flex flex-col gap-space-2xl">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-gutter-lg items-center pt-space-md">
-            {/* Hero Left Column: Narrative & Action with Framer Motion Fade-ins */}
+            {/* Left Column: Heading & Value Prop */}
             <div className="lg:col-span-7 flex flex-col gap-space-lg">
               <motion.div
-                initial={{ opacity: 0, y: -14 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-                className="inline-flex items-center gap-space-sm px-space-md py-space-xs rounded-full bg-surface-container-high w-fit shadow-sm"
+                variants={fadeUpVariants}
+                initial="hidden"
+                animate="visible"
+                custom={0}
+                className="inline-flex items-center gap-space-sm px-space-md py-1.5 rounded-full bg-surface-container-high/90 backdrop-blur-md w-fit border border-primary/25 shadow-sm"
               >
-                <span className="w-2 h-2 rounded-full bg-secondary shadow-[0_0_10px_currentColor] animate-pulse" />
-                <span className="font-mono text-label-tech text-secondary tracking-wider uppercase">
-                  Next-Gen Hydro Telemetry Active
+                <span className="relative flex h-2.5 w-2.5">
+                  <span className="animate-pulse-ring absolute inline-flex h-full w-full rounded-full bg-secondary opacity-75" />
+                  <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-secondary shadow-[0_0_10px_rgba(79,219,200,0.9)]" />
                 </span>
-                <span className="font-mono text-label-badge text-on-surface-variant bg-surface-container px-space-xs py-0.5 rounded">
-                  v4.8 REV
+                <span className="font-mono text-label-tech text-secondary tracking-wider uppercase font-semibold">
+                  AQUA PC SOLUTIONS
+                </span>
+                <span className="text-outline font-mono text-[11px] hidden sm:inline">
+                  • EMBILIPITIYA, SRI LANKA
                 </span>
               </motion.div>
 
-              <motion.div
-                initial={{ opacity: 0, y: 22 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.65, delay: 0.12, ease: [0.22, 1, 0.36, 1] }}
-                className="flex flex-col gap-space-sm"
-              >
+              <div className="flex flex-col gap-space-sm">
                 <h1 className="font-syne text-display-hero-mobile lg:text-display-hero text-on-surface tracking-tight">
-                  Liquid-Cooled Precision.{" "}
-                  <span className="bg-gradient-to-r from-primary via-tertiary to-secondary bg-clip-text text-transparent">
-                    Elite PC Hardware
-                  </span>{" "}
-                  &amp; Master Repair Services.
+                  <MaskedReveal delay={0.05}>Build Your Dream Setup.</MaskedReveal>{" "}
+                  <MaskedReveal delay={0.16}>
+                    <span className="text-shimmer">Certified PC Hardware</span>
+                  </MaskedReveal>{" "}
+                  <MaskedReveal delay={0.26}>&amp; Expert Craftsmanship.</MaskedReveal>
                 </h1>
-                <p className="text-body-lg text-on-surface-variant max-w-2xl">
-                  Discover next-gen silicon, custom enthusiast water-cooling loops, and white-glove diagnostic &amp; repair solutions engineered for extreme performance and sustained acoustic calm.
-                </p>
-              </motion.div>
+                <motion.p
+                  variants={fadeUpVariants}
+                  initial="hidden"
+                  animate="visible"
+                  custom={2}
+                  className="text-body-lg text-on-surface-variant max-w-2xl leading-relaxed"
+                >
+                  Welcome to <strong className="text-on-surface">Aqua PC Solutions</strong>. Your trusted destination for verified Grade-A components, custom gaming rigs, thermal optimization, and micro-precision repair diagnostics in Sri Lanka.
+                </motion.p>
+              </div>
 
-              {/* Dual CTAs with subtle stagger */}
+              {/* Action Buttons with Magnetic Spring Pull */}
               <motion.div
-                initial={{ opacity: 0, y: 18 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.28, ease: [0.22, 1, 0.36, 1] }}
+                variants={fadeUpVariants}
+                initial="hidden"
+                animate="visible"
+                custom={3}
                 className="flex flex-wrap items-center gap-space-md pt-space-xs"
               >
-                <a
-                  href="#hardware-showcase"
-                  className="inline-flex items-center justify-center gap-space-sm px-space-xl py-space-md rounded-xl bg-gradient-to-r from-primary-container via-primary to-secondary text-on-primary font-syne text-title-md shadow-[0_0_30px_rgba(6,182,212,0.45)] hover:shadow-[0_0_40px_rgba(6,182,212,0.65)] hover:-translate-y-0.5 transition-all"
-                >
-                  <span className="material-symbols-outlined text-[20px]">
-                    memory
-                  </span>
-                  <span>Explore PC Hardware</span>
-                </a>
-                <Link
-                  href="/contact"
-                  className="inline-flex items-center justify-center gap-space-sm px-space-xl py-space-md rounded-xl bg-surface-container-high hover:bg-surface-bright text-on-surface font-syne text-title-md border border-outline-variant/30 transition-all hover:border-primary/40 hover:-translate-y-0.5"
-                >
-                  <span className="material-symbols-outlined text-[20px]">
-                    build_circle
-                  </span>
-                  <span>Book Repair Diagnosis</span>
-                </Link>
+                <MagneticWrap>
+                  <Link
+                    href="/shop"
+                    className="relative sheen-hover inline-flex items-center justify-center gap-space-sm px-space-xl py-space-md rounded-xl bg-gradient-to-r from-primary to-secondary text-surface font-syne text-title-md font-bold shadow-cyan-glow hover:shadow-cyan-glow-lg hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-300 group"
+                  >
+                    <span className="material-symbols-outlined text-[20px] relative z-10 group-hover:rotate-12 transition-transform duration-300">
+                      grid_view
+                    </span>
+                    <span className="relative z-10">Browse 300+ Parts</span>
+                  </Link>
+                </MagneticWrap>
+
+                <MagneticWrap>
+                  <a
+                    href={WHATSAPP_BASE}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="sheen-hover inline-flex items-center justify-center gap-space-sm px-space-xl py-space-md rounded-xl bg-[#25D366] hover:bg-[#20ba59] text-white font-syne text-title-md font-bold shadow-md hover:shadow-[0_10px_28px_rgba(37,211,102,0.35)] hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-300"
+                  >
+                    <WhatsAppIcon />
+                    <span>WhatsApp Inquiry</span>
+                  </a>
+                </MagneticWrap>
+
+                <MagneticWrap strength={0.16}>
+                  <Link
+                    href="/contact"
+                    className="inline-flex items-center justify-center gap-space-sm px-space-xl py-space-md rounded-xl bg-surface-container-high hover:bg-surface-bright text-on-surface font-syne text-title-md border border-outline-variant/30 transition-all duration-300 hover:border-primary/40 hover:-translate-y-0.5"
+                  >
+                    <span className="material-symbols-outlined text-[20px] text-primary">
+                      build_circle
+                    </span>
+                    <span>Book Repair</span>
+                  </Link>
+                </MagneticWrap>
               </motion.div>
 
-              {/* Quick Hardware Assurance Micro-badges */}
+              {/* Trust Badges Bar */}
               <motion.div
-                initial={{ opacity: 0, y: 14 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.55, delay: 0.42, ease: [0.22, 1, 0.36, 1] }}
-                className="flex flex-wrap items-center gap-space-lg pt-space-sm text-on-surface-variant"
+                variants={fadeUpVariants}
+                initial="hidden"
+                animate="visible"
+                custom={4}
+                className="flex flex-wrap items-center gap-x-space-lg gap-y-space-xs pt-space-sm text-body-sm text-on-surface-variant"
               >
-                <div className="flex items-center gap-space-xs">
-                  <span className="material-symbols-outlined text-primary text-[18px]">
-                    verified
-                  </span>
-                  <span className="text-body-sm">
-                    Silicon Binning &amp; Delid Guarantee
-                  </span>
-                </div>
-                <div className="flex items-center gap-space-xs">
-                  <span className="material-symbols-outlined text-secondary text-[18px]">
-                    water_drop
-                  </span>
-                  <span className="text-body-sm">
-                    0.00% Leak Tolerance
-                  </span>
-                </div>
+                {[
+                  { icon: "check_circle", label: "Grade-A Bench Tested", color: "text-primary" },
+                  { icon: "security", label: "06 Months Warranty", color: "text-secondary" },
+                  { icon: "local_shipping", label: "Safe Island-wide Delivery", color: "text-tertiary" },
+                ].map((badge, i) => (
+                  <motion.div
+                    key={badge.label}
+                    variants={fadeInVariants}
+                    custom={i}
+                    className="flex items-center gap-1.5 group cursor-default"
+                  >
+                    <span
+                      className={`material-symbols-outlined ${badge.color} text-[18px] group-hover:scale-125 transition-transform duration-200`}
+                    >
+                      {badge.icon}
+                    </span>
+                    <span className="group-hover:text-on-surface transition-colors">
+                      {badge.label}
+                    </span>
+                  </motion.div>
+                ))}
               </motion.div>
             </div>
 
-            {/* Hero Right Column: Graphic Rig Showcase & Telemetry HUD with entrance motion */}
+            {/* Right Column: Hero Visual Rig Showcase with Conic Light Border & 3D Tilt */}
             <motion.div
-              initial={{ opacity: 0, scale: 0.95, y: 24 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              transition={{ duration: 0.75, delay: 0.22, ease: [0.22, 1, 0.36, 1] }}
+              variants={scaleInVariants}
+              initial="hidden"
+              animate="visible"
+              custom={2}
               className="lg:col-span-5 relative"
             >
-              <div className="relative rounded-2xl bg-surface-container-high/90 backdrop-blur-2xl p-space-lg shadow-xl border border-primary/20 overflow-hidden">
-                <div className="absolute -top-12 -right-12 w-48 h-48 bg-primary/20 rounded-full blur-3xl pointer-events-none" />
-
-                {/* Header of HUD */}
-                <div className="flex items-center justify-between pb-space-md">
-                  <div className="flex items-center gap-space-xs">
-                    <span className="material-symbols-outlined text-primary text-[20px]">
-                      thermostat
-                    </span>
-                    <span className="font-mono text-label-tech text-on-surface uppercase tracking-wider">
-                      AQUA-LAB TEST BENCH 07
+              <TiltSpotlightCard
+                conicBorder
+                sheen
+                maxTilt={3.5}
+                className="rounded-2xl shadow-2xl card-glow"
+                innerClassName="bg-surface-container-high/95 backdrop-blur-xl p-space-md sm:p-space-lg"
+              >
+                <div className="relative z-10">
+                  <div className="flex items-center justify-between pb-space-sm border-b border-outline-variant/20">
+                    <div className="flex items-center gap-2">
+                      <span className="relative flex h-2.5 w-2.5">
+                        <span className="animate-pulse-ring absolute inline-flex h-full w-full rounded-full bg-[#25D366] opacity-75" />
+                        <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#25D366]" />
+                      </span>
+                      <span className="font-mono text-label-tech text-on-surface uppercase font-bold">
+                        AQUA TECH LAB RIG
+                      </span>
+                    </div>
+                    <span className="px-space-sm py-0.5 rounded-full bg-secondary/15 text-secondary font-mono text-[11px] font-semibold border border-secondary/20">
+                      BENCHMARK ACTIVE
                     </span>
                   </div>
-                  <span className="px-space-sm py-0.5 rounded-full bg-secondary/10 text-secondary font-mono text-label-badge uppercase border border-secondary/20">
-                    LOOP INTACT
-                  </span>
+
+                  {/* Interactive Toggle Pill */}
+                  <div className="flex gap-2 my-space-sm p-1 rounded-xl bg-surface-container border border-outline-variant/15">
+                    {(["specs", "cooling"] as const).map((tab) => {
+                      const isSelected = activeTab === tab;
+                      return (
+                        <button
+                          key={tab}
+                          type="button"
+                          onClick={() => setActiveTab(tab)}
+                          className={`flex-1 py-1.5 px-3 rounded-lg font-syne text-body-sm transition-colors text-center relative z-10 ${
+                            isSelected
+                              ? "text-surface font-bold"
+                              : "text-on-surface-variant hover:text-on-surface"
+                          }`}
+                        >
+                          {isSelected && (
+                            <motion.span
+                              layoutId="hero-rig-tab"
+                              className={`absolute inset-0 rounded-lg -z-10 shadow-sm ${
+                                tab === "specs" ? "bg-primary" : "bg-secondary"
+                              }`}
+                              transition={{ type: "spring", stiffness: 380, damping: 32 }}
+                            />
+                          )}
+                          <span>
+                            {tab === "specs" ? "Hardware Stability" : "Thermal Profile"}
+                          </span>
+                        </button>
+                      );
+                    })}
+                  </div>
+
+                  {/* Hardware Image */}
+                  <div className="relative w-full h-60 sm:h-72 rounded-xl overflow-hidden bg-surface-container-lowest scan-overlay">
+                    <Image
+                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuCzAgT1ycU31D0XXng7zUxriWh_-AJeqiSxHggoL5n3OUn4967qRAk-8lipNJE3yhEI7S-rW0Vsvwu_WISzGD-15X3dYeF9K8GgkFpO0o95G7tY4kRuq23kMPeGXuxcIWu_DjNPW1oqvT0x2nL2DyfK_lPLNU9uUWFRgb9EIlVpHynrASnW-tXBGyJPMH-euBM4FfPsd68trJRjtrzVLpUxXR_f5_msEEoRUSf5azYx"
+                      alt="Custom Liquid Cooled Gaming PC by Aqua PC Solutions"
+                      fill
+                      priority
+                      sizes="(max-width: 768px) 100vw, 42vw"
+                      className="object-cover transition-transform duration-700 group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-surface-container-lowest via-transparent to-transparent" />
+
+                    <AnimatePresence mode="wait">
+                      <motion.div
+                        key={activeTab + "-overlay"}
+                        initial={{ opacity: 0, y: 6 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -6 }}
+                        transition={{ duration: 0.25, ease: EASE_PREMIUM }}
+                        className="absolute bottom-3 left-3 right-3 flex items-center justify-between bg-surface-container/90 backdrop-blur-md px-3 py-2 rounded-lg border border-primary/20"
+                      >
+                        <div className="flex items-center gap-2">
+                          <span className="material-symbols-outlined text-primary text-[18px]">
+                            {activeTelemetry.overlayIcon}
+                          </span>
+                          <span className="font-mono text-[12px] text-on-surface">
+                            {activeTelemetry.overlayLabel}
+                          </span>
+                        </div>
+                        <span className="font-mono text-[12px] text-secondary font-bold">
+                          {activeTelemetry.overlayMetric}
+                        </span>
+                      </motion.div>
+                    </AnimatePresence>
+                  </div>
+
+                  {/* Live Oscilloscope + Progress Meter */}
+                  <div className="mt-space-sm p-3 rounded-lg bg-surface-container border border-outline-variant/15 flex flex-col gap-2">
+                    <div className="flex items-center justify-between font-mono text-[11px]">
+                      <span className="text-on-surface-variant">{activeTelemetry.signalLabel}</span>
+                      <span className="text-secondary font-bold">{activeTelemetry.signalValue}</span>
+                    </div>
+                    <LiveOscilloscope mode={activeTab === "specs" ? "primary" : "secondary"} />
+                    <div className="flex items-center justify-between font-mono text-[11px] pt-0.5">
+                      <span className="text-on-surface-variant">{activeTelemetry.barLabel}</span>
+                      <span className="text-primary font-bold">{activeTelemetry.barValue}</span>
+                    </div>
+                    <div className="w-full h-1.5 rounded-full bg-surface-container-lowest overflow-hidden">
+                      <motion.div
+                        key={activeTab + "-bar"}
+                        initial={{ width: "0%" }}
+                        animate={{ width: activeTelemetry.barWidth }}
+                        transition={{ duration: 0.7, ease: EASE_PREMIUM }}
+                        className="h-full rounded-full bg-gradient-to-r from-primary via-tertiary to-secondary shadow-[0_0_8px_rgba(76,215,246,0.6)]"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Telemetry / Specs Grid */}
+                  <AnimatePresence mode="wait">
+                    <motion.div
+                      key={activeTab}
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -8 }}
+                      transition={{ duration: 0.25, ease: EASE_PREMIUM }}
+                      className="grid grid-cols-3 gap-2 mt-space-sm"
+                    >
+                      {activeTelemetry.stats.map((stat) => (
+                        <div
+                          key={stat.label}
+                          className="p-2.5 rounded-lg bg-surface-container flex flex-col border border-outline-variant/15 text-center hover:border-primary/35 transition-colors"
+                        >
+                          <span className="font-mono text-[10px] text-outline uppercase">
+                            {stat.label}
+                          </span>
+                          <span className={`font-mono text-title-md ${stat.color} font-bold`}>
+                            {stat.value}
+                          </span>
+                          <span className="text-[10px] text-outline truncate">{stat.sub}</span>
+                        </div>
+                      ))}
+                    </motion.div>
+                  </AnimatePresence>
+
+                  {/* Direct Card CTA */}
+                  <div className="mt-space-sm pt-space-xs border-t border-outline-variant/15 flex items-center justify-between">
+                    <span className="text-body-sm text-on-surface-variant">
+                      Need a custom rig quotation?
+                    </span>
+                    <a
+                      href={`${WHATSAPP_BASE}?text=Hi%20Aqua%20PC%20Solutions,%20I%20would%20like%20a%20quotation%20for%20a%20custom%20gaming%20PC.`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-[#25D366] hover:text-[#20ba59] font-syne text-body-sm font-bold flex items-center gap-1 transition-colors group/cta"
+                    >
+                      <span>Message Founder</span>
+                      <span className="material-symbols-outlined text-[16px] group-hover/cta:translate-x-1 transition-transform">
+                        arrow_forward
+                      </span>
+                    </a>
+                  </div>
                 </div>
-
-                {/* Hardware Rig Image (Optimized with priority & responsive sizes) */}
-                <div className="relative w-full h-72 rounded-xl overflow-hidden bg-surface-container-lowest">
-                  <Image
-                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuCzAgT1ycU31D0XXng7zUxriWh_-AJeqiSxHggoL5n3OUn4967qRAk-8lipNJE3yhEI7S-rW0Vsvwu_WISzGD-15X3dYeF9K8GgkFpO0o95G7tY4kRuq23kMPeGXuxcIWu_DjNPW1oqvT0x2nL2DyfK_lPLNU9uUWFRgb9EIlVpHynrASnW-tXBGyJPMH-euBM4FfPsd68trJRjtrzVLpUxXR_f5_msEEoRUSf5azYx"
-                    alt="High-end enthusiast open-frame liquid-cooled gaming PC"
-                    fill
-                    priority
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 42vw"
-                    className="object-cover"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-surface-container-lowest via-transparent to-transparent" />
-
-                  {/* Floating Pill on Image */}
-                  <div className="absolute bottom-3 left-3 bg-surface-container/90 backdrop-blur-md px-space-md py-space-xs rounded-lg flex items-center gap-space-sm shadow-md border border-primary/20">
-                    <span className="material-symbols-outlined text-primary text-[16px]">
-                      speed
-                    </span>
-                    <span className="font-mono text-label-tech text-on-surface">
-                      Flow Velocity: 3.8 L/min
-                    </span>
-                  </div>
-                </div>
-
-                {/* Dynamic Telemetry Feed Grid */}
-                <div className="grid grid-cols-3 gap-space-sm mt-space-md">
-                  <div className="p-space-sm rounded-lg bg-surface-container flex flex-col border border-outline-variant/15">
-                    <span className="font-mono text-[10px] text-outline uppercase">
-                      Core Delta-T
-                    </span>
-                    <span className="font-mono text-telemetry-num text-primary pt-0.5">
-                      +24.3 °C
-                    </span>
-                    <span className="text-[10px] text-secondary">
-                      Ambient Balanced
-                    </span>
-                  </div>
-                  <div className="p-space-sm rounded-lg bg-surface-container flex flex-col border border-outline-variant/15">
-                    <span className="font-mono text-[10px] text-outline uppercase">
-                      Draw Active
-                    </span>
-                    <span className="font-mono text-telemetry-num text-on-surface pt-0.5">
-                      582 W
-                    </span>
-                    <span className="text-[10px] text-primary">
-                      96.8% Titanium Eff.
-                    </span>
-                  </div>
-                  <div className="p-space-sm rounded-lg bg-surface-container flex flex-col border border-outline-variant/15">
-                    <span className="font-mono text-[10px] text-outline uppercase">
-                      Acoustic SPL
-                    </span>
-                    <span className="font-mono text-telemetry-num text-secondary pt-0.5">
-                      21.4 dBA
-                    </span>
-                    <span className="text-[10px] text-outline">
-                      Whisper Tier
-                    </span>
-                  </div>
-                </div>
-
-                {/* Mini Live Wattage / Thermal Gauge Chart */}
-                <div className="mt-space-md flex flex-col gap-1.5">
-                  <div className="flex justify-between items-center text-body-sm">
-                    <span className="text-on-surface-variant font-mono text-label-tech">
-                      Hydro-Loop Saturation Capacity
-                    </span>
-                    <span className="text-primary font-mono text-telemetry-num">
-                      44% Used
-                    </span>
-                  </div>
-                  <div className="w-full h-2 rounded-full bg-surface-container-lowest overflow-hidden">
-                    <div className="h-full bg-gradient-to-r from-secondary via-primary to-tertiary w-[44%] rounded-full shadow-[0_0_12px_rgba(76,215,246,0.6)]" />
-                  </div>
-                </div>
-              </div>
+              </TiltSpotlightCard>
             </motion.div>
           </div>
 
-          {/* ── Trust Proof Stats Banner ── */}
-          <div className="w-full rounded-2xl bg-surface-container p-space-lg shadow-lg border border-outline-variant/20">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-gutter">
-              {TRUST_STATS.map((stat, idx) => (
-                <div key={idx} className="flex flex-col gap-1 items-start">
-                  <div className={`flex items-center gap-space-xs ${stat.color}`}>
-                    <span className="material-symbols-outlined text-[24px]">
-                      {stat.icon}
-                    </span>
-                    <span className="font-syne text-display-hero-mobile tracking-tight">
-                      {stat.value}
-                    </span>
+          {/* Metric Bar */}
+          <motion.div
+            variants={fadeUpVariants}
+            initial="hidden"
+            animate="visible"
+            custom={4}
+            className="w-full rounded-2xl bg-surface-container p-space-md sm:p-space-lg shadow-lg border border-outline-variant/20 relative overflow-hidden"
+          >
+            <div
+              className="absolute inset-0 opacity-5 pointer-events-none"
+              style={{
+                backgroundImage:
+                  "radial-gradient(circle at 50% 50%, rgb(var(--color-primary)) 0%, transparent 70%)",
+              }}
+            />
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-gutter relative z-10">
+              {TRUST_METRICS.map((metric, idx) => (
+                <motion.div
+                  key={idx}
+                  variants={fadeUpVariants}
+                  custom={idx}
+                  className="flex items-center gap-space-sm group"
+                >
+                  <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary shrink-0 border border-primary/20 group-hover:bg-primary/20 group-hover:scale-110 group-hover:border-primary/40 transition-all duration-300">
+                    <span className="material-symbols-outlined text-[24px]">{metric.icon}</span>
                   </div>
-                  <span className="font-syne text-title-md text-on-surface">
-                    {stat.title}
-                  </span>
-                  <span className="text-body-sm text-on-surface-variant">
-                    {stat.description}
-                  </span>
-                </div>
+                  <div className="flex flex-col">
+                    <span className="font-syne text-headline-sm text-on-surface font-bold leading-tight">
+                      <AnimatedNumber value={metric.value} />
+                    </span>
+                    <span className="font-syne text-body-sm text-on-surface font-semibold">
+                      {metric.title}
+                    </span>
+                    <span className="text-[12px] text-on-surface-variant">{metric.sub}</span>
+                  </div>
+                </motion.div>
               ))}
             </div>
-          </div>
+          </motion.div>
         </div>
       </section>
 
-      {/* ── Section 2: Featured PC Hardware Showcase ── */}
-      <section className="w-full py-space-2xl bg-surface" id="hardware-showcase">
-        <div className="max-w-[1440px] mx-auto px-gutter-lg flex flex-col gap-space-xl">
-          {/* Showcase Header with Tab Switches */}
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-space-md">
-            <div className="flex flex-col gap-space-xs">
-              <div className="flex items-center gap-space-xs text-primary">
-                <span className="material-symbols-outlined text-[18px]">
-                  developer_board
-                </span>
-                <span className="font-mono text-label-tech uppercase tracking-widest">
-                  Inventory Lab Access
-                </span>
-              </div>
-              <h2 className="font-syne text-headline-lg text-on-surface">
-                Featured Enthusiast Hardware
-              </h2>
-              <p className="text-body-md text-on-surface-variant">
-                Factory-binned processors, high-copper cooling solutions, and flagship graphics engines.
-              </p>
-            </div>
+      {/* ── Scroll Ticker ── */}
+      <ScrollTicker />
 
-            {/* Filter Tab Buttons */}
-            <div className="flex flex-wrap items-center gap-space-xs p-1 rounded-xl bg-surface-container-high border border-outline-variant/20">
-              {[
-                { id: "all", label: "All Silicon" },
-                { id: "cpu", label: "Processors" },
-                { id: "gpu", label: "Graphics Cards" },
-                { id: "cooling", label: "Liquid Cooling" },
-                { id: "memory", label: "Memory & Boards" },
-              ].map((tab) => (
-                <button
-                  key={tab.id}
-                  onClick={() => setFilter(tab.id)}
-                  className={`px-space-md py-space-xs rounded-lg font-syne text-title-md transition-all ${
-                    filter === tab.id
-                      ? "bg-primary-container text-on-primary-container shadow-sm"
-                      : "text-on-surface-variant hover:text-on-surface"
-                  }`}
-                  type="button"
-                >
-                  {tab.label}
-                </button>
-              ))}
-            </div>
+      {/* ── 2. Quick Shop Categories Navigator ── */}
+      <RevealSection className="w-full py-space-2xl px-gutter-lg bg-surface border-t border-outline-variant/15">
+        <div className="max-w-[1440px] mx-auto flex flex-col gap-space-xl">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-space-md">
+            <motion.div variants={fadeUpVariants} custom={0}>
+              <span className="font-mono text-label-tech text-secondary uppercase tracking-widest block mb-1">
+                // HARDWARE INVENTORY
+              </span>
+              <h2 className="font-syne text-headline-lg text-on-surface">
+                Explore Components by Category
+              </h2>
+            </motion.div>
+            <motion.div variants={fadeInVariants} custom={1}>
+              <Link
+                href="/shop"
+                className="inline-flex items-center gap-space-xs text-primary hover:text-primary-fixed font-syne text-title-md transition-colors group"
+              >
+                <span>View Full 300+ Item Shop Catalog</span>
+                <span className="material-symbols-outlined text-[18px] group-hover:translate-x-1 transition-transform">
+                  arrow_forward
+                </span>
+              </Link>
+            </motion.div>
           </div>
 
-          {/* Hardware Products Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter">
-            {filteredProducts.map((product) => (
-              <div
-                key={product.id}
-                className="group rounded-2xl bg-surface-container p-space-md flex flex-col justify-between shadow-md hover:shadow-xl hover:-translate-y-1 transition-all border border-outline-variant/15 hover:border-primary/40"
-              >
-                <div className="flex flex-col gap-space-md">
-                  {/* Hardware Image Well */}
-                  <div className="relative w-full h-48 rounded-xl overflow-hidden bg-surface-container-low flex items-center justify-center">
-                    <Image
-                      src={product.image}
-                      alt={product.name}
-                      fill
-                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-                      className="object-cover group-hover:scale-105 transition-transform duration-300"
-                    />
-                    <span
-                      className={`absolute top-2.5 right-2.5 px-space-sm py-0.5 rounded-full font-mono text-[10px] uppercase border ${
-                        product.badgeType === "stock"
-                          ? "bg-secondary/15 text-secondary border-secondary/30"
-                          : product.badgeType === "limited"
-                          ? "bg-primary/15 text-primary border-primary/30"
-                          : "bg-tertiary/15 text-tertiary border-tertiary/30"
-                      }`}
-                    >
-                      {product.badge}
-                    </span>
-                    <span className="absolute bottom-2.5 left-2.5 px-space-sm py-0.5 rounded bg-surface-container-high/90 text-primary font-mono text-label-tech border border-outline-variant/20">
-                      {product.featureTag}
-                    </span>
-                  </div>
-
-                  {/* Hardware Titles & Specs */}
-                  <div className="flex flex-col gap-space-xs">
-                    <span className="font-mono text-[11px] text-outline uppercase tracking-wider">
-                      {product.platform}
-                    </span>
-                    <h3 className="font-syne text-title-md text-on-surface group-hover:text-primary transition-colors">
-                      {product.name}
-                    </h3>
-
-                    {/* Spec Pairing */}
-                    <div className="grid grid-cols-2 gap-space-xs mt-space-xs">
-                      {product.specs.map((spec, i) => (
+          {/* 8-Card Category Grid with 3D Spring Tilt & Metallic Sheen */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-gutter">
+            {CATEGORIES.map((cat, i) => (
+              <motion.div key={cat.id} variants={scaleInVariants} custom={i}>
+                <TiltSpotlightCard
+                  sheen
+                  maxTilt={5}
+                  className="rounded-2xl bg-surface-container hover:bg-surface-container-high border border-outline-variant/15 hover:border-primary/40 shadow-sm hover:shadow-xl transition-all duration-300 card-glow h-full"
+                >
+                  <Link
+                    href={`/shop?category=${cat.id}`}
+                    className="p-space-lg flex flex-col justify-between h-full relative z-10"
+                  >
+                    <div className="flex flex-col gap-space-sm">
+                      <div className="flex items-center justify-between">
                         <div
-                          key={i}
-                          className="p-space-xs rounded bg-surface-container-high font-mono text-label-tech text-on-surface-variant flex justify-between"
+                          className={`w-12 h-12 rounded-xl bg-gradient-to-br ${cat.color} flex items-center justify-center ${cat.iconColor} border ${cat.border} group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300`}
                         >
-                          <span>{spec.label}:</span>
-                          <span className="text-on-surface font-semibold">
+                          <span className="material-symbols-outlined text-[24px]">
+                            {cat.icon}
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-1.5">
+                          <span className="font-mono text-[10px] text-outline/70">
+                            0{i + 1}
+                          </span>
+                          <span className="px-2.5 py-1 rounded-full bg-surface-container-high text-on-surface-variant font-mono text-[11px] border border-outline-variant/20">
+                            {cat.count}
+                          </span>
+                        </div>
+                      </div>
+                      <div>
+                        <h3 className="font-syne text-title-md text-on-surface group-hover:text-primary transition-colors">
+                          {cat.name}
+                        </h3>
+                        <p className="text-body-sm text-on-surface-variant mt-1">{cat.desc}</p>
+                      </div>
+                    </div>
+                    <div className="pt-space-md mt-space-md border-t border-outline-variant/10 flex items-center justify-between text-body-sm font-syne font-semibold text-primary">
+                      <span>Explore Items</span>
+                      <span className="material-symbols-outlined text-[16px] group-hover:translate-x-2 transition-transform duration-300">
+                        arrow_forward
+                      </span>
+                    </div>
+                  </Link>
+                </TiltSpotlightCard>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </RevealSection>
+
+      {/* ── 3. Featured Hardware Spotlight ── */}
+      <RevealSection className="w-full py-space-2xl px-gutter-lg bg-surface-container-low border-t border-outline-variant/15">
+        <div className="max-w-[1440px] mx-auto flex flex-col gap-space-xl">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-space-md">
+            <motion.div variants={fadeUpVariants} custom={0}>
+              <span className="font-mono text-label-tech text-primary uppercase tracking-widest block mb-1">
+                // POPULAR SILICON &amp; HARDWARE
+              </span>
+              <h2 className="font-syne text-headline-lg text-on-surface">
+                Featured In-Demand Components
+              </h2>
+              <p className="text-body-md text-on-surface-variant max-w-xl mt-1">
+                All components are Grade-A verified with clean contacts, stable voltage margins, and instant WhatsApp inquiry.
+              </p>
+            </motion.div>
+            <motion.div variants={fadeInVariants} custom={1}>
+              <Link
+                href="/shop"
+                className="px-space-md py-space-sm rounded-xl bg-surface-container-high hover:bg-surface-bright text-on-surface font-syne text-body-md font-semibold border border-outline-variant/30 transition-all flex items-center gap-2 self-start md:self-auto hover:border-primary/40 hover:-translate-y-0.5"
+              >
+                <span>View All 300+ Products</span>
+                <span className="material-symbols-outlined text-[16px]">arrow_forward</span>
+              </Link>
+            </motion.div>
+          </div>
+
+          {/* Product Spotlight Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter">
+            {FEATURED_HIGHLIGHTS.map((item, i) => (
+              <motion.div key={item.id} variants={fadeUpVariants} custom={i}>
+                <SpotlightCard className="sheen-hover rounded-2xl bg-surface-container p-space-lg flex flex-col justify-between border border-outline-variant/15 hover:border-primary/40 shadow-md hover:shadow-2xl transition-all duration-300 card-glow hover:-translate-y-1.5 h-full">
+                  {/* Top shimmer line on hover */}
+                  <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-primary/0 to-transparent group-hover:via-primary/60 transition-all duration-500" />
+
+                  <div className="flex flex-col gap-space-sm relative z-10">
+                    {/* Category & Badge */}
+                    <div className="flex items-center justify-between">
+                      <span className="px-2.5 py-0.5 rounded bg-primary/10 text-primary font-mono text-[11px] uppercase font-semibold border border-primary/20">
+                        {item.category}
+                      </span>
+                      <span
+                        className={`px-2.5 py-0.5 rounded-full font-mono text-[11px] font-semibold ${
+                          item.badgeType === "hot"
+                            ? "bg-rose-500/15 text-rose-400"
+                            : item.badgeType === "popular"
+                            ? "bg-secondary/15 text-secondary"
+                            : item.badgeType === "certified"
+                            ? "bg-emerald-500/15 text-emerald-400"
+                            : "bg-primary/15 text-primary"
+                        }`}
+                      >
+                        {item.badge}
+                      </span>
+                    </div>
+
+                    <div>
+                      <h3 className="font-syne text-headline-sm text-on-surface group-hover:text-primary transition-colors duration-300">
+                        {item.name}
+                      </h3>
+                      <p className="font-mono text-label-tech text-outline mt-0.5">
+                        {item.platform}
+                      </p>
+                    </div>
+
+                    {/* Specs List */}
+                    <div className="grid grid-cols-2 gap-2 mt-space-xs">
+                      {item.specs.map((spec, sIdx) => (
+                        <div
+                          key={sIdx}
+                          className="p-2 rounded-lg bg-surface-container-high/80 border border-outline-variant/10 flex flex-col hover:border-primary/25 transition-colors"
+                        >
+                          <span className="text-[10px] font-mono text-outline uppercase">
+                            {spec.label}
+                          </span>
+                          <span className="text-body-sm font-mono text-on-surface font-semibold truncate">
                             {spec.value}
                           </span>
                         </div>
                       ))}
                     </div>
                   </div>
-                </div>
 
-                {/* Bottom Price & Action */}
-                <div className="mt-space-lg pt-space-sm flex items-center justify-between border-t border-outline-variant/15">
-                  <div className="flex flex-col">
-                    <span className="font-mono text-[10px] text-outline uppercase">
-                      Retail Lab Price
-                    </span>
-                    <span className="font-syne text-headline-sm text-primary">
-                      ${product.price.toFixed(2)}
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-space-xs">
-                    <button
-                      aria-label="Compare Product"
-                      className="p-space-sm rounded-lg bg-surface-container-high text-on-surface-variant hover:text-on-surface transition-colors"
-                      type="button"
+                  {/* Bottom WhatsApp Inquiry Flow */}
+                  <div className="mt-space-lg pt-space-md border-t border-outline-variant/15 flex flex-col sm:flex-row items-center gap-2 relative z-10">
+                    <a
+                      href={`${WHATSAPP_BASE}?text=${encodeURIComponent(item.inquiryText)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-full sm:flex-1 py-2.5 px-space-md rounded-xl bg-[#25D366] hover:bg-[#20ba59] text-white font-syne text-body-sm font-bold flex items-center justify-center gap-2 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md"
                     >
-                      <span className="material-symbols-outlined text-[18px]">
-                        balance
-                      </span>
-                    </button>
-                    <button
-                      onClick={() => handleAddToCart(product.id)}
-                      className={`px-space-md py-space-sm rounded-lg font-syne text-body-md transition-all shadow-sm ${
-                        addedItem === product.id
-                          ? "bg-secondary text-surface font-bold"
-                          : "bg-primary text-on-primary hover:bg-primary-fixed-dim"
-                      }`}
-                      type="button"
+                      <WhatsAppIcon className="w-4 h-4 shrink-0" />
+                      <span>Check Price on WhatsApp</span>
+                    </a>
+                    <Link
+                      href="/shop"
+                      className="w-full sm:w-auto p-2.5 rounded-xl bg-surface-container-high hover:bg-surface-bright text-on-surface-variant hover:text-on-surface flex items-center justify-center border border-outline-variant/20 transition-colors hover:border-primary/30"
+                      title="View in Shop"
                     >
-                      {addedItem === product.id ? "Added!" : "Add to Cart"}
-                    </button>
+                      <span className="material-symbols-outlined text-[18px]">open_in_new</span>
+                    </Link>
                   </div>
-                </div>
-              </div>
+                </SpotlightCard>
+              </motion.div>
             ))}
           </div>
         </div>
-      </section>
+      </RevealSection>
 
-      {/* ── Section 3: Bespoke Water-Cooling Architecture Teaser ── */}
-      <section className="w-full py-space-2xl bg-surface-container-lowest border-t border-outline-variant/15">
-        <div className="max-w-[1440px] mx-auto px-gutter-lg flex flex-col gap-space-xl">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-gutter-lg items-center">
-            <div className="lg:col-span-6 flex flex-col gap-space-md">
-              <span className="font-mono text-label-tech text-secondary uppercase tracking-widest">
-                // HYDRO DYNAMICS SPECIALIZATION
+      {/* ── 3.5 Interactive Rig Blueprints Configurator ── */}
+      <RevealSection className="w-full py-space-2xl px-gutter-lg bg-surface border-t border-outline-variant/15">
+        <div className="max-w-[1440px] mx-auto flex flex-col gap-space-xl">
+          <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-space-md">
+            <motion.div variants={fadeUpVariants} custom={0}>
+              <span className="font-mono text-label-tech text-primary uppercase tracking-widest block mb-1">
+                // INTERACTIVE BUILD ARCHITECT
               </span>
               <h2 className="font-syne text-headline-lg text-on-surface">
-                Precision Hand-Bent Hardline Loops
+                Custom Rig Tier Blueprints
               </h2>
-              <p className="text-body-lg text-on-surface-variant leading-relaxed">
-                Every custom water loop we design is measured down to the millimeter. Using premium acrylic or industrial copper tubing, CNC-milled acrylic distribution plates, and dual-pump D5 redundant loops, we guarantee sub-ambient thermal margins and whisper-silent acoustic performance.
+              <p className="text-body-md text-on-surface-variant max-w-xl mt-1">
+                Preview balanced gaming and creator builds tuned in our Embilipitiya lab—complete with thermal headroom, benchmark validation, and instant WhatsApp quotation.
               </p>
-              <div className="flex flex-col gap-space-sm pt-space-xs">
-                <div className="flex items-center gap-space-sm">
-                  <span className="material-symbols-outlined text-secondary">
-                    check_circle
-                  </span>
-                  <span className="text-on-surface text-body-md">
-                    Helium &amp; dry-nitrogen leak test certified up to 2.0 BAR
-                  </span>
-                </div>
-                <div className="flex items-center gap-space-sm">
-                  <span className="material-symbols-outlined text-secondary">
-                    check_circle
-                  </span>
-                  <span className="text-on-surface text-body-md">
-                    Custom fluid viscosity and biocide formulation included
-                  </span>
-                </div>
-                <div className="flex items-center gap-space-sm">
-                  <span className="material-symbols-outlined text-secondary">
-                    check_circle
-                  </span>
-                  <span className="text-on-surface text-body-md">
-                    Direct-die CPU delid and custom full-cover GPU water blocks
-                  </span>
-                </div>
-              </div>
-              <div className="pt-space-sm">
-                <Link
-                  href="/services"
-                  className="inline-flex items-center gap-space-xs text-primary hover:text-primary-fixed font-syne text-title-md transition-colors"
-                >
-                  <span>Explore Liquid Cooling Protocols</span>
-                  <span className="material-symbols-outlined text-[18px]">
-                    arrow_forward
-                  </span>
-                </Link>
-              </div>
-            </div>
+            </motion.div>
 
-            <div className="lg:col-span-6">
-              <div className="relative rounded-2xl overflow-hidden bg-surface-container border border-primary/20 p-space-lg shadow-xl">
-                <div className="relative w-full h-[360px] rounded-xl overflow-hidden">
-                  <Image
-                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuDp5XScZK4J0J5uZcjpWUe9tLQHruoNtDTru3Suf2QQO7OzsRmeNGxFYv0m7kUcGuQj93-k-oFAsXVhdM5yq_I7ELDoqXrKkZzS9zze64mlZroyW5zOBLo-zK44XVE789CnAk6nIlUwmE7MyekZpeBE9rkKcH3qNNWMTFysyb_1jtMfjLpUeu2pAAyCeN59NN_rKXKwLKGaHhneSjgKLO0rDfYMutiY9bfXvwM2qvBm"
-                    alt="Precision custom liquid loop assembly workbench"
-                    fill
-                    sizes="(max-width: 1024px) 100vw, 50vw"
-                    className="object-cover"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-surface-container-lowest via-transparent to-transparent" />
-                  <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between bg-surface-container-high/90 backdrop-blur-md p-space-md rounded-xl border border-outline-variant/30">
-                    <div>
-                      <span className="font-mono text-[10px] text-primary uppercase block">
-                        BENCH LAB SPECIFICATION
+            {/* Tier Switcher Pills */}
+            <motion.div
+              variants={fadeInVariants}
+              custom={1}
+              className="flex flex-wrap gap-1.5 p-1.5 rounded-xl bg-surface-container border border-outline-variant/20 w-fit"
+            >
+              {RIG_BLUEPRINTS.map((tier) => {
+                const isSelected = blueprintId === tier.id;
+                return (
+                  <button
+                    key={tier.id}
+                    type="button"
+                    onClick={() => setBlueprintId(tier.id)}
+                    className={`relative z-10 px-4 py-2 rounded-lg font-syne text-body-sm font-semibold transition-colors ${
+                      isSelected
+                        ? "text-surface"
+                        : "text-on-surface-variant hover:text-on-surface"
+                    }`}
+                  >
+                    {isSelected && (
+                      <motion.span
+                        layoutId="rig-blueprint-tab"
+                        className="absolute inset-0 rounded-lg bg-gradient-to-r from-primary to-secondary shadow-sm -z-10"
+                        transition={{ type: "spring", stiffness: 360, damping: 32 }}
+                      />
+                    )}
+                    {tier.label}
+                  </button>
+                );
+              })}
+            </motion.div>
+          </div>
+
+          <motion.div variants={scaleInVariants} custom={1}>
+            <TiltSpotlightCard
+              conicBorder
+              maxTilt={1.5}
+              className="rounded-3xl shadow-2xl"
+              innerClassName="bg-surface-container-low p-space-lg md:p-space-2xl relative"
+            >
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={activeBlueprint.id}
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -12 }}
+                  transition={{ duration: 0.3, ease: EASE_PREMIUM }}
+                  className="grid grid-cols-1 lg:grid-cols-12 gap-gutter-lg items-center relative z-10"
+                >
+                  {/* Left: Overview & 4 Hardware Specs */}
+                  <div className="lg:col-span-7 flex flex-col gap-space-md">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <span className="px-3 py-1 rounded-full bg-primary/15 text-primary font-mono text-[11px] font-bold border border-primary/25">
+                        {activeBlueprint.tag}
                       </span>
-                      <span className="font-syne text-title-md text-on-surface">
-                        Zero-Leak Hydro Dynamics Guarantee
+                      <span className="px-3 py-1 rounded-full bg-secondary/10 text-secondary font-mono text-[11px] font-semibold border border-secondary/20">
+                        24H BURN-IN CERTIFIED
                       </span>
                     </div>
-                    <span className="px-space-sm py-1 rounded bg-secondary/15 text-secondary font-mono text-label-tech">
-                      2-YEAR SLA
-                    </span>
+
+                    <div>
+                      <h3 className="font-syne text-headline-md text-on-surface">
+                        {activeBlueprint.title}
+                      </h3>
+                      <p className="text-body-md text-on-surface-variant mt-1 leading-relaxed">
+                        {activeBlueprint.summary}
+                      </p>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      {activeBlueprint.specs.map((spec) => (
+                        <div
+                          key={spec.label}
+                          className="p-3 rounded-xl bg-surface-container border border-outline-variant/15 flex items-center gap-3 hover:border-primary/35 transition-colors"
+                        >
+                          <div className="w-10 h-10 rounded-lg bg-primary/10 text-primary flex items-center justify-center shrink-0 border border-primary/20">
+                            <span className="material-symbols-outlined text-[20px]">
+                              {spec.icon}
+                            </span>
+                          </div>
+                          <div className="min-w-0">
+                            <span className="block font-mono text-[10px] uppercase text-outline">
+                              {spec.label}
+                            </span>
+                            <span className="block font-syne text-body-sm font-semibold text-on-surface truncate">
+                              {spec.value}
+                            </span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+
+                    <div className="flex flex-wrap items-center gap-3 pt-2">
+                      <MagneticWrap>
+                        <a
+                          href={`${WHATSAPP_BASE}?text=${encodeURIComponent(activeBlueprint.whatsappText)}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="sheen-hover inline-flex items-center gap-2 px-space-lg py-3 rounded-xl bg-[#25D366] hover:bg-[#20ba59] text-white font-syne text-body-md font-bold shadow-md hover:shadow-[0_10px_28px_rgba(37,211,102,0.35)] hover:-translate-y-0.5 transition-all"
+                        >
+                          <WhatsAppIcon className="w-4 h-4 shrink-0" />
+                          <span>Request {activeBlueprint.label} Quote</span>
+                        </a>
+                      </MagneticWrap>
+                      <Link
+                        href="/shop"
+                        className="inline-flex items-center gap-1.5 px-space-lg py-3 rounded-xl bg-surface-container hover:bg-surface-container-high text-on-surface font-syne text-body-md font-semibold border border-outline-variant/30 hover:border-primary/40 transition-all"
+                      >
+                        <span>Customize Parts</span>
+                        <span className="material-symbols-outlined text-[18px]">tune</span>
+                      </Link>
+                    </div>
                   </div>
+
+                  {/* Right: Animated Circular SVG Gauges */}
+                  <div className="lg:col-span-5 flex flex-col gap-space-md p-space-lg rounded-2xl bg-surface-container border border-outline-variant/20">
+                    <div className="flex items-center justify-between pb-2 border-b border-outline-variant/15">
+                      <span className="font-mono text-label-tech text-primary uppercase font-bold">
+                        LAB BENCHMARK TELEMETRY
+                      </span>
+                      <span className="font-mono text-[11px] text-secondary">VERIFIED PROFILE</span>
+                    </div>
+
+                    <div className="grid grid-cols-3 gap-3 py-2">
+                      <CircularGauge
+                        value={activeBlueprint.gauges[0].value}
+                        label={activeBlueprint.gauges[0].label}
+                        displayText={activeBlueprint.gauges[0].display}
+                        accent="primary"
+                      />
+                      <CircularGauge
+                        value={activeBlueprint.gauges[1].value}
+                        label={activeBlueprint.gauges[1].label}
+                        displayText={activeBlueprint.gauges[1].display}
+                        accent="secondary"
+                      />
+                      <CircularGauge
+                        value={activeBlueprint.gauges[2].value}
+                        label={activeBlueprint.gauges[2].label}
+                        displayText={activeBlueprint.gauges[2].display}
+                        accent="tertiary"
+                      />
+                    </div>
+
+                    <div className="p-3 rounded-xl bg-surface-container-low border border-outline-variant/15 flex items-center justify-between text-body-sm">
+                      <span className="text-on-surface-variant font-mono text-[11px]">
+                        Cable Management &amp; BIOS Tuning
+                      </span>
+                      <span className="font-mono text-[11px] text-primary font-bold">INCLUDED</span>
+                    </div>
+                  </div>
+                </motion.div>
+              </AnimatePresence>
+            </TiltSpotlightCard>
+          </motion.div>
+        </div>
+      </RevealSection>
+
+      {/* ── 4. Services & Repair Triage ── */}
+      <RevealSection className="w-full py-space-2xl px-gutter-lg bg-surface border-t border-outline-variant/15">
+        <div className="max-w-[1440px] mx-auto flex flex-col gap-space-xl">
+          <motion.div
+            variants={fadeUpVariants}
+            custom={0}
+            className="text-center max-w-2xl mx-auto flex flex-col gap-space-xs"
+          >
+            <span className="font-mono text-label-tech text-secondary uppercase tracking-widest">
+              // EXPERT LAB CAPABILITIES
+            </span>
+            <h2 className="font-syne text-headline-lg text-on-surface">
+              More than Parts. Complete Engineering Solutions.
+            </h2>
+            <p className="text-body-md text-on-surface-variant">
+              From assembling showpiece rigs to performing micro-soldering on damaged traces, we handle every hardware challenge with laboratory care.
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-gutter">
+            {SERVICES_PREVIEW.map((srv, i) => (
+              <motion.div key={srv.title} variants={fadeUpVariants} custom={i}>
+                <SpotlightCard
+                  glowColor="rgb(var(--color-secondary) / 0.14)"
+                  className="p-space-lg rounded-2xl bg-surface-container flex flex-col justify-between border border-outline-variant/15 hover:border-secondary/40 shadow-md hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 card-glow h-full"
+                >
+                  <div className="flex flex-col gap-space-md relative z-10">
+                    <div className="flex items-center justify-between">
+                      <div className="w-12 h-12 rounded-xl bg-secondary/10 flex items-center justify-center text-secondary border border-secondary/20 group-hover:scale-110 group-hover:bg-secondary/20 transition-all duration-300">
+                        <span className="material-symbols-outlined text-[24px]">{srv.icon}</span>
+                      </div>
+                      <span className="font-mono text-[10px] text-primary uppercase font-bold tracking-wider">
+                        {srv.tag}
+                      </span>
+                    </div>
+                    <div>
+                      <h3 className="font-syne text-headline-sm text-on-surface mb-2 group-hover:text-secondary transition-colors">
+                        {srv.title}
+                      </h3>
+                      <p className="text-body-md text-on-surface-variant leading-relaxed">
+                        {srv.desc}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="pt-space-lg mt-space-md border-t border-outline-variant/10 relative z-10">
+                    <Link
+                      href={srv.link}
+                      className="inline-flex items-center gap-1.5 text-secondary hover:text-secondary-fixed font-syne text-body-md font-semibold transition-colors group/link"
+                    >
+                      <span>Learn More</span>
+                      <span className="material-symbols-outlined text-[16px] group-hover/link:translate-x-2 transition-transform duration-300">
+                        arrow_forward
+                      </span>
+                    </Link>
+                  </div>
+                </SpotlightCard>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </RevealSection>
+
+      {/* ── 5. Meet the Founder & Authenticity Spotlight ── */}
+      <RevealSection className="w-full py-space-2xl px-gutter-lg bg-surface-container-lowest border-t border-outline-variant/15">
+        <TiltSpotlightCard
+          conicBorder
+          maxTilt={1.5}
+          className="max-w-[1440px] mx-auto rounded-3xl shadow-2xl"
+          innerClassName="bg-surface-container p-space-lg md:p-space-2xl"
+        >
+          <div className="absolute -right-20 -top-20 w-80 h-80 bg-primary/10 rounded-full blur-[80px] pointer-events-none" />
+          <div className="absolute -left-20 -bottom-20 w-80 h-80 bg-secondary/10 rounded-full blur-[80px] pointer-events-none" />
+
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-gutter-lg items-center relative z-10">
+            {/* Founder Photo */}
+            <motion.div variants={fadeUpVariants} custom={0} className="lg:col-span-4 flex justify-center">
+              <div className="relative w-64 h-80 sm:w-72 sm:h-96 rounded-2xl overflow-hidden bg-surface-container-high border-2 border-primary/30 shadow-2xl group/photo hover:border-primary/60 transition-colors duration-300">
+                <Image
+                  src="/images/founder.jpg"
+                  alt="S.L.K Thinul Hansana - Founder of Aqua PC Solutions"
+                  fill
+                  sizes="(max-width: 768px) 100vw, 320px"
+                  className="object-cover object-center group-hover/photo:scale-105 transition-transform duration-700"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-surface-container-lowest via-transparent to-transparent opacity-75" />
+                <div className="absolute inset-0 opacity-0 group-hover/photo:opacity-100 transition-opacity duration-500 overflow-hidden rounded-2xl scan-overlay" />
+                <div className="absolute bottom-3 inset-x-3 p-2.5 rounded-xl bg-surface-container/90 backdrop-blur-md border border-primary/20 text-center">
+                  <span className="block font-syne text-body-md text-on-surface font-bold">
+                    S.L.K Thinul Hansana
+                  </span>
+                  <span className="font-mono text-[11px] text-secondary">
+                    Founder &amp; Hardware Specialist
+                  </span>
                 </div>
               </div>
-            </div>
-          </div>
-        </div>
-      </section>
+            </motion.div>
 
-      {/* ── Section 4: Call to Action Banner ── */}
-      <section className="w-full py-space-2xl bg-surface">
-        <div className="max-w-[1440px] mx-auto px-gutter-lg">
-          <div className="rounded-2xl bg-gradient-to-br from-surface-container-high via-surface-container to-surface-container-low p-space-xl md:p-space-2xl border border-primary/30 relative overflow-hidden shadow-2xl">
-            <div className="absolute -right-20 -bottom-20 w-80 h-80 bg-primary/15 rounded-full blur-[90px] pointer-events-none" />
-            <div className="max-w-2xl flex flex-col gap-space-md relative z-10">
-              <span className="font-mono text-label-tech text-secondary tracking-widest uppercase">
-                READY TO ELEVATE YOUR RIG?
-              </span>
+            {/* Founder Story & Vision */}
+            <motion.div
+              variants={fadeUpVariants}
+              custom={1}
+              className="lg:col-span-8 flex flex-col gap-space-md"
+            >
+              <div className="flex items-center gap-2">
+                <span className="px-3 py-1 rounded-full bg-primary/10 text-primary font-mono text-label-tech uppercase font-bold border border-primary/20">
+                  OUR FOUNDER &amp; COMMITMENT
+                </span>
+                <span className="text-outline font-mono text-label-tech">EST. 11.06.2026</span>
+              </div>
+
               <h2 className="font-syne text-headline-lg text-on-surface">
-                Consult With Our Master Hardware Engineers Today
+                &ldquo;We treat every computer like a masterwork of engineering.&rdquo;
               </h2>
-              <p className="text-body-lg text-on-surface-variant">
-                Whether you need catastrophic diagnostic triage, custom loop maintenance, or are planning your next dream workstation build, our Austin laboratory is ready.
+
+              <p className="text-body-md text-on-surface-variant leading-relaxed">
+                Founded on <strong className="text-on-surface">November 6, 2026</strong> in{" "}
+                <strong className="text-on-surface">Embilipitiya, Sri Lanka</strong> by{" "}
+                <strong className="text-on-surface">S.L.K Thinul Hansana</strong>, Aqua PC Solutions is built on an unwavering commitment to authenticity. We reject overpriced inferior hardware and unreliable repairs.
               </p>
+
+              <p className="text-body-md text-on-surface-variant leading-relaxed">
+                Whether you need a rock-solid workstation, a high-FPS competitive esports machine, or verified Grade-A components delivered to your doorstep, we provide direct guidance, honest pricing, and personal warranty support.
+              </p>
+
               <div className="flex flex-wrap items-center gap-space-md pt-space-xs">
                 <Link
-                  href="/contact"
-                  className="px-space-xl py-space-md rounded-xl bg-gradient-to-r from-primary to-secondary text-surface font-syne text-title-md font-bold shadow-cyan-glow hover:shadow-cyan-glow-lg transition-all"
+                  href="/about"
+                  className="relative px-space-lg py-space-sm rounded-xl bg-gradient-to-r from-primary to-secondary text-surface font-syne text-body-md font-bold shadow-cyan-glow hover:shadow-cyan-glow-lg transition-all hover:-translate-y-0.5 overflow-hidden group/btn"
                 >
-                  Book Diagnostics Intake
+                  <span className="absolute inset-0 animate-shimmer opacity-0 group-hover/btn:opacity-100 transition-opacity" />
+                  <span className="relative z-10">Read Our Full Story</span>
                 </Link>
-                <Link
-                  href="/pricing"
-                  className="px-space-xl py-space-md rounded-xl bg-surface-container hover:bg-surface-bright text-on-surface font-syne text-title-md border border-outline-variant/30 transition-colors"
+
+                <a
+                  href={WHATSAPP_BASE}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-space-lg py-space-sm rounded-xl bg-[#25D366]/15 hover:bg-[#25D366]/25 text-[#25D366] font-syne text-body-md font-semibold border border-[#25D366]/30 transition-all flex items-center gap-2 hover:-translate-y-0.5"
                 >
-                  View Service Rate Card
-                </Link>
+                  <WhatsAppIcon className="w-4 h-4 shrink-0" />
+                  <span>Chat with Founder</span>
+                </a>
+
+                <a
+                  href="tel:+94788194535"
+                  className="px-space-lg py-space-sm rounded-xl bg-surface-container-high hover:bg-surface-bright text-on-surface font-syne text-body-md font-semibold border border-outline-variant/30 transition-all flex items-center gap-1.5 hover:-translate-y-0.5"
+                >
+                  <span className="material-symbols-outlined text-[18px] text-primary">call</span>
+                  <span>+94 78 819 4535</span>
+                </a>
               </div>
-            </div>
+            </motion.div>
           </div>
-        </div>
-      </section>
+        </TiltSpotlightCard>
+      </RevealSection>
+
+      {/* ── 6. Bottom Call to Action Banner ── */}
+      <RevealSection className="w-full py-space-2xl px-gutter-lg bg-surface border-t border-outline-variant/15">
+        <motion.div
+          variants={scaleInVariants}
+          custom={0}
+          className="max-w-[1440px] mx-auto text-center flex flex-col items-center gap-space-md py-space-2xl px-space-md rounded-3xl bg-gradient-to-br from-surface-container-high via-surface-container to-surface-container-low border border-primary/30 shadow-2xl relative overflow-hidden"
+        >
+          <CircuitFlowBackdrop className="absolute inset-0 w-full h-full opacity-45" />
+          <div className="absolute -right-20 -bottom-20 w-80 h-80 bg-primary/15 rounded-full blur-[100px] animate-orb-drift pointer-events-none" />
+          <div className="absolute -left-20 -top-20 w-80 h-80 bg-secondary/15 rounded-full blur-[100px] animate-orb-drift-delay pointer-events-none" />
+
+          <div
+            className="absolute inset-0 opacity-[0.03] pointer-events-none rounded-3xl"
+            style={{
+              backgroundImage:
+                "linear-gradient(rgb(var(--color-primary)) 1px, transparent 1px), linear-gradient(90deg, rgb(var(--color-primary)) 1px, transparent 1px)",
+              backgroundSize: "40px 40px",
+            }}
+          />
+
+          <motion.span
+            variants={fadeUpVariants}
+            custom={0}
+            className="px-4 py-1.5 rounded-full bg-primary/10 text-primary font-mono text-label-tech uppercase font-bold tracking-wider border border-primary/20 relative z-10"
+          >
+            CONNECT WITH AQUA PC SOLUTIONS
+          </motion.span>
+
+          <motion.h2
+            variants={fadeUpVariants}
+            custom={1}
+            className="font-syne text-headline-lg lg:text-display-hero-mobile text-on-surface max-w-2xl font-bold relative z-10"
+          >
+            Ready to Build, Upgrade or Fix Your Setup?
+          </motion.h2>
+
+          <motion.p
+            variants={fadeUpVariants}
+            custom={2}
+            className="text-body-lg text-on-surface-variant max-w-xl relative z-10"
+          >
+            Get in touch directly with our team in Embilipitiya for component availability, custom quotation, or technical diagnostic help.
+          </motion.p>
+
+          <motion.div
+            variants={fadeUpVariants}
+            custom={3}
+            className="flex flex-wrap justify-center items-center gap-space-md pt-space-sm z-10"
+          >
+            <MagneticWrap>
+              <a
+                href={WHATSAPP_BASE}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="sheen-hover px-space-xl py-space-md rounded-xl bg-[#25D366] hover:bg-[#20ba59] text-white font-syne text-title-md font-bold shadow-lg hover:-translate-y-0.5 transition-all duration-300 flex items-center gap-2"
+              >
+                <WhatsAppIcon />
+                <span>Instant WhatsApp Chat</span>
+              </a>
+            </MagneticWrap>
+
+            <MagneticWrap>
+              <Link
+                href="/shop"
+                className="relative sheen-hover px-space-xl py-space-md rounded-xl bg-gradient-to-r from-primary to-secondary text-surface font-syne text-title-md font-bold shadow-cyan-glow hover:shadow-cyan-glow-lg hover:-translate-y-0.5 transition-all duration-300 inline-block"
+              >
+                <span className="relative z-10">Browse 300+ Parts Shop</span>
+              </Link>
+            </MagneticWrap>
+
+            <MagneticWrap strength={0.16}>
+              <Link
+                href="/contact"
+                className="px-space-xl py-space-md rounded-xl bg-surface-container-high hover:bg-surface-bright text-on-surface font-syne text-title-md border border-outline-variant/30 transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/40 inline-block"
+              >
+                Visit Contact Lab
+              </Link>
+            </MagneticWrap>
+          </motion.div>
+        </motion.div>
+      </RevealSection>
     </div>
   );
 }

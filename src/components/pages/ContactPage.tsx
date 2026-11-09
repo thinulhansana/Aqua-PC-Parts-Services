@@ -1,8 +1,19 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
 import { motion, AnimatePresence } from "framer-motion";
+import { useSession } from "next-auth/react";
+import { useAuthModal } from "@/components/auth/AuthContext";
+import {
+  RevealSection,
+  SpotlightCard,
+  MaskedReveal,
+  CircuitFlowBackdrop,
+  AnimatedNumber,
+  fadeUpVariants,
+  scaleInVariants,
+} from "@/components/ui/MotionPrimitives";
 
 const TechnicianChat = dynamic(
   () => import("@/components/contact/TechnicianChat"),
@@ -66,6 +77,9 @@ const URGENCY_LABELS: Record<
 };
 
 export default function ContactPage() {
+  const { data: session, status } = useSession();
+  const { openAuthModal } = useAuthModal();
+
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
@@ -81,6 +95,38 @@ export default function ContactPage() {
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [ticketId, setTicketId] = useState<string>("");
   const [copied, setCopied] = useState(false);
+
+  // Auto-fill empty client fields from active Auth.js session & saved account blueprint
+  useEffect(() => {
+    if (status !== "authenticated" || !session?.user) return;
+
+    setFormData((prev) => ({
+      ...prev,
+      fullName: prev.fullName || session.user.name || "",
+      email: prev.email || session.user.email || "",
+    }));
+
+    let cancelled = false;
+    fetch("/api/account")
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (cancelled || !data?.user) return;
+        setFormData((prev) => ({
+          ...prev,
+          fullName: prev.fullName || data.user.name || "",
+          email: prev.email || data.user.email || "",
+          phone: prev.phone || data.user.phone || "",
+          specs: prev.specs || data.user.rigSpecs || "",
+        }));
+      })
+      .catch(() => {
+        // Non-blocking profile prefill
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [status, session?.user]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -132,7 +178,7 @@ export default function ContactPage() {
     } catch (err) {
       console.error("Formspree submission error:", err);
       setSubmitError(
-        "Network telemetry timeout. Please verify connectivity or call our 24/7 hotline at +1 (800) 840-AQUA."
+        "Network telemetry timeout. Please verify connectivity or call our hotline at +94 78 819 4535 or reach us via WhatsApp."
       );
     } finally {
       setIsSubmitting(false);
@@ -173,83 +219,108 @@ export default function ContactPage() {
     <div className="flex flex-col w-full">
       {/* ── Top Ambient Glow & Header Block ── */}
       <section className="relative w-full overflow-hidden bg-surface-container-lowest -mt-20 pt-28 pb-space-lg">
-        <div className="absolute -top-32 left-1/4 w-[600px] h-[350px] bg-primary/10 rounded-full blur-[120px] pointer-events-none" />
-        <div className="absolute -top-20 right-1/4 w-[450px] h-[300px] bg-secondary/10 rounded-full blur-[100px] pointer-events-none" />
+        <CircuitFlowBackdrop className="absolute inset-0 w-full h-full opacity-55" />
+        <div className="absolute -top-32 left-1/4 w-[600px] h-[350px] bg-primary/10 rounded-full blur-[120px] animate-orb-drift pointer-events-none" />
+        <div className="absolute -top-20 right-1/4 w-[450px] h-[300px] bg-secondary/10 rounded-full blur-[100px] animate-orb-drift-delay pointer-events-none" />
 
         <div className="max-w-[1440px] mx-auto px-gutter-lg pt-space-xl pb-space-lg w-full relative z-10">
           <div className="flex flex-col gap-space-xs max-w-4xl">
-            <div className="flex items-center gap-space-sm">
+            <motion.div
+              variants={fadeUpVariants}
+              initial="hidden"
+              animate="visible"
+              custom={0}
+              className="flex items-center gap-space-sm"
+            >
               <span className="inline-flex items-center gap-space-xs px-space-sm py-0.5 rounded-full bg-surface-container font-mono text-label-tech text-secondary border border-secondary/30">
                 <span className="w-1.5 h-1.5 rounded-full bg-secondary shadow-[0_0_8px_rgba(79,219,200,0.9)] animate-pulse" />
                 TRANSMISSION PIPELINE ACTIVE
               </span>
               <span className="font-mono text-label-tech text-outline">
-                AUSTIN LAB // STATION #04
+                MAIN LAB // STATION #04
               </span>
-            </div>
+            </motion.div>
             <h1 className="font-syne text-display-hero-mobile lg:text-headline-lg text-on-surface uppercase tracking-tight">
-              Get in Touch with Our Hardware Engineers &amp; Diagnostic Lab
+              <MaskedReveal delay={0.05}>Get in Touch with Our</MaskedReveal>{" "}
+              <MaskedReveal delay={0.18}>
+                <span className="text-shimmer">Hardware Engineers &amp; Diagnostic Lab</span>
+              </MaskedReveal>
             </h1>
-            <p className="text-body-lg text-on-surface-variant max-w-2xl">
+            <motion.p
+              variants={fadeUpVariants}
+              initial="hidden"
+              animate="visible"
+              custom={2}
+              className="text-body-lg text-on-surface-variant max-w-2xl"
+            >
               Whether your custom loop experienced thermal saturation, your rig fails POST diagnostics, or you need architecture-level silicon matching, our bench technicians respond within clock cycles.
-            </p>
+            </motion.p>
           </div>
 
           {/* Quick Telemetry Strip */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-space-md mt-space-lg">
-            <div className="p-space-md rounded-xl bg-surface-container-low flex items-center justify-between shadow-sm border border-outline-variant/15">
-              <div>
+          <motion.div
+            variants={fadeUpVariants}
+            initial="hidden"
+            animate="visible"
+            custom={3}
+            className="grid grid-cols-2 md:grid-cols-4 gap-space-md mt-space-lg"
+          >
+            <SpotlightCard className="p-space-md rounded-xl bg-surface-container-low flex items-center justify-between shadow-sm border border-outline-variant/15 hover:border-primary/40 hover:-translate-y-1 transition-all duration-300">
+              <div className="relative z-10">
                 <span className="font-mono text-[10px] text-outline block">
                   CURRENT BENCH LOAD
                 </span>
                 <span className="font-syne text-headline-sm text-on-surface">
-                  14 Units
+                  <AnimatedNumber value="14 Units" />
                 </span>
               </div>
-              <span className="material-symbols-outlined text-primary text-[28px]">
+              <span className="material-symbols-outlined text-primary text-[28px] relative z-10 group-hover:scale-110 transition-transform">
                 speed
               </span>
-            </div>
-            <div className="p-space-md rounded-xl bg-surface-container-low flex items-center justify-between shadow-sm border border-outline-variant/15">
-              <div>
+            </SpotlightCard>
+            <SpotlightCard
+              glowColor="rgb(var(--color-secondary) / 0.14)"
+              className="p-space-md rounded-xl bg-surface-container-low flex items-center justify-between shadow-sm border border-outline-variant/15 hover:border-secondary/40 hover:-translate-y-1 transition-all duration-300"
+            >
+              <div className="relative z-10">
                 <span className="font-mono text-[10px] text-outline block">
                   AVG INTAKE TRIAGE
                 </span>
                 <span className="font-syne text-headline-sm text-secondary">
-                  18 Mins
+                  <AnimatedNumber value="18 Mins" />
                 </span>
               </div>
-              <span className="material-symbols-outlined text-secondary text-[28px]">
+              <span className="material-symbols-outlined text-secondary text-[28px] relative z-10 group-hover:scale-110 transition-transform">
                 timer
               </span>
-            </div>
-            <div className="p-space-md rounded-xl bg-surface-container-low flex items-center justify-between shadow-sm border border-outline-variant/15">
-              <div>
+            </SpotlightCard>
+            <SpotlightCard className="p-space-md rounded-xl bg-surface-container-low flex items-center justify-between shadow-sm border border-outline-variant/15 hover:border-tertiary/40 hover:-translate-y-1 transition-all duration-300">
+              <div className="relative z-10">
                 <span className="font-mono text-[10px] text-outline block">
                   LEAK TEST RIGS
                 </span>
                 <span className="font-syne text-headline-sm text-tertiary">
-                  6 Available
+                  <AnimatedNumber value="6 Available" />
                 </span>
               </div>
-              <span className="material-symbols-outlined text-tertiary text-[28px]">
+              <span className="material-symbols-outlined text-tertiary text-[28px] relative z-10 group-hover:scale-110 transition-transform">
                 water_drop
               </span>
-            </div>
-            <div className="p-space-md rounded-xl bg-surface-container-low flex items-center justify-between shadow-sm border border-outline-variant/15">
-              <div>
+            </SpotlightCard>
+            <SpotlightCard className="p-space-md rounded-xl bg-surface-container-low flex items-center justify-between shadow-sm border border-outline-variant/15 hover:border-primary/40 hover:-translate-y-1 transition-all duration-300">
+              <div className="relative z-10">
                 <span className="font-mono text-[10px] text-outline block">
                   REPAIR SUCCESS RATE
                 </span>
                 <span className="font-syne text-headline-sm text-primary">
-                  99.4%
+                  <AnimatedNumber value="99.4%" />
                 </span>
               </div>
-              <span className="material-symbols-outlined text-primary text-[28px]">
+              <span className="material-symbols-outlined text-primary text-[28px] relative z-10 group-hover:scale-110 transition-transform">
                 verified
               </span>
-            </div>
-          </div>
+            </SpotlightCard>
+          </motion.div>
         </div>
       </section>
 
@@ -315,8 +386,8 @@ export default function ContactPage() {
                         type="button"
                         onClick={handleCopyTicket}
                         className={`inline-flex items-center gap-space-xs px-space-md py-space-xs rounded-lg font-mono text-label-tech transition-all border ${copied
-                            ? "bg-secondary/20 text-secondary border-secondary/40 shadow-sm"
-                            : "bg-surface-container-high hover:bg-surface-bright text-on-surface border-outline-variant/30"
+                          ? "bg-secondary/20 text-secondary border-secondary/40 shadow-sm"
+                          : "bg-surface-container-high hover:bg-surface-bright text-on-surface border-outline-variant/30"
                           }`}
                       >
                         <span className="material-symbols-outlined text-[16px]">
@@ -397,7 +468,7 @@ export default function ContactPage() {
                             Bench Allocation
                           </span>
                           <span className="text-[11px] text-on-surface-variant">
-                            Assigned to Austin Bay Station #01
+                            Assigned to Tech Lab Bay #01
                           </span>
                         </div>
                       </div>
@@ -443,7 +514,7 @@ export default function ContactPage() {
                 </motion.div>
               ) : (
                 <div className="flex flex-col">
-                  <div className="flex items-center justify-between mb-space-lg">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-space-lg">
                     <div>
                       <span className="font-mono text-label-tech text-primary uppercase tracking-widest block">
                         SECURE INTAKE // 01
@@ -452,11 +523,32 @@ export default function ContactPage() {
                         Repair Intake &amp; Quote Requisition
                       </h2>
                     </div>
-                    <span className="p-space-sm rounded-lg bg-surface-container text-primary border border-primary/20">
-                      <span className="material-symbols-outlined text-[24px]">
-                        hardware
+                    <div className="flex items-center gap-2 shrink-0">
+                      {status === "authenticated" && session?.user ? (
+                        <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-secondary/15 border border-secondary/35 font-mono text-[11px] text-secondary">
+                          <span className="material-symbols-outlined text-[15px]">
+                            verified_user
+                          </span>
+                          <span>Profile Synced</span>
+                        </span>
+                      ) : status === "unauthenticated" ? (
+                        <button
+                          type="button"
+                          onClick={() => openAuthModal("signin", "/contact")}
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface-container hover:bg-surface-container-high border border-primary/30 text-primary font-mono text-[11px] transition-colors cursor-pointer"
+                        >
+                          <span className="material-symbols-outlined text-[15px]">
+                            login
+                          </span>
+                          <span>Sign In to Autofill</span>
+                        </button>
+                      ) : null}
+                      <span className="p-space-sm rounded-lg bg-surface-container text-primary border border-primary/20">
+                        <span className="material-symbols-outlined text-[24px]">
+                          hardware
+                        </span>
                       </span>
-                    </span>
+                    </div>
                   </div>
 
                   <form onSubmit={handleSubmit} className="flex flex-col gap-space-md">
@@ -511,7 +603,7 @@ export default function ContactPage() {
                           <input
                             className="w-full pl-10 pr-space-md py-space-sm rounded-lg bg-surface-container text-on-surface placeholder:text-outline text-body-md focus:outline-none focus:ring-2 focus:ring-primary transition-all border border-outline-variant/20 disabled:opacity-60"
                             id="email"
-                            placeholder="e.vance@blackmesa.internal"
+                            placeholder="yourname@gmail.com"
                             required
                             type="email"
                             disabled={isSubmitting}
@@ -540,7 +632,7 @@ export default function ContactPage() {
                           <input
                             className="w-full pl-10 pr-space-md py-space-sm rounded-lg bg-surface-container text-on-surface placeholder:text-outline text-body-md focus:outline-none focus:ring-2 focus:ring-primary transition-all border border-outline-variant/20 disabled:opacity-60"
                             id="phone"
-                            placeholder="+1 (512) 840-0294"
+                            placeholder="+94 78 819 4535"
                             type="tel"
                             disabled={isSubmitting}
                             value={formData.phone}
@@ -677,8 +769,8 @@ export default function ContactPage() {
                           <label
                             key={tier.id}
                             className={`cursor-pointer relative p-space-md rounded-lg bg-surface-container hover:bg-surface-container-high transition-colors flex flex-col gap-1 text-left border ${formData.urgency === tier.id
-                                ? "border-primary bg-primary/10"
-                                : "border-outline-variant/20"
+                              ? "border-primary bg-primary/10"
+                              : "border-outline-variant/20"
                               } ${isSubmitting ? "opacity-60 cursor-not-allowed" : ""}`}
                           >
                             <input
@@ -698,8 +790,8 @@ export default function ContactPage() {
                               </span>
                               <span
                                 className={`w-2.5 h-2.5 rounded-full ${formData.urgency === tier.id
-                                    ? "bg-primary"
-                                    : "bg-outline"
+                                  ? "bg-primary"
+                                  : "bg-outline"
                                   }`}
                               />
                             </div>
@@ -724,8 +816,8 @@ export default function ContactPage() {
                       </div>
                       <button
                         className={`w-full sm:w-auto px-space-xl py-space-md rounded-lg bg-gradient-to-r from-primary to-secondary text-surface font-syne text-title-md font-bold transition-all shadow-cyan-glow flex items-center justify-center gap-space-sm ${isSubmitting
-                            ? "cursor-not-allowed opacity-85"
-                            : "hover:shadow-cyan-glow-lg hover:-translate-y-0.5 cursor-pointer"
+                          ? "cursor-not-allowed opacity-85"
+                          : "hover:shadow-cyan-glow-lg hover:-translate-y-0.5 cursor-pointer"
                           }`}
                         type="submit"
                         disabled={isSubmitting}
@@ -787,19 +879,17 @@ export default function ContactPage() {
               </div>
               <div className="flex flex-col gap-1">
                 <h3 className="font-syne text-title-md text-on-surface">
-                  Aqua PC Tech Lab — Central Austin
+                  Aqua PC Tech Lab
                 </h3>
                 <p className="text-body-md text-on-surface-variant">
-                  1044 Hydro Silicon Parkway, Suite 400
-                  <br />
-                  Austin, TX 78758, United States
+                  Embilipitiya, Sri Lanka
                 </p>
               </div>
 
               {/* Operating Hours Table */}
               <div className="bg-surface-container rounded-lg p-space-md flex flex-col gap-space-xs border border-outline-variant/15">
                 <span className="font-mono text-label-tech text-tertiary">
-                  OPERATING HOURS (CST)
+                  OPERATING HOURS
                 </span>
                 <div className="flex justify-between items-center text-body-sm">
                   <span className="text-on-surface-variant">
@@ -827,30 +917,39 @@ export default function ContactPage() {
                 </div>
               </div>
 
-              {/* High-Contrast Interactive Map Component */}
-              <div className="w-full h-52 rounded-lg overflow-hidden relative shadow-inner bg-surface-container border border-primary/20 flex flex-col items-center justify-center p-space-md text-center">
-                <div className="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center mb-space-xs shadow-[0_0_15px_rgba(76,215,246,0.5)]">
-                  <span className="material-symbols-outlined text-primary text-[28px]">
-                    pin_drop
-                  </span>
+              {/* Live Interactive Google Map Component */}
+              <div className="w-full rounded-xl overflow-hidden border border-outline-variant/20 bg-surface-container shadow-inner flex flex-col">
+                <div className="w-full h-64 relative bg-surface-container-high">
+                  <iframe
+                    title="Aqua PC Tech Lab - Embilipitiya, Sri Lanka"
+                    src="https://maps.google.com/maps?q=Embilipitiya,+Sri+Lanka&t=&z=14&ie=UTF8&iwloc=&output=embed"
+                    className="w-full h-full border-0"
+                    loading="lazy"
+                    allowFullScreen
+                    referrerPolicy="no-referrer-when-downgrade"
+                  />
                 </div>
-                <span className="font-syne text-title-md text-on-surface">
-                  Silicon Corridor Clean Lab
-                </span>
-                <span className="font-mono text-label-tech text-outline">
-                  LAT 30.3842° N // LONG 97.7121° W
-                </span>
-                <a
-                  className="mt-space-sm inline-flex items-center gap-space-xs px-space-md py-1 rounded bg-surface-container-high text-primary hover:text-primary-fixed hover:bg-surface-bright font-mono text-label-tech transition-colors border border-primary/30"
-                  href="https://maps.google.com"
-                  rel="noopener noreferrer"
-                  target="_blank"
-                >
-                  <span>Get Driving Vectors</span>
-                  <span className="material-symbols-outlined text-[14px]">
-                    open_in_new
-                  </span>
-                </a>
+                <div className="p-3 bg-surface-container flex items-center justify-between border-t border-outline-variant/20">
+                  <div className="flex items-center gap-2">
+                    <span className="material-symbols-outlined text-primary text-[18px]">
+                      location_on
+                    </span>
+                    <span className="font-mono text-label-tech text-on-surface">
+                      Embilipitiya, Sri Lanka
+                    </span>
+                  </div>
+                  <a
+                    href="https://www.google.com/maps/search/?api=1&query=Embilipitiya,+Sri+Lanka"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-surface-container-high hover:bg-surface-bright text-primary text-body-sm font-medium transition-colors border border-outline-variant/30"
+                  >
+                    <span>Open in Maps</span>
+                    <span className="material-symbols-outlined text-[14px]">
+                      open_in_new
+                    </span>
+                  </a>
+                </div>
               </div>
             </div>
 
@@ -862,7 +961,7 @@ export default function ContactPage() {
               <div className="grid grid-cols-1 gap-space-sm">
                 <a
                   className="p-space-md rounded-lg bg-surface-container hover:bg-surface-container-high transition-all flex items-center justify-between group border border-outline-variant/15 hover:border-primary/40"
-                  href="tel:+18008402782"
+                  href="tel:+94788194535"
                 >
                   <div className="flex items-center gap-space-md">
                     <div className="w-10 h-10 rounded-lg bg-surface-container-high flex items-center justify-center text-primary group-hover:scale-105 transition-transform border border-primary/20">
@@ -872,10 +971,10 @@ export default function ContactPage() {
                     </div>
                     <div>
                       <span className="font-syne text-title-md text-on-surface block">
-                        Repair Diagnostic Hotline
+                        Repair &amp; Diagnostic Hotline
                       </span>
                       <span className="font-mono text-telemetry-num text-outline group-hover:text-primary transition-colors">
-                        +1 (800) 840-AQUA (ext. 2)
+                        +94 78 819 4535
                       </span>
                     </div>
                   </div>
@@ -886,20 +985,20 @@ export default function ContactPage() {
 
                 <a
                   className="p-space-md rounded-lg bg-surface-container hover:bg-surface-container-high transition-all flex items-center justify-between group border border-outline-variant/15 hover:border-secondary/40"
-                  href="mailto:sales@aquapc.internal"
+                  href="mailto:thinulhansana.business@gmail.com"
                 >
                   <div className="flex items-center gap-space-md">
                     <div className="w-10 h-10 rounded-lg bg-surface-container-high flex items-center justify-center text-secondary group-hover:scale-105 transition-transform border border-secondary/20">
                       <span className="material-symbols-outlined text-[20px]">
-                        shopping_cart_checkout
+                        mail
                       </span>
                     </div>
                     <div>
                       <span className="font-syne text-title-md text-on-surface block">
-                        Hardware Sales &amp; Custom Rigs
+                        Direct Inquiries &amp; Orders
                       </span>
                       <span className="font-mono text-telemetry-num text-outline group-hover:text-secondary transition-colors">
-                        sales@aquapc.internal
+                        thinulhansana.business@gmail.com
                       </span>
                     </div>
                   </div>
@@ -908,31 +1007,36 @@ export default function ContactPage() {
                   </span>
                 </a>
 
-                <div className="p-space-md rounded-lg bg-gradient-to-br from-surface-container to-surface-container-high flex items-center justify-between border border-outline-variant/20">
+                <a
+                  href="https://wa.me/message/CYZRQDEHLIRZF1"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-space-md rounded-lg bg-gradient-to-br from-surface-container to-surface-container-high hover:border-[#25D366]/50 transition-all flex items-center justify-between group border border-outline-variant/20"
+                >
                   <div className="flex items-center gap-space-md">
-                    <div className="w-10 h-10 rounded-lg bg-[#5865F2]/20 flex items-center justify-center text-primary">
-                      <span className="material-symbols-outlined text-[20px]">
-                        forum
-                      </span>
+                    <div className="w-10 h-10 rounded-lg bg-[#25D366]/20 flex items-center justify-center text-[#25D366] group-hover:scale-105 transition-transform border border-[#25D366]/30">
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                        className="w-5 h-5 shrink-0"
+                        aria-hidden="true"
+                      >
+                        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+                      </svg>
                     </div>
                     <div>
-                      <span className="font-syne text-title-md text-on-surface block">
-                        Discord Lab Overclock Guild
+                      <span className="font-syne text-title-md text-on-surface block group-hover:text-[#25D366] transition-colors">
+                        WhatsApp Instant Support
                       </span>
                       <span className="font-mono text-label-tech text-outline">
-                        4,890 Active Hardware Enthusiasts
+                        Direct Inquiry &amp; Availability
                       </span>
                     </div>
                   </div>
-                  <a
-                    href="https://discord.com"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="px-space-md py-space-xs rounded-lg bg-primary-container text-on-primary-container hover:bg-primary font-syne text-title-md transition-all shadow-sm"
-                  >
-                    Join Guild
-                  </a>
-                </div>
+                  <span className="px-space-md py-space-xs rounded-lg bg-[#25D366] hover:bg-[#1ebe5a] text-white font-syne text-title-md transition-all shadow-sm">
+                    Chat Now
+                  </span>
+                </a>
               </div>
             </div>
           </div>
@@ -940,9 +1044,13 @@ export default function ContactPage() {
       </section>
 
       {/* ── Out-of-State Emergency Drop-Off & Mail-In Section ── */}
-      <section className="max-w-[1440px] mx-auto px-gutter-lg pb-space-2xl w-full">
+      <RevealSection className="max-w-[1440px] mx-auto px-gutter-lg pb-space-2xl w-full">
         <div className="bg-surface-container-low rounded-xl p-space-lg sm:p-space-xl shadow-xl relative overflow-hidden border border-outline-variant/20">
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-space-md mb-space-xl">
+          <motion.div
+            variants={fadeUpVariants}
+            custom={0}
+            className="flex flex-col md:flex-row md:items-end justify-between gap-space-md mb-space-xl"
+          >
             <div className="flex flex-col gap-space-xs max-w-2xl">
               <div className="flex items-center gap-space-xs">
                 <span className="material-symbols-outlined text-secondary text-[22px]">
@@ -960,7 +1068,7 @@ export default function ContactPage() {
               </p>
             </div>
             <button
-              className="inline-flex items-center gap-space-xs px-space-lg py-space-sm rounded-lg bg-surface-container hover:bg-surface-bright text-primary font-syne text-title-md transition-colors shadow-sm self-start md:self-auto border border-primary/20"
+              className="inline-flex items-center gap-space-xs px-space-lg py-space-sm rounded-lg bg-surface-container hover:bg-surface-bright text-primary font-syne text-title-md transition-all shadow-sm self-start md:self-auto border border-primary/20 hover:border-primary/50 hover:-translate-y-0.5"
               type="button"
             >
               <span className="material-symbols-outlined text-[20px]">
@@ -968,86 +1076,95 @@ export default function ContactPage() {
               </span>
               <span>Download Shipping Foam Cutout Template</span>
             </button>
-          </div>
+          </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-gutter">
             {/* Step 1 Card */}
-            <div className="bg-surface-container rounded-xl p-space-lg flex flex-col gap-space-md border border-outline-variant/15">
-              <div className="flex items-center justify-between">
-                <span className="w-8 h-8 rounded-full bg-primary/20 text-primary font-mono text-telemetry-num flex items-center justify-center font-bold">
-                  01
-                </span>
-                <span className="material-symbols-outlined text-outline text-[24px]">
-                  invert_colors_off
-                </span>
-              </div>
-              <div className="flex flex-col gap-space-xs">
-                <h3 className="font-syne text-title-md text-on-surface">
-                  Loop Draining &amp; Instapak
-                </h3>
-                <p className="text-body-md text-on-surface-variant">
-                  Fully drain all cooling fluids using the lowest manifold valve. Fill internal chassis cavities with expanding Instapak™ or high-density polyfoam to anchor the GPU bracket.
-                </p>
-              </div>
-              <div className="mt-auto pt-space-xs">
-                <span className="font-mono text-label-tech text-tertiary">
-                  MANDATORY FOR CUSTOM LOOPS
-                </span>
-              </div>
-            </div>
+            <motion.div variants={scaleInVariants} custom={0}>
+              <SpotlightCard className="bg-surface-container rounded-xl p-space-lg flex flex-col gap-space-md border border-outline-variant/15 hover:border-primary/40 hover:-translate-y-1 transition-all duration-300 h-full">
+                <div className="flex items-center justify-between relative z-10">
+                  <span className="w-8 h-8 rounded-full bg-primary/20 text-primary font-mono text-telemetry-num flex items-center justify-center font-bold">
+                    01
+                  </span>
+                  <span className="material-symbols-outlined text-outline text-[24px] group-hover:text-primary transition-colors">
+                    invert_colors_off
+                  </span>
+                </div>
+                <div className="flex flex-col gap-space-xs relative z-10">
+                  <h3 className="font-syne text-title-md text-on-surface">
+                    Loop Draining &amp; Instapak
+                  </h3>
+                  <p className="text-body-md text-on-surface-variant">
+                    Fully drain all cooling fluids using the lowest manifold valve. Fill internal chassis cavities with expanding Instapak™ or high-density polyfoam to anchor the GPU bracket.
+                  </p>
+                </div>
+                <div className="mt-auto pt-space-xs relative z-10">
+                  <span className="font-mono text-label-tech text-tertiary">
+                    MANDATORY FOR CUSTOM LOOPS
+                  </span>
+                </div>
+              </SpotlightCard>
+            </motion.div>
 
             {/* Step 2 Card */}
-            <div className="bg-surface-container rounded-xl p-space-lg flex flex-col gap-space-md border border-outline-variant/15">
-              <div className="flex items-center justify-between">
-                <span className="w-8 h-8 rounded-full bg-secondary/20 text-secondary font-mono text-telemetry-num flex items-center justify-center font-bold">
-                  02
-                </span>
-                <span className="material-symbols-outlined text-outline text-[24px]">
-                  local_shipping
-                </span>
-              </div>
-              <div className="flex flex-col gap-space-xs">
-                <h3 className="font-syne text-title-md text-on-surface">
-                  Insured Pre-Paid Waybills
-                </h3>
-                <p className="text-body-md text-on-surface-variant">
-                  We generate direct FedEx Priority or UPS Air insured labels up to $10,000 declared hardware value. Double-box rigs with a minimum of 2 inches of cushioning around original carton.
-                </p>
-              </div>
-              <div className="mt-auto pt-space-xs">
-                <span className="font-mono text-label-tech text-secondary">
-                  INCLUDES TRANSIT SENSOR STICKERS
-                </span>
-              </div>
-            </div>
+            <motion.div variants={scaleInVariants} custom={1}>
+              <SpotlightCard
+                glowColor="rgb(var(--color-secondary) / 0.14)"
+                className="bg-surface-container rounded-xl p-space-lg flex flex-col gap-space-md border border-outline-variant/15 hover:border-secondary/40 hover:-translate-y-1 transition-all duration-300 h-full"
+              >
+                <div className="flex items-center justify-between relative z-10">
+                  <span className="w-8 h-8 rounded-full bg-secondary/20 text-secondary font-mono text-telemetry-num flex items-center justify-center font-bold">
+                    02
+                  </span>
+                  <span className="material-symbols-outlined text-outline text-[24px] group-hover:text-secondary transition-colors">
+                    local_shipping
+                  </span>
+                </div>
+                <div className="flex flex-col gap-space-xs relative z-10">
+                  <h3 className="font-syne text-title-md text-on-surface">
+                    Insured Pre-Paid Waybills
+                  </h3>
+                  <p className="text-body-md text-on-surface-variant">
+                    We generate direct FedEx Priority or UPS Air insured labels up to $10,000 declared hardware value. Double-box rigs with a minimum of 2 inches of cushioning around original carton.
+                  </p>
+                </div>
+                <div className="mt-auto pt-space-xs relative z-10">
+                  <span className="font-mono text-label-tech text-secondary">
+                    INCLUDES TRANSIT SENSOR STICKERS
+                  </span>
+                </div>
+              </SpotlightCard>
+            </motion.div>
 
             {/* Step 3 Card */}
-            <div className="bg-surface-container rounded-xl p-space-lg flex flex-col gap-space-md border border-outline-variant/15">
-              <div className="flex items-center justify-between">
-                <span className="w-8 h-8 rounded-full bg-tertiary/20 text-tertiary font-mono text-telemetry-num flex items-center justify-center font-bold">
-                  03
-                </span>
-                <span className="material-symbols-outlined text-outline text-[24px]">
-                  sensor_occupied
-                </span>
-              </div>
-              <div className="flex flex-col gap-space-xs">
-                <h3 className="font-syne text-title-md text-on-surface">
-                  In-Bay Video Unboxing
-                </h3>
-                <p className="text-body-md text-on-surface-variant">
-                  Every external parcel is unboxed under calibrated 4K bench cameras. You receive a link to the visual intake audit within 45 minutes of laboratory dock arrival in Austin.
-                </p>
-              </div>
-              <div className="mt-auto pt-space-xs">
-                <span className="font-mono text-label-tech text-primary">
-                  AUDITED CHAIN OF CUSTODY
-                </span>
-              </div>
-            </div>
+            <motion.div variants={scaleInVariants} custom={2}>
+              <SpotlightCard className="bg-surface-container rounded-xl p-space-lg flex flex-col gap-space-md border border-outline-variant/15 hover:border-tertiary/40 hover:-translate-y-1 transition-all duration-300 h-full">
+                <div className="flex items-center justify-between relative z-10">
+                  <span className="w-8 h-8 rounded-full bg-tertiary/20 text-tertiary font-mono text-telemetry-num flex items-center justify-center font-bold">
+                    03
+                  </span>
+                  <span className="material-symbols-outlined text-outline text-[24px] group-hover:text-tertiary transition-colors">
+                    sensor_occupied
+                  </span>
+                </div>
+                <div className="flex flex-col gap-space-xs relative z-10">
+                  <h3 className="font-syne text-title-md text-on-surface">
+                    In-Bay Video Unboxing
+                  </h3>
+                  <p className="text-body-md text-on-surface-variant">
+                    Every external parcel is unboxed under calibrated 4K bench cameras. You receive a link to the visual intake audit within 45 minutes of laboratory dock arrival.
+                  </p>
+                </div>
+                <div className="mt-auto pt-space-xs relative z-10">
+                  <span className="font-mono text-label-tech text-primary">
+                    AUDITED CHAIN OF CUSTODY
+                  </span>
+                </div>
+              </SpotlightCard>
+            </motion.div>
           </div>
         </div>
-      </section>
+      </RevealSection>
 
       {/* ── Live Chat & Instant Ticket Status Lookup Widget Section (Code-Split) ── */}
       <section className="max-w-[1440px] mx-auto px-gutter-lg pb-space-2xl w-full">
@@ -1058,7 +1175,7 @@ export default function ContactPage() {
           </div>
 
           {/* Ticket Status Real-Time Telemetry Lookup (Code-Split) */}
-          <div className="md:col-span-6" id="telemetry-tracer">
+          <div className="md:col-span-6 scroll-mt-28" id="telemetry-tracer">
             <TicketTracer />
           </div>
         </div>

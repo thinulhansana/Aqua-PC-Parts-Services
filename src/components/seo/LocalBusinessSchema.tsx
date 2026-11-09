@@ -6,28 +6,28 @@ export default function LocalBusinessSchema() {
     "@type": ["ComputerRepairService", "LocalBusiness"],
     "@id": "https://aquapcparts.com/#organization",
     "name": "Aqua PC Parts & Services",
-    "alternateName": "Aqua Lab Austin",
+    "alternateName": "Aqua PC Parts & Services",
     "description":
-      "Austin's premier liquid-cooled PC engineering lab. Specializing in custom water loops, silicon binning, micro-soldering component diagnostics, and elite workstation builds.",
+      "Premier custom PC engineering, quality parts, component diagnostics, and high-performance workstation builds in Embilipitiya, Sri Lanka.",
     "url": "https://aquapcparts.com",
-    "telephone": "+1-800-840-2782",
-    "email": "lab@aquapcparts.com",
+    "telephone": "+94788194535",
+    "email": "thinulhansana.business@gmail.com",
     "image": [
       "https://lh3.googleusercontent.com/aida-public/AB6AXuCzAgT1ycU31D0XXng7zUxriWh_-AJeqiSxHggoL5n3OUn4967qRAk-8lipNJE3yhEI7S-rW0Vsvwu_WISzGD-15X3dYeF9K8GgkFpO0o95G7tY4kRuq23kMPeGXuxcIWu_DjNPW1oqvT0x2nL2DyfK_lPLNU9uUWFRgb9EIlVpHynrASnW-tXBGyJPMH-euBM4FfPsd68trJRjtrzVLpUxXR_f5_msEEoRUSf5azYx",
       "https://lh3.googleusercontent.com/aida-public/AB6AXuDp5XScZK4J0J5uZcjpWUe9tLQHruoNtDTru3Suf2QQO7OzsRmeNGxFYv0m7kUcGuQj93-k-oFAsXVhdM5yq_I7ELDoqXrKkZzS9zze64mlZroyW5zOBLo-zK44XVE789CnAk6nIlUwmE7MyekZpeBE9rkKcH3qNNWMTFysyb_1jtMfjLpUeu2pAAyCeN59NN_rKXKwLKGaHhneSjgKLO0rDfYMutiY9bfXvwM2qvBm"
     ],
     "address": {
       "@type": "PostalAddress",
-      "streetAddress": "1044 Hydro Silicon Parkway, Suite 400",
-      "addressLocality": "Austin",
-      "addressRegion": "TX",
-      "postalCode": "78758",
-      "addressCountry": "US"
+      "streetAddress": "Embilipitiya",
+      "addressLocality": "Embilipitiya",
+      "addressRegion": "Sabaragamuwa",
+      "postalCode": "70200",
+      "addressCountry": "LK"
     },
     "geo": {
       "@type": "GeoCoordinates",
-      "latitude": 30.3842,
-      "longitude": -97.7121
+      "latitude": 6.3438,
+      "longitude": 80.8504
     },
     "openingHoursSpecification": [
       {
