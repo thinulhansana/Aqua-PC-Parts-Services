@@ -1,6 +1,7 @@
 import { randomBytes, randomUUID, scryptSync, timingSafeEqual } from "node:crypto";
 import { promises as fs } from "node:fs";
 import path from "node:path";
+import { getD1Database } from "@/lib/cf-env";
 
 export interface StoredUser {
   id: string;
@@ -26,10 +27,23 @@ export interface PublicUserProfile {
   createdAt: string;
 }
 
-const DATA_DIR = path.join(process.cwd(), ".data");
-const USERS_FILE = path.join(DATA_DIR, "users.json");
+interface D1UserRow {
+  id: string;
+  name: string;
+  email: string;
+  password_hash: string | null;
+  provider: string;
+  image: string | null;
+  phone: string | null;
+  rig_specs: string | null;
+  created_at: string;
+  updated_at: string;
+}
 
-// In-memory mirror & fallback if disk is read-only
+// Track initialized D1 instances in this isolate
+const initializedDatabases = new WeakSet<object>();
+
+// In-memory mirror & fallback if neither D1 nor writable filesystem is available
 let memoryUsers: StoredUser[] | null = null;
 let ioQueue: Promise<unknown> = Promise.resolve();
 
@@ -59,27 +73,68 @@ function toPublicProfile(user: StoredUser): PublicUserProfile {
   };
 }
 
-async function readUsers(): Promise<StoredUser[]> {
+function d1RowToStoredUser(row: D1UserRow): StoredUser {
+  return {
+    id: row.id,
+    name: row.name,
+    email: row.email,
+    passwordHash: row.password_hash ?? undefined,
+    provider: row.provider === "google" ? "google" : "credentials",
+    image: row.image ?? undefined,
+    phone: row.phone ?? undefined,
+    rigSpecs: row.rig_specs ?? undefined,
+    createdAt: row.created_at,
+    updatedAt: row.updated_at,
+  };
+}
+
+async function ensureD1Schema(db: D1Database): Promise<void> {
+  if (initializedDatabases.has(db)) return;
+
+  await db
+    .prepare(
+      "CREATE TABLE IF NOT EXISTS users (id TEXT PRIMARY KEY, name TEXT NOT NULL, email TEXT NOT NULL UNIQUE, password_hash TEXT, provider TEXT NOT NULL DEFAULT 'credentials', image TEXT, phone TEXT, rig_specs TEXT, created_at TEXT NOT NULL, updated_at TEXT NOT NULL)"
+    )
+    .run();
+
+  await db
+    .prepare("CREATE INDEX IF NOT EXISTS idx_users_email ON users (email)")
+    .run();
+
+  initializedDatabases.add(db);
+}
+
+function getLocalStoragePaths() {
+  const dataDir = path.join(process.cwd(), ".data");
+  return {
+    dataDir,
+    usersFile: path.join(dataDir, "users.json"),
+  };
+}
+
+async function readLocalUsers(): Promise<StoredUser[]> {
   try {
-    const raw = await fs.readFile(USERS_FILE, "utf8");
+    const { usersFile } = getLocalStoragePaths();
+    const raw = await fs.readFile(usersFile, "utf8");
     const parsed = JSON.parse(raw);
     if (Array.isArray(parsed)) {
       memoryUsers = parsed;
       return parsed;
     }
   } catch {
-    // File does not exist yet or cannot be read
+    // File does not exist yet or filesystem is read-only
   }
   if (memoryUsers) return memoryUsers;
   memoryUsers = [];
   return memoryUsers;
 }
 
-async function writeUsers(users: StoredUser[]): Promise<void> {
+async function writeLocalUsers(users: StoredUser[]): Promise<void> {
   memoryUsers = users;
   try {
-    await fs.mkdir(DATA_DIR, { recursive: true });
-    await fs.writeFile(USERS_FILE, JSON.stringify(users, null, 2), "utf8");
+    const { dataDir, usersFile } = getLocalStoragePaths();
+    await fs.mkdir(dataDir, { recursive: true });
+    await fs.writeFile(usersFile, JSON.stringify(users, null, 2), "utf8");
   } catch {
     // Keep memory store functional if filesystem writes are unavailable
   }
@@ -112,9 +167,67 @@ export async function createCredentialsUser({
   email: string;
   password: string;
 }): Promise<PublicUserProfile> {
+  const normalizedEmail = normalizeEmail(email);
+  const cleanName = name.trim();
+  const passwordHash = hashPassword(password);
+  const now = new Date().toISOString();
+
+  const db = await getD1Database();
+  if (db) {
+    await ensureD1Schema(db);
+    const existing = await db
+      .prepare("SELECT provider FROM users WHERE email = ?")
+      .bind(normalizedEmail)
+      .first<{ provider: string }>();
+
+    if (existing) {
+      const msg =
+        existing.provider === "google"
+          ? "An account with this email already exists via Google Sign-In. Please sign in with Google."
+          : "An account with this email already exists.";
+      throw new Error(`DUPLICATE_EMAIL:${msg}`);
+    }
+
+    const created: StoredUser = {
+      id: randomUUID(),
+      name: cleanName,
+      email: normalizedEmail,
+      passwordHash,
+      provider: "credentials",
+      createdAt: now,
+      updatedAt: now,
+    };
+
+    try {
+      await db
+        .prepare(
+          "INSERT INTO users (id, name, email, password_hash, provider, image, phone, rig_specs, created_at, updated_at) VALUES (?, ?, ?, ?, ?, NULL, NULL, NULL, ?, ?)"
+        )
+        .bind(
+          created.id,
+          created.name,
+          created.email,
+          created.passwordHash,
+          created.provider,
+          created.createdAt,
+          created.updatedAt
+        )
+        .run();
+    } catch (error) {
+      const msg = error instanceof Error ? error.message : "";
+      if (msg.includes("UNIQUE")) {
+        throw new Error(
+          "DUPLICATE_EMAIL:An account with this email already exists."
+        );
+      }
+      throw error;
+    }
+
+    return toPublicProfile(created);
+  }
+
   return serializeTask(async () => {
-    const users = await readUsers();
-    const normalizedEmail = normalizeEmail(email);
+    const users = await readLocalUsers();
 
     const existing = users.find((u) => u.email === normalizedEmail);
     if (existing) {
@@ -125,19 +238,18 @@ export async function createCredentialsUser({
       throw new Error(`DUPLICATE_EMAIL:${msg}`);
     }
 
-    const now = new Date().toISOString();
     const newUser: StoredUser = {
       id: randomUUID(),
-      name: name.trim(),
+      name: cleanName,
       email: normalizedEmail,
-      passwordHash: hashPassword(password),
+      passwordHash,
       provider: "credentials",
       createdAt: now,
       updatedAt: now,
     };
 
     users.push(newUser);
-    await writeUsers(users);
+    await writeLocalUsers(users);
     return toPublicProfile(newUser);
   });
 }
@@ -146,9 +258,24 @@ export async function verifyUserCredentials(
   email: string,
   password: string
 ): Promise<PublicUserProfile | null> {
+  const normalizedEmail = normalizeEmail(email);
+
+  const db = await getD1Database();
+  if (db) {
+    await ensureD1Schema(db);
+    const row = await db
+      .prepare("SELECT * FROM users WHERE email = ?")
+      .bind(normalizedEmail)
+      .first<D1UserRow>();
+
+    if (!row || !row.password_hash) return null;
+    if (!verifyPassword(password, row.password_hash)) return null;
+
+    return toPublicProfile(d1RowToStoredUser(row));
+  }
+
   return serializeTask(async () => {
-    const users = await readUsers();
-    const normalizedEmail = normalizeEmail(email);
+    const users = await readLocalUsers();
     const user = users.find((u) => u.email === normalizedEmail);
     if (!user || !user.passwordHash) return null;
 
@@ -170,23 +297,81 @@ export async function upsertOAuthProfile({
   image?: string | null;
   provider: "google";
 }): Promise<PublicUserProfile> {
+  const normalizedEmail = normalizeEmail(email);
+  const now = new Date().toISOString();
+  const fallbackName = name?.trim() || normalizedEmail.split("@")[0];
+
+  const db = await getD1Database();
+  if (db) {
+    await ensureD1Schema(db);
+    const existingRow = await db
+      .prepare("SELECT * FROM users WHERE email = ?")
+      .bind(normalizedEmail)
+      .first<D1UserRow>();
+
+    if (existingRow) {
+      const existing = d1RowToStoredUser(existingRow);
+      const nextName = existing.name || fallbackName;
+      const nextImage = image || existing.image || null;
+
+      await db
+        .prepare(
+          "UPDATE users SET name = ?, image = ?, updated_at = ? WHERE email = ?"
+        )
+        .bind(nextName, nextImage, now, normalizedEmail)
+        .run();
+
+      return toPublicProfile({
+        ...existing,
+        name: nextName,
+        image: nextImage ?? undefined,
+        updatedAt: now,
+      });
+    }
+
+    const created: StoredUser = {
+      id: randomUUID(),
+      name: fallbackName,
+      email: normalizedEmail,
+      provider,
+      image: image || undefined,
+      createdAt: now,
+      updatedAt: now,
+    };
+
+    await db
+      .prepare(
+        "INSERT INTO users (id, name, email, password_hash, provider, image, phone, rig_specs, created_at, updated_at) VALUES (?, ?, ?, NULL, ?, ?, NULL, NULL, ?, ?)"
+      )
+      .bind(
+        created.id,
+        created.name,
+        created.email,
+        created.provider,
+        created.image ?? null,
+        created.createdAt,
+        created.updatedAt
+      )
+      .run();
+
+    return toPublicProfile(created);
+  }
+
   return serializeTask(async () => {
-    const users = await readUsers();
-    const normalizedEmail = normalizeEmail(email);
-    const now = new Date().toISOString();
+    const users = await readLocalUsers();
     const existing = users.find((u) => u.email === normalizedEmail);
 
     if (existing) {
-      existing.name = existing.name || name?.trim() || normalizedEmail.split("@")[0];
+      existing.name = existing.name || fallbackName;
       existing.image = image || existing.image;
       existing.updatedAt = now;
-      await writeUsers(users);
+      await writeLocalUsers(users);
       return toPublicProfile(existing);
     }
 
     const created: StoredUser = {
       id: randomUUID(),
-      name: name?.trim() || normalizedEmail.split("@")[0],
+      name: fallbackName,
       email: normalizedEmail,
       provider,
       image: image || undefined,
@@ -195,7 +380,7 @@ export async function upsertOAuthProfile({
     };
 
     users.push(created);
-    await writeUsers(users);
+    await writeLocalUsers(users);
     return toPublicProfile(created);
   });
 }
@@ -203,9 +388,20 @@ export async function upsertOAuthProfile({
 export async function getUserProfileByEmail(
   email: string
 ): Promise<PublicUserProfile | null> {
+  const normalizedEmail = normalizeEmail(email);
+
+  const db = await getD1Database();
+  if (db) {
+    await ensureD1Schema(db);
+    const row = await db
+      .prepare("SELECT * FROM users WHERE email = ?")
+      .bind(normalizedEmail)
+      .first<D1UserRow>();
+    return row ? toPublicProfile(d1RowToStoredUser(row)) : null;
+  }
+
   return serializeTask(async () => {
-    const users = await readUsers();
-    const normalizedEmail = normalizeEmail(email);
+    const users = await readLocalUsers();
     const user = users.find((u) => u.email === normalizedEmail);
     return user ? toPublicProfile(user) : null;
   });
@@ -215,11 +411,85 @@ export async function updateUserProfileByEmail(
   email: string,
   updates: { name?: string; phone?: string; rigSpecs?: string }
 ): Promise<PublicUserProfile | null> {
+  const normalizedEmail = normalizeEmail(email);
+  const now = new Date().toISOString();
+
+  const db = await getD1Database();
+  if (db) {
+    await ensureD1Schema(db);
+    const existingRow = await db
+      .prepare("SELECT * FROM users WHERE email = ?")
+      .bind(normalizedEmail)
+      .first<D1UserRow>();
+
+    if (!existingRow) {
+      const created: StoredUser = {
+        id: randomUUID(),
+        name: updates.name?.trim() || normalizedEmail.split("@")[0],
+        email: normalizedEmail,
+        provider: "google",
+        phone: updates.phone?.trim() || undefined,
+        rigSpecs: updates.rigSpecs?.trim() || undefined,
+        createdAt: now,
+        updatedAt: now,
+      };
+
+      await db
+        .prepare(
+          "INSERT INTO users (id, name, email, password_hash, provider, image, phone, rig_specs, created_at, updated_at) VALUES (?, ?, ?, NULL, ?, NULL, ?, ?, ?, ?)"
+        )
+        .bind(
+          created.id,
+          created.name,
+          created.email,
+          created.provider,
+          created.phone ?? null,
+          created.rigSpecs ?? null,
+          created.createdAt,
+          created.updatedAt
+        )
+        .run();
+
+      return toPublicProfile(created);
+    }
+
+    const user = d1RowToStoredUser(existingRow);
+    const nextName =
+      typeof updates.name === "string" && updates.name.trim()
+        ? updates.name.trim()
+        : user.name;
+    const nextPhone =
+      typeof updates.phone === "string" ? updates.phone.trim() : user.phone;
+    const nextSpecs =
+      typeof updates.rigSpecs === "string"
+        ? updates.rigSpecs.trim()
+        : user.rigSpecs;
+
+    await db
+      .prepare(
+        "UPDATE users SET name = ?, phone = ?, rig_specs = ?, updated_at = ? WHERE email = ?"
+      )
+      .bind(
+        nextName,
+        nextPhone ?? null,
+        nextSpecs ?? null,
+        now,
+        normalizedEmail
+      )
+      .run();
+
+    return toPublicProfile({
+      ...user,
+      name: nextName,
+      phone: nextPhone,
+      rigSpecs: nextSpecs,
+      updatedAt: now,
+    });
+  }
+
   return serializeTask(async () => {
-    const users = await readUsers();
-    const normalizedEmail = normalizeEmail(email);
+    const users = await readLocalUsers();
     const user = users.find((u) => u.email === normalizedEmail);
-    const now = new Date().toISOString();
 
     if (!user) {
       const created: StoredUser = {
@@ -233,7 +503,7 @@ export async function updateUserProfileByEmail(
         updatedAt: now,
       };
       users.push(created);
-      await writeUsers(users);
+      await writeLocalUsers(users);
       return toPublicProfile(created);
     }
 
@@ -247,8 +517,7 @@ export async function updateUserProfileByEmail(
       user.rigSpecs = updates.rigSpecs.trim();
     }
     user.updatedAt = now;
-    await writeUsers(users);
+    await writeLocalUsers(users);
     return toPublicProfile(user);
   });
 }
-

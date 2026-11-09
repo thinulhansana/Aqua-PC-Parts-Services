@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useState, useCallback } from "react";
+import React, { createContext, useContext, useState, useCallback, useEffect } from "react";
 import { SessionProvider } from "next-auth/react";
 import AuthModal from "@/components/auth/AuthModal";
 import type { AuthMode } from "@/components/auth/AuthPanel";
@@ -21,7 +21,7 @@ const AuthModalContext = createContext<AuthModalContextValue>({
 
 export function AuthProvider({
   children,
-  googleEnabled,
+  googleEnabled: initialGoogleEnabled,
 }: {
   children: React.ReactNode;
   googleEnabled: boolean;
@@ -29,6 +29,27 @@ export function AuthProvider({
   const [isOpen, setIsOpen] = useState(false);
   const [mode, setMode] = useState<AuthMode>("signin");
   const [callbackUrl, setCallbackUrl] = useState("/account");
+  const [googleEnabled, setGoogleEnabled] = useState(initialGoogleEnabled);
+
+  useEffect(() => {
+    setGoogleEnabled(initialGoogleEnabled);
+  }, [initialGoogleEnabled]);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch("/api/auth/providers")
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (cancelled || !data || typeof data !== "object") return;
+        setGoogleEnabled(Boolean((data as Record<string, unknown>).google));
+      })
+      .catch(() => {
+        // Keep initial SSR flag if offline
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   const openAuthModal = useCallback(
     (nextMode: AuthMode = "signin", nextCallbackUrl: string = "/account") => {
@@ -64,4 +85,3 @@ export function AuthProvider({
 export function useAuthModal() {
   return useContext(AuthModalContext);
 }
-

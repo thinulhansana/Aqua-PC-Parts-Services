@@ -108,15 +108,25 @@ export default function ContactPage() {
 
     let cancelled = false;
     fetch("/api/account")
-      .then((res) => (res.ok ? res.json() : null))
+      .then((res) =>
+        (res.ok ? res.json() : null) as Promise<{
+          user?: {
+            name?: string;
+            email?: string;
+            phone?: string;
+            rigSpecs?: string;
+          };
+        } | null>
+      )
       .then((data) => {
-        if (cancelled || !data?.user) return;
+        const syncedUser = data?.user;
+        if (cancelled || !syncedUser) return;
         setFormData((prev) => ({
           ...prev,
-          fullName: prev.fullName || data.user.name || "",
-          email: prev.email || data.user.email || "",
-          phone: prev.phone || data.user.phone || "",
-          specs: prev.specs || data.user.rigSpecs || "",
+          fullName: prev.fullName || syncedUser.name || "",
+          email: prev.email || syncedUser.email || "",
+          phone: prev.phone || syncedUser.phone || "",
+          specs: prev.specs || syncedUser.rigSpecs || "",
         }));
       })
       .catch(() => {
@@ -162,8 +172,10 @@ export default function ContactPage() {
       if (response.ok) {
         setIsSubmitted(true);
       } else {
-        const data = await response.json().catch(() => null);
-        if (data && data.errors && data.errors.length > 0) {
+        const data = (await response.json().catch(() => null)) as {
+          errors?: Array<{ message: string }>;
+        } | null;
+        if (data?.errors && data.errors.length > 0) {
           setSubmitError(
             data.errors
               .map((err: { message: string }) => err.message)

@@ -72,7 +72,10 @@ export default function AccountPage({ initialProfile }: AccountPageProps) {
         }),
       });
 
-      const data = await res.json().catch(() => ({}));
+      const data = (await res.json().catch(() => ({}))) as {
+        error?: unknown;
+        user?: PublicUserProfile;
+      };
       if (!res.ok) {
         setSaveMessage({
           type: "error",

@@ -6,6 +6,7 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { motion } from "framer-motion";
 import AuthPanel, { type AuthMode } from "@/components/auth/AuthPanel";
+import { useAuthModal } from "@/components/auth/AuthContext";
 import {
   CircuitFlowBackdrop,
   MaskedReveal,
@@ -40,6 +41,8 @@ export default function LoginPage({ googleEnabled }: LoginPageProps) {
   const searchParams = useSearchParams();
   const router = useRouter();
   const { data: session, status } = useSession();
+  const { googleEnabled: liveGoogleEnabled } = useAuthModal();
+  const resolvedGoogleEnabled = googleEnabled || liveGoogleEnabled;
 
   const rawCallback = searchParams.get("callbackUrl") || "/account";
   const callbackUrl =
@@ -191,7 +194,7 @@ export default function LoginPage({ googleEnabled }: LoginPageProps) {
                 <AuthPanel
                   initialMode={initialMode}
                   callbackUrl={callbackUrl}
-                  googleEnabled={googleEnabled}
+                  googleEnabled={resolvedGoogleEnabled}
                   initialError={initialError}
                   onSuccess={(target) => {
                     router.push(target);

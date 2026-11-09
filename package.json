@@ -6,9 +6,16 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
+    "deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
+    "upload": "opennextjs-cloudflare build && opennextjs-cloudflare upload",
+    "cf-typegen": "wrangler types --env-interface CloudflareEnv cloudflare-env.d.ts",
+    "cf-d1-init:local": "wrangler d1 execute aqua-pc-users --local --file=migrations/0001_users.sql",
+    "cf-d1-init:remote": "wrangler d1 execute aqua-pc-users --remote --file=migrations/0001_users.sql"
   },
   "dependencies": {
+    "@opennextjs/cloudflare": "^1.20.16",
     "framer-motion": "^14.10.1",
     "next": "^15.0.0",
     "next-auth": "^5.0.0-beta.32",
@@ -24,6 +31,7 @@
     "eslint-config-next": "^15.0.0",
     "postcss": "^8.0.0",
     "tailwindcss": "^3.4.0",
-    "typescript": "^5.0.0"
+    "typescript": "^5.0.0",
+    "wrangler": "^4.158.0"
   }
 }

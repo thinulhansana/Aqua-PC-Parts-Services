@@ -202,7 +202,9 @@ export default function AuthPanel({
           }),
         });
 
-        const data = await res.json().catch(() => ({}));
+        const data = (await res.json().catch(() => ({}))) as {
+          error?: unknown;
+        };
         if (!res.ok) {
           setErrorMsg(
             typeof data?.error === "string"
