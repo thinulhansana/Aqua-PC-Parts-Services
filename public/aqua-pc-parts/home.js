@@ -130,40 +130,44 @@
 
   // ── Build Flat Search Index for Instant Autocomplete ────────────────────────
   const flatCatalog = [];
-  USED.forEach((sec) => {
-    sec.categories.forEach((cat) => {
-      cat.items.forEach((it) => {
-        flatCatalog.push({
-          id: it.id,
-          name: it.name,
-          price: it.price,
-          secId: sec.id,
-          secLabel: sec.label,
-          catName: cat.name,
-          isNew: it.condition === "new" || it.specs === "Brand New",
-          page: "used-parts.html",
-          hay: (it.name + " " + cat.name + " " + sec.label + " " + (it.specs || "")).toLowerCase(),
+  function rebuildFlatCatalog() {
+    flatCatalog.length = 0;
+    USED.forEach((sec) => {
+      sec.categories.forEach((cat) => {
+        cat.items.forEach((it) => {
+          flatCatalog.push({
+            id: it.id,
+            name: it.name,
+            price: it.price,
+            secId: sec.id,
+            secLabel: sec.label,
+            catName: cat.name,
+            isNew: it.condition === "new" || it.specs === "Brand New",
+            page: "used-parts.html",
+            hay: (it.name + " " + cat.name + " " + sec.label + " " + (it.specs || "")).toLowerCase(),
+          });
         });
       });
     });
-  });
-  NEW.forEach((sec) => {
-    sec.categories.forEach((cat) => {
-      cat.items.forEach((it) => {
-        flatCatalog.push({
-          id: it.id,
-          name: it.name,
-          price: it.price,
-          secId: sec.id,
-          secLabel: sec.label,
-          catName: cat.name,
-          isNew: true,
-          page: "brand-new-parts.html",
-          hay: (it.name + " " + cat.name + " " + sec.label + " " + (it.specs || "")).toLowerCase(),
+    NEW.forEach((sec) => {
+      sec.categories.forEach((cat) => {
+        cat.items.forEach((it) => {
+          flatCatalog.push({
+            id: it.id,
+            name: it.name,
+            price: it.price,
+            secId: sec.id,
+            secLabel: sec.label,
+            catName: cat.name,
+            isNew: true,
+            page: "brand-new-parts.html",
+            hay: (it.name + " " + cat.name + " " + sec.label + " " + (it.specs || "")).toLowerCase(),
+          });
         });
       });
     });
-  });
+  }
+  rebuildFlatCatalog();
 
   function searchCatalogItems(rawQuery, limit) {
     const q = (rawQuery || "").trim().toLowerCase();
@@ -1079,4 +1083,22 @@
     document.fonts.ready.then(() => moveIndicator($("[data-dept-tab].active")));
   }
   bindInteractive(document);
+
+  window.addEventListener("aqua:catalog-updated", () => {
+    rebuildFlatCatalog();
+    const nextUsed = countItems(USED);
+    const nextNew = countItems(NEW);
+    const nextDepts = USED.length + NEW.length;
+    const nextBinds = { "used-count": nextUsed, "new-count": nextNew, "dept-count": nextDepts };
+    $$("[data-bind]").forEach((el) => {
+      const v = nextBinds[el.getAttribute("data-bind")];
+      if (v !== undefined) el.textContent = String(v);
+    });
+    $$("[data-count-bind]").forEach((el) => {
+      const v = nextBinds[el.getAttribute("data-count-bind")];
+      if (v !== undefined) el.textContent = String(v);
+    });
+    const curTab = $("[data-dept-tab].active");
+    renderDepts(curTab ? curTab.getAttribute("data-dept-tab") : "used");
+  });
 })();

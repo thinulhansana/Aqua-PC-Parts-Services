@@ -6097,3 +6097,140 @@ window.AQUA_PARTS_CATALOG = {
     }
   ]
 };
+
+// ── Live Catalog Sync Runtime (Local Override + Cloudflare KV Cloud Sync) ──
+window.__AQUA_SYNC_RUNTIME_FN__ = function () {
+  if (typeof window === "undefined" || !window.AQUA_PARTS_CATALOG) return;
+
+  const STORAGE_KEY = "aqua-parts-catalog-override-v1";
+  window.AQUA_CATALOG_STORAGE_KEY = STORAGE_KEY;
+
+  // Keep a pristine deep clone of the factory baseline catalog
+  if (!window.AQUA_PARTS_DEFAULT_CATALOG) {
+    try {
+      window.AQUA_PARTS_DEFAULT_CATALOG = JSON.parse(
+        JSON.stringify(window.AQUA_PARTS_CATALOG)
+      );
+    } catch (_) {}
+  }
+
+  function countSecs(secs) {
+    if (!Array.isArray(secs)) return 0;
+    return secs.reduce(
+      (sum, s) =>
+        sum +
+        (Array.isArray(s.categories)
+          ? s.categories.reduce(
+              (cs, c) => cs + (Array.isArray(c.items) ? c.items.length : 0),
+              0
+            )
+          : 0),
+      0
+    );
+  }
+
+  window.applyAquaCatalogOverride = function (incoming, skipEvent) {
+    if (!incoming || typeof incoming !== "object") return;
+    const target = window.AQUA_PARTS_CATALOG;
+
+    const nextUsed = Array.isArray(incoming.usedSections)
+      ? incoming.usedSections
+      : Array.isArray(incoming.sections)
+      ? incoming.sections
+      : null;
+
+    const nextNew = Array.isArray(incoming.brandNewSections)
+      ? incoming.brandNewSections
+      : null;
+
+    if (nextUsed) {
+      if (Array.isArray(target.usedSections)) {
+        target.usedSections.splice(0, target.usedSections.length, ...nextUsed);
+      } else {
+        target.usedSections = nextUsed.slice();
+      }
+      if (Array.isArray(target.sections)) {
+        target.sections.splice(0, target.sections.length, ...nextUsed);
+      } else {
+        target.sections = nextUsed.slice();
+      }
+    }
+
+    if (nextNew) {
+      if (Array.isArray(target.brandNewSections)) {
+        target.brandNewSections.splice(0, target.brandNewSections.length, ...nextNew);
+      } else {
+        target.brandNewSections = nextNew.slice();
+      }
+    }
+
+    // Recompute counts accurately
+    const usedTotal = countSecs(target.usedSections);
+    const newTotal = countSecs(target.brandNewSections);
+    target.usedTotalItems = usedTotal;
+    target.totalItems = usedTotal;
+    target.brandNewTotalItems = newTotal;
+
+    const secCounts = {};
+    (target.usedSections || []).forEach((s) => {
+      secCounts[s.id] = countSecs([s]);
+    });
+    target.sectionItemCounts = secCounts;
+
+    const bnCounts = {};
+    (target.brandNewSections || []).forEach((s) => {
+      bnCounts[s.id] = countSecs([s]);
+    });
+    target.brandNewSectionItemCounts = bnCounts;
+
+    if (incoming.whatsappPhone) target.whatsappPhone = incoming.whatsappPhone;
+    if (incoming.whatsappDirectBase) target.whatsappDirectBase = incoming.whatsappDirectBase;
+
+    if (!skipEvent) {
+      try {
+        window.dispatchEvent(
+          new CustomEvent("aqua:catalog-updated", { detail: target })
+        );
+      } catch (_) {}
+    }
+  };
+
+  // 1. Apply local cache synchronously on boot so there is zero price flicker
+  try {
+    const cachedRaw = localStorage.getItem(STORAGE_KEY);
+    if (cachedRaw) {
+      const parsed = JSON.parse(cachedRaw);
+      const catData = parsed && parsed.catalog ? parsed.catalog : parsed;
+      if (catData && (catData.usedSections || catData.brandNewSections)) {
+        window.applyAquaCatalogOverride(catData, true);
+      }
+    }
+  } catch (_) {}
+
+  // 2. Fetch latest live cloud catalog from Cloudflare Pages KV (/api/catalog)
+  if (typeof fetch === "function" && /^https?:/i.test(window.location.protocol)) {
+    fetch("/api/catalog", {
+      method: "GET",
+      headers: { Accept: "application/json" },
+      cache: "no-store",
+    })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((res) => {
+        if (res && res.ok && res.hasCloudData && res.catalog) {
+          try {
+            localStorage.setItem(
+              STORAGE_KEY,
+              JSON.stringify({
+                updatedAt: res.updatedAt || new Date().toISOString(),
+                catalog: res.catalog,
+              })
+            );
+          } catch (_) {}
+          window.applyAquaCatalogOverride(res.catalog, false);
+        }
+      })
+      .catch(() => {});
+  }
+};
+window.__AQUA_SYNC_RUNTIME_FN__();
+

@@ -1,0 +1,11 @@
+{
+  "name": "aquapcparts",
+  "compatibility_date": "2026-11-04",
+  "pages_build_output_dir": ".",
+  "kv_namespaces": [
+    {
+      "binding": "AQUA_CATALOG_KV",
+      "id": "0396d38ca6a846e98b577a688b49becd"
+    }
+  ]
+}

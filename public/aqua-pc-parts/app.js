@@ -491,6 +491,7 @@
   function renderItemCard(item, categoryName, sectionLabel, sec) {
     const hasPrice = typeof item.price === "number" && Number.isFinite(item.price);
     const isBrandNew = isNewConditionItem(item, sec);
+    const isOutOfStock = item.inStock === false;
     const isCustomizing = state.openCustomizers.has(item.id);
     const inQuote = Boolean(state.quoteList[item.id]);
     const opts = getItemOpts(item.id);
@@ -502,6 +503,7 @@
     card.className =
       "item-card" +
       (isBrandNew ? " is-new-item" : "") +
+      (isOutOfStock ? " is-out-of-stock" : "") +
       (isCustomizing ? " customizing" : "");
 
     const mainRow = document.createElement("div");
@@ -531,6 +533,7 @@
 
     badgesEl.innerHTML = `
       <span class="badge-condition ${isBrandNew ? "new" : "used"}">${condBadgeText}</span>
+      ${isOutOfStock ? '<span class="badge-out-of-stock">Out of Stock</span>' : ""}
       <span class="badge-warranty">${warrantyText}</span>
       <span class="badge-grade">${categoryName}</span>
     `;
@@ -1113,7 +1116,7 @@
     }
   });
 
-  // Initial Boot
+    // Initial Boot
   loadPersistedQuote();
   applyViewMode(state.viewMode);
   syncConditionButtonsUI();
@@ -1121,4 +1124,22 @@
   renderCatalog();
   updateQuoteDrawerUI();
   if (urlParams.get("quote") === "open") openQuoteDrawer();
+
+  // Re-render automatically when live cloud catalog updates arrive
+  window.addEventListener("aqua:catalog-updated", () => {
+    const nextUsed = countItemsInSections(USED_SECTIONS);
+    const nextNew = countItemsInSections(BRAND_NEW_SECTIONS);
+    setText("nav-used-count", nextUsed);
+    setText("nav-new-count", nextNew);
+    if (PAGE_MODE === "new") {
+      setText("hero-total-items", nextNew);
+      setText("hero-total-sections", BRAND_NEW_SECTIONS.length);
+    } else {
+      setText("hero-total-items", nextUsed);
+      setText("hero-total-sections", USED_SECTIONS.length);
+    }
+    renderSidebar();
+    renderCatalog();
+    updateQuoteDrawerUI();
+  });
 })();

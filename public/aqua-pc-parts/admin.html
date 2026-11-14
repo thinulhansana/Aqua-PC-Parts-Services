@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Store Admin Panel — Price &amp; Inventory Manager | Aqua PC Parts</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Syne:wght@700;800&display=swap"
+    rel="stylesheet"
+  />
+  <link
+    rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+  />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body data-page="admin">
+  <!-- Ambient Studio Background -->
+  <div class="ambient-bg" aria-hidden="true">
+    <div class="ambient-orb orb-cyan"></div>
+    <div class="ambient-orb orb-teal"></div>
+    <div class="ambient-orb orb-amber"></div>
+    <div class="ambient-noise"></div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       PASSCODE AUTHENTICATION GATE
+       ═══════════════════════════════════════════════════════════════════════ -->
+  <div id="admin-auth-gate" class="admin-auth-gate">
+    <div class="auth-card">
+      <div class="auth-brand">
+        <div class="brand-logo" aria-hidden="true">
+          <svg viewBox="0 0 36 36" fill="none" class="brand-mark-svg">
+            <rect x="4" y="4" width="28" height="28" rx="7" stroke="currentColor" stroke-width="2" />
+            <rect x="11" y="11" width="14" height="14" rx="3" fill="currentColor" fill-opacity="0.18" stroke="currentColor" stroke-width="1.8" />
+            <circle cx="18" cy="18" r="2.5" fill="currentColor" />
+          </svg>
+        </div>
+        <div>
+          <span class="brand-badge">EMBILIPITIYA WORKSHOP</span>
+          <h1 class="auth-title">Aqua PC Parts · Admin</h1>
+        </div>
+      </div>
+
+      <p class="auth-desc">
+        Enter your store admin passcode to update LKR prices, add or remove items, adjust bulk markups, and publish live to <strong>aquapcparts.pages.dev</strong>.
+      </p>
+
+      <form id="admin-login-form" class="auth-form" autocomplete="off">
+        <label for="admin-passcode-input" class="field-label">Admin Passcode</label>
+        <div class="auth-input-row">
+          <input
+            id="admin-passcode-input"
+            type="password"
+            placeholder="Enter admin passcode..."
+            required
+            autofocus
+          />
+          <button type="submit" class="lp-btn lp-btn-primary">
+            <span>Unlock Admin</span>
+            <span class="material-symbols-outlined">lock_open</span>
+          </button>
+        </div>
+        <p id="admin-login-error" class="auth-error hidden"></p>
+        <p class="auth-hint">
+          Default passcode: <code>aqua2026</code> (you can change this inside the panel).
+        </p>
+      </form>
+
+      <div class="auth-footer">
+        <a href="./index.html" class="btn-main-site">
+          <span class="material-symbols-outlined">arrow_back</span>
+          <span>Back to Storefront</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       MAIN ADMIN APPLICATION
+       ═══════════════════════════════════════════════════════════════════════ -->
+  <div id="admin-app" class="admin-app hidden">
+    <!-- Top Sticky Admin Bar -->
+    <header class="site-header admin-header">
+      <div class="header-inner">
+        <a href="./index.html" class="brand-cluster">
+          <div class="brand-logo" aria-hidden="true">
+            <svg viewBox="0 0 36 36" fill="none" class="brand-mark-svg">
+              <rect x="4" y="4" width="28" height="28" rx="7" stroke="currentColor" stroke-width="2" />
+              <rect x="11" y="11" width="14" height="14" rx="3" fill="currentColor" fill-opacity="0.18" stroke="currentColor" stroke-width="1.8" />
+              <circle cx="18" cy="18" r="2.5" fill="currentColor" />
+            </svg>
+          </div>
+          <div class="brand-text">
+            <div class="brand-title-row">
+              <span class="brand-name">Aqua PC Parts</span>
+              <span class="brand-badge">ADMIN CONSOLE</span>
+            </div>
+            <span class="brand-sub" id="admin-sync-status">Live Cloud &amp; Local Catalog Manager</span>
+          </div>
+        </a>
+
+        <!-- Storefront Preview Links -->
+        <nav class="page-nav" aria-label="View Storefront Pages">
+          <a href="./index.html" target="_blank" class="page-nav-link" title="Open Storefront in new tab">
+            <span class="material-symbols-outlined">storefront</span>
+            <span>Storefront ↗</span>
+          </a>
+          <a href="./used-parts.html" target="_blank" class="page-nav-link" title="Open Used Parts in new tab">
+            <span class="material-symbols-outlined">verified</span>
+            <span>Used (<span id="nav-admin-used">358</span>) ↗</span>
+          </a>
+          <a href="./brand-new-parts.html" target="_blank" class="page-nav-link new-tab" title="Open Brand New Parts in new tab">
+            <span class="material-symbols-outlined">inventory_2</span>
+            <span>Brand New (<span id="nav-admin-new">34</span>) ↗</span>
+          </a>
+        </nav>
+
+        <!-- Primary Admin Save & Utility Actions -->
+        <div class="header-actions">
+          <span id="unsaved-pill" class="unsaved-pill hidden">
+            <span class="material-symbols-outlined">edit_note</span>
+            <span id="unsaved-count">0</span> unsaved changes
+          </span>
+
+          <button id="btn-publish-live" type="button" class="lp-btn lp-btn-emerald admin-save-btn">
+            <span class="material-symbols-outlined">cloud_upload</span>
+            <span>Save &amp; Publish Live</span>
+          </button>
+
+          <button id="btn-download-catalog" type="button" class="btn-main-site" title="Download updated catalog.js file">
+            <span class="material-symbols-outlined">download</span>
+            <span class="hide-mobile">Download catalog.js</span>
+          </button>
+
+          <button id="theme-toggle-btn" type="button" class="btn-icon" title="Toggle Dark / Light Theme" aria-label="Toggle color theme">
+            <span id="theme-toggle-icon" class="material-symbols-outlined">light_mode</span>
+          </button>
+
+          <button id="btn-lock-admin" type="button" class="btn-icon" title="Lock Admin Session" aria-label="Lock Admin Session">
+            <span class="material-symbols-outlined">logout</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main class="container admin-main">
+      <!-- KPI Dashboard Strip -->
+      <section class="admin-kpi-grid" aria-label="Catalog Overview">
+        <div class="admin-kpi-card">
+          <div class="kpi-top">
+            <span class="kpi-label">USED PARTS INVENTORY</span>
+            <span class="material-symbols-outlined kpi-icon cyan">verified</span>
+          </div>
+          <div class="kpi-val"><strong id="kpi-used-items">358</strong> <span>items</span></div>
+          <span class="kpi-sub" id="kpi-used-depts">Across 10 hardware departments</span>
+        </div>
+
+        <div class="admin-kpi-card">
+          <div class="kpi-top">
+            <span class="kpi-label">BRAND NEW INVENTORY</span>
+            <span class="material-symbols-outlined kpi-icon emerald">inventory_2</span>
+          </div>
+          <div class="kpi-val"><strong id="kpi-new-items">34</strong> <span>SKUs</span></div>
+          <span class="kpi-sub" id="kpi-new-depts">Across 7 brand-new departments</span>
+        </div>
+
+        <div class="admin-kpi-card">
+          <div class="kpi-top">
+            <span class="kpi-label">PRICED VS. INQUIRY</span>
+            <span class="material-symbols-outlined kpi-icon amber">payments</span>
+          </div>
+          <div class="kpi-val"><strong id="kpi-priced-items">0</strong> <span>priced</span></div>
+          <span class="kpi-sub"><b id="kpi-inquiry-items">0</b> listed as Price on Inquiry</span>
+        </div>
+
+        <div class="admin-kpi-card">
+          <div class="kpi-top">
+            <span class="kpi-label">STOCK AVAILABILITY</span>
+            <span class="material-symbols-outlined kpi-icon emerald">check_circle</span>
+          </div>
+          <div class="kpi-val"><strong id="kpi-instock-items">0</strong> <span>in stock</span></div>
+          <span class="kpi-sub"><b id="kpi-outstock-items">0</b> marked Out of Stock</span>
+        </div>
+      </section>
+
+      <!-- Admin Mode Tabs -->
+      <div class="admin-tabs-bar" role="tablist" aria-label="Admin Management Tools">
+        <button type="button" class="admin-tab-btn active" data-admin-tab="items" role="tab" aria-selected="true">
+          <span class="material-symbols-outlined">table_chart</span>
+          <span>1. Edit Prices &amp; Items</span>
+        </button>
+        <button type="button" class="admin-tab-btn" data-admin-tab="add" role="tab" aria-selected="false">
+          <span class="material-symbols-outlined">add_circle</span>
+          <span>2. Add New Items (Single or Batch)</span>
+        </button>
+        <button type="button" class="admin-tab-btn" data-admin-tab="bulk" role="tab" aria-selected="false">
+          <span class="material-symbols-outlined">Price_change</span>
+          <span>3. Bulk Price Markup &amp; Backups</span>
+        </button>
+      </div>
+
+      <!-- ───────────────────────────────────────────────────────────────────
+           TAB 1: INLINE PRICE & ITEM EDITOR
+           ─────────────────────────────────────────────────────────────────── -->
+      <section id="admin-panel-items" class="admin-panel-section">
+        <div class="admin-controls-card">
+          <div class="admin-filter-row">
+            <!-- Division Switcher -->
+            <div class="admin-seg-group" role="group" aria-label="Filter by Store Division">
+              <button type="button" class="admin-seg-btn active" data-div-filter="used">
+                Used Parts (<span id="seg-used-count">358</span>)
+              </button>
+              <button type="button" class="admin-seg-btn" data-div-filter="new">
+                Brand New (<span id="seg-new-count">34</span>)
+              </button>
+              <button type="button" class="admin-seg-btn" data-div-filter="all">
+                All Divisions
+              </button>
+            </div>
+
+            <!-- Department Select -->
+            <div class="admin-select-wrap">
+              <label for="admin-dept-filter" class="sr-only">Department</label>
+              <select id="admin-dept-filter" class="sort-select">
+                <option value="all">All Departments</option>
+              </select>
+            </div>
+
+            <!-- Subcategory Select -->
+            <div class="admin-select-wrap">
+              <label for="admin-cat-filter" class="sr-only">Subcategory</label>
+              <select id="admin-cat-filter" class="sort-select">
+                <option value="all">All Subcategories</option>
+              </select>
+            </div>
+
+            <!-- Status Filter -->
+            <div class="admin-select-wrap">
+              <label for="admin-status-filter" class="sr-only">Status Filter</label>
+              <select id="admin-status-filter" class="sort-select">
+                <option value="all">Status: All Items</option>
+                <option value="priced">Priced Items Only</option>
+                <option value="inquiry">Price on Inquiry Only</option>
+                <option value="out">Out of Stock Only</option>
+              </select>
+            </div>
+
+            <!-- Search Input -->
+            <div class="admin-search-box">
+              <span class="material-symbols-outlined">search</span>
+              <input
+                id="admin-search-input"
+                type="search"
+                placeholder="Search item name, model, or price..."
+                autocomplete="off"
+              />
+            </div>
+          </div>
+
+          <div class="admin-toolbar-meta">
+            <span id="admin-showing-label">Showing 0 items</span>
+            <div class="admin-quick-legend">
+              <span>Tip: Edit any name or price directly in the table, or click <b>+750</b> / <b>+2000</b> to apply markup over Base Price. Press <b>Save &amp; Publish Live</b> when done.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Editable Items Table -->
+        <div class="admin-table-wrap">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th style="width: 30%;">Item Name &amp; Model</th>
+                <th style="width: 17%;">Department / Subcategory</th>
+                <th style="width: 12%;">Base / Retail (Rs.)</th>
+                <th style="width: 14%;">Quick Markup</th>
+                <th style="width: 14%;">Selling Price (Rs.)</th>
+                <th style="width: 8%;">Stock</th>
+                <th style="width: 5%; text-align:right;">Action</th>
+              </tr>
+            </thead>
+            <tbody id="admin-items-tbody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ───────────────────────────────────────────────────────────────────
+           TAB 2: ADD NEW ITEM OR BATCH PASTE ITEMS
+           ─────────────────────────────────────────────────────────────────── -->
+      <section id="admin-panel-add" class="admin-panel-section hidden">
+        <div class="admin-two-col">
+          <!-- Single Item Add Card -->
+          <div class="admin-box-card">
+            <span class="section-tag">SINGLE ITEM CREATOR</span>
+            <h2>Add a New Product to Catalog</h2>
+            <p class="admin-card-sub">
+              Add a new component or peripheral to either the Used Parts Catalog or the Brand New Store.
+            </p>
+
+            <form id="admin-add-single-form" class="admin-form">
+              <div class="form-row-2">
+                <div class="form-field">
+                  <label for="add-division">Store Division</label>
+                  <select id="add-division" class="sort-select">
+                    <option value="used">Used Parts Division</option>
+                    <option value="new">Brand New Division</option>
+                  </select>
+                </div>
+
+                <div class="form-field">
+                  <label for="add-section">Hardware Department</label>
+                  <select id="add-section" class="sort-select"></select>
+                </div>
+              </div>
+
+              <div class="form-row-2">
+                <div class="form-field">
+                  <label for="add-category">Subcategory</label>
+                  <select id="add-category" class="sort-select"></select>
+                </div>
+
+                <div class="form-field">
+                  <label for="add-new-category">Or Create New Subcategory (Optional)</label>
+                  <input
+                    id="add-new-category"
+                    type="text"
+                    class="note-input"
+                    placeholder="e.g. RTX 40-Series Cards"
+                  />
+                </div>
+              </div>
+
+              <div class="form-field">
+                <label for="add-item-name">Item Name / Model Description *</label>
+                <input
+                  id="add-item-name"
+                  type="text"
+                  class="note-input"
+                  placeholder="e.g. RTX 3060 12GB GDDR6 Dual Fan"
+                  required
+                />
+              </div>
+
+              <div class="form-row-3">
+                <div class="form-field">
+                  <label for="add-base-price">Base / Retail Price (Rs.)</label>
+                  <input
+                    id="add-base-price"
+                    type="number"
+                    min="0"
+                    step="10"
+                    class="note-input"
+                    placeholder="e.g. 85000"
+                  />
+                </div>
+
+                <div class="form-field">
+                  <label for="add-markup-preset">Auto Markup Preset</label>
+                  <select id="add-markup-preset" class="sort-select">
+                    <option value="2000">+ Rs. 2,000 (Used Default)</option>
+                    <option value="750">+ Rs. 750 (Brand New Default)</option>
+                    <option value="0">+ Rs. 0 (Exact Price)</option>
+                  </select>
+                </div>
+
+                <div class="form-field">
+                  <label for="add-final-price">Final Selling Price (Rs.)</label>
+                  <input
+                    id="add-final-price"
+                    type="number"
+                    min="0"
+                    step="10"
+                    class="note-input"
+                    placeholder="Leave empty for Inquiry"
+                  />
+                </div>
+              </div>
+
+              <div class="form-row-2">
+                <div class="form-field">
+                  <label for="add-warranty">Warranty Label</label>
+                  <input
+                    id="add-warranty"
+                    type="text"
+                    class="note-input"
+                    placeholder="06 Months Testing Warranty"
+                    value="06 Months Testing Warranty"
+                  />
+                </div>
+
+                <div class="form-field">
+                  <label for="add-stock-status">Stock Status</label>
+                  <select id="add-stock-status" class="sort-select">
+                    <option value="in">In Stock</option>
+                    <option value="out">Out of Stock</option>
+                  </select>
+                </div>
+              </div>
+
+              <button type="submit" class="lp-btn lp-btn-primary">
+                <span class="material-symbols-outlined">add</span>
+                <span>Add Item to Catalog</span>
+              </button>
+            </form>
+          </div>
+
+          <!-- Multi-Line Batch Paste Importer -->
+          <div class="admin-box-card">
+            <span class="section-tag">FAST PRICE-SHEET BATCH IMPORTER</span>
+            <h2>Paste Multiple Items at Once</h2>
+            <p class="admin-card-sub">
+              Paste lines in the format <code>Item Name | Price</code> (one item per line). Choose a markup (`+0`, `+750`, or `+2000`) to automatically compute the selling price for every pasted item!
+            </p>
+
+            <form id="admin-batch-form" class="admin-form">
+              <div class="form-row-2">
+                <div class="form-field">
+                  <label for="batch-markup">Apply Markup to Pasted Prices</label>
+                  <select id="batch-markup" class="sort-select">
+                    <option value="0">+ Rs. 0 (Use exact price)</option>
+                    <option value="750">+ Rs. 750 (Brand New sheet rule)</option>
+                    <option value="2000">+ Rs. 2,000 (Used hardware rule)</option>
+                  </select>
+                </div>
+                <div class="form-field">
+                  <label>Target Department &amp; Subcategory</label>
+                  <div class="admin-hint-pill">Uses the Division, Department &amp; Subcategory selected on the left</div>
+                </div>
+              </div>
+
+              <div class="form-field">
+                <label for="batch-lines">Paste Items (Format: <code>Item Name | RetailPrice</code>)</label>
+                <textarea
+                  id="batch-lines"
+                  rows="8"
+                  class="note-input admin-textarea"
+                  placeholder="USB GAMING MOUSE G102 | 600&#10;GAMING KEYBOARD &amp; MOUSE GTX360 | 1950&#10;24&quot; FRAMELESS FHD IPS | 20350"
+                ></textarea>
+              </div>
+
+              <button type="submit" class="lp-btn lp-btn-emerald">
+                <span class="material-symbols-outlined">playlist_add</span>
+                <span>Batch Import All Lines</span>
+              </button>
+            </form>
+          </div>
+        </div>
+      </section>
+
+      <!-- ───────────────────────────────────────────────────────────────────
+           TAB 3: BULK PRICE MARKUP, BACKUP & SECURITY
+           ─────────────────────────────────────────────────────────────────── -->
+      <section id="admin-panel-bulk" class="admin-panel-section hidden">
+        <div class="admin-two-col">
+          <!-- Bulk Price Calculator -->
+          <div class="admin-box-card">
+            <span class="section-tag">BULK PRICE &amp; MARKUP ENGINE</span>
+            <h2>Bulk Adjust Prices Across Catalog</h2>
+            <p class="admin-card-sub">
+              Update dozens or hundreds of prices in one click — apply a fixed LKR markup over Base Retail Price, add/subtract a flat LKR amount, or adjust by percentage.
+            </p>
+
+            <form id="admin-bulk-price-form" class="admin-form">
+              <div class="form-field">
+                <label for="bulk-target">1. Select Target Items</label>
+                <select id="bulk-target" class="sort-select">
+                  <option value="used">All Used Parts (358 Items)</option>
+                  <option value="new">All Brand New Parts (34 Items)</option>
+                  <option value="filtered">Currently Filtered Items in Tab 1</option>
+                </select>
+              </div>
+
+              <div class="form-field">
+                <label for="bulk-mode">2. Pricing Formula</label>
+                <select id="bulk-mode" class="sort-select">
+                  <option value="retail-plus">Set Selling Price = Base Retail Price + Fixed LKR</option>
+                  <option value="add-flat">Add / Subtract Fixed LKR to Current Selling Price</option>
+                  <option value="percent">Increase / Decrease Current Selling Price by Percentage (%)</option>
+                </select>
+              </div>
+
+              <div class="form-field">
+                <label for="bulk-amount">3. Amount (LKR or % — use negative number to reduce)</label>
+                <input
+                  id="bulk-amount"
+                  type="number"
+                  step="any"
+                  value="2000"
+                  class="note-input"
+                  required
+                />
+              </div>
+
+              <button type="submit" class="lp-btn lp-btn-primary">
+                <span class="material-symbols-outlined">auto_fix_high</span>
+                <span>Apply Bulk Price Update</span>
+              </button>
+            </form>
+          </div>
+
+          <!-- Export, Import, Reset & Passcode Security -->
+          <div class="admin-box-card">
+            <span class="section-tag">EXPORT, IMPORT &amp; SECURITY</span>
+            <h2>Backups, File Export &amp; Admin Passcode</h2>
+            <p class="admin-card-sub">
+              Download your updated catalog as a drop-in <code>catalog.js</code> file, CSV spreadsheet, or JSON backup, or change your admin passcode.
+            </p>
+
+            <div class="admin-backup-grid">
+              <button type="button" id="btn-export-js" class="btn-main-site">
+                <span class="material-symbols-outlined">javascript</span>
+                <span>Download catalog.js</span>
+              </button>
+
+              <button type="button" id="btn-export-json" class="btn-main-site">
+                <span class="material-symbols-outlined">data_object</span>
+                <span>Export JSON Backup</span>
+              </button>
+
+              <button type="button" id="btn-export-csv" class="btn-main-site">
+                <span class="material-symbols-outlined">csv</span>
+                <span>Export CSV Sheet</span>
+              </button>
+
+              <label class="btn-main-site file-upload-label">
+                <span class="material-symbols-outlined">upload_file</span>
+                <span>Import JSON File</span>
+                <input id="input-import-json" type="file" accept=".json,application/json" class="hidden" />
+              </label>
+            </div>
+
+            <hr class="admin-divider" />
+
+            <form id="admin-passcode-form" class="admin-form">
+              <div class="form-field">
+                <label for="new-admin-passcode">Change Admin Passcode</label>
+                <div class="auth-input-row">
+                  <input
+                    id="new-admin-passcode"
+                    type="password"
+                    class="note-input"
+                    placeholder="New passcode (min 4 chars)..."
+                    minlength="4"
+                    required
+                  />
+                  <button type="submit" class="btn-quote-cart">
+                    <span class="material-symbols-outlined">key</span>
+                    <span>Update Passcode</span>
+                  </button>
+                </div>
+              </div>
+            </form>
+
+            <hr class="admin-divider" />
+
+            <div class="admin-reset-row">
+              <div>
+                <strong>Reset to Factory Default Catalog</strong>
+                <p>Clears any custom edits and restores the baseline 358 Used + 34 Brand New items.</p>
+              </div>
+              <button type="button" id="btn-reset-factory" class="btn-danger-outline">
+                <span class="material-symbols-outlined">restart_alt</span>
+                <span>Reset Default</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="admin-toast" class="admin-toast hidden" role="status" aria-live="polite"></div>
+
+  <script src="catalog.js"></script>
+  <script src="admin.js"></script>
+</body>
+</html>
