@@ -3,11 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Aqua PC Parts | Used &amp; Brand New PC Components — Embilipitiya, Sri Lanka</title>
+  <title>Aqua PC Parts | Premium Used &amp; Brand New PC Components — Embilipitiya, Sri Lanka</title>
   <meta
     name="description"
-    content="Shop Grade-A bench-tested Used PC Parts (358+ items) and Factory-Sealed Brand New Peripherals & Boxed Components at Aqua PC Parts, Embilipitiya, Sri Lanka. Transparent LKR prices & instant WhatsApp ordering."
+    content="Aqua PC Parts — Grade-A bench-tested used hardware and factory-sealed brand-new PC components in Embilipitiya, Sri Lanka. Transparent LKR pricing, 06-month testing warranty, island-wide delivery and instant WhatsApp ordering."
   />
+  <script>document.documentElement.classList.add("js");</script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
@@ -20,7 +21,9 @@
   />
   <link rel="stylesheet" href="styles.css" />
 </head>
-<body data-page="home">
+<body data-page="landing">
+  <div class="scroll-progress" id="scroll-progress" aria-hidden="true"></div>
+
   <!-- Ambient Background -->
   <div class="ambient-bg" aria-hidden="true">
     <div class="ambient-orb orb-cyan"></div>
@@ -54,8 +57,8 @@
     </div>
   </div>
 
-  <!-- Top Storefront Header -->
-  <header class="site-header">
+  <!-- Header -->
+  <header class="site-header" id="site-header">
     <div class="header-inner">
       <a href="./index.html" class="brand-cluster">
         <div class="brand-logo" aria-hidden="true">
@@ -70,82 +73,49 @@
         </div>
       </a>
 
-      <!-- Page Navigation Tabs -->
       <nav class="page-nav" aria-label="Primary Storefront Divisions">
         <a href="./index.html" class="page-nav-link active" aria-current="page">
           <span class="material-symbols-outlined">storefront</span>
-          <span>Storefront Hub</span>
+          <span>Storefront</span>
         </a>
         <a href="./used-parts.html" class="page-nav-link">
           <span class="material-symbols-outlined">verified</span>
           <span>Used Parts</span>
-          <span class="nav-pill-count" id="nav-used-count">358</span>
+          <span class="nav-pill-count" data-bind="used-count">358</span>
         </a>
         <a href="./brand-new-parts.html" class="page-nav-link new-tab">
           <span class="material-symbols-outlined">new_releases</span>
           <span>Brand New Parts</span>
-          <span class="nav-pill-count" id="nav-new-count">New</span>
+          <span class="nav-pill-count" data-bind="new-count">34</span>
         </a>
       </nav>
 
-      <!-- Global Header Search -->
-      <div class="header-search-wrap">
+      <form class="header-search-wrap" id="header-search-form" role="search" autocomplete="off">
         <span class="material-symbols-outlined search-icon" aria-hidden="true">search</span>
         <input
           id="global-search-input"
           type="search"
-          placeholder="Search all 358+ parts, GPUs, CPUs, peripherals... ( / )"
-          aria-label="Search all PC parts"
-          autocomplete="off"
+          placeholder="Search RTX 3060, Ryzen 5, SSD, keyboard...  ( / )"
+          aria-label="Search the catalog"
         />
-        <button
-          id="global-search-clear"
-          type="button"
-          class="search-clear-btn hidden"
-          aria-label="Clear search"
-        >
-          <span class="material-symbols-outlined">close</span>
-        </button>
-      </div>
+      </form>
 
-      <!-- Header Actions -->
       <div class="header-actions">
-        <button
-          id="quote-drawer-open-btn"
-          type="button"
-          class="btn-quote-cart"
-          aria-label="Open Multi-Item Quote List"
-        >
+        <a href="./used-parts.html?quote=open" class="btn-quote-cart" aria-label="Open your quote list">
           <span class="material-symbols-outlined">shopping_bag</span>
           <span>Quote (<span id="quote-count-badge" class="tabular-nums">0</span>)</span>
-        </button>
+        </a>
 
-        <button
-          id="theme-toggle-btn"
-          type="button"
-          class="btn-icon"
-          title="Toggle Dark / Light Theme"
-          aria-label="Toggle color theme"
-        >
+        <button id="theme-toggle-btn" type="button" class="btn-icon" title="Toggle Dark / Light Theme" aria-label="Toggle color theme">
           <span id="theme-toggle-icon" class="material-symbols-outlined">light_mode</span>
         </button>
 
-        <a
-          id="main-site-link"
-          href="https://aquapcsolutions.yyth.workers.dev/"
-          class="btn-main-site"
-        >
+        <a id="main-site-link" href="https://aquapcsolutions.yyth.workers.dev/" class="btn-main-site">
           <span class="material-symbols-outlined">arrow_back</span>
           <span class="hide-mobile">Main Site</span>
         </a>
 
-        <a
-          id="header-whatsapp-btn"
-          href="https://wa.me/94788194535"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="btn-whatsapp-header"
-        >
+        <a href="https://wa.me/94788194535" target="_blank" rel="noopener noreferrer" class="btn-whatsapp-header">
           <svg viewBox="0 0 24 24" fill="currentColor" class="wa-svg" aria-hidden="true">
             <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
           </svg>
@@ -155,288 +125,322 @@
     </div>
   </header>
 
-  <!-- Hero & Dual Division Showcase -->
-  <section class="hero-section">
-    <div class="container">
-      <div class="hero-content">
-        <div class="hero-pill cyan-pill">
-          <span class="pulse-dot"></span>
-          <span>AQUA PC PARTS · USED &amp; BRAND NEW DIVISIONS</span>
-        </div>
-        <h1 class="hero-title">
-          <span class="gradient-text">Aqua PC Parts</span>
-          <span class="hero-subtitle-inline">— Grade-A Used Hardware &amp; Brand New Store</span>
-        </h1>
-        <p class="hero-desc">
-          Explore our two dedicated hardware divisions: bench-tested Grade-A used components backed by our 06-month testing warranty, and factory-sealed brand-new peripherals, audio gear &amp; boxed components — all with transparent LKR pricing and instant WhatsApp ordering.
-        </p>
+  <main>
+    <!-- ───────────── HERO ───────────── -->
+    <section class="lp-hero" id="top">
+      <canvas id="hero-canvas" class="lp-canvas" aria-hidden="true"></canvas>
+      <div class="lp-hero-vignette" aria-hidden="true"></div>
 
-        <div class="hero-stats-strip">
-          <div class="stat-pill">
-            <span class="material-symbols-outlined">inventory_2</span>
-            <span><strong id="hero-total-items">358</strong> Used Parts Catalog</span>
-          </div>
-          <div class="stat-pill emerald">
-            <span class="material-symbols-outlined">new_releases</span>
-            <span><strong id="hero-new-items">34</strong> Brand New Categories</span>
-          </div>
-          <div class="stat-pill">
-            <span class="material-symbols-outlined">category</span>
-            <span><strong id="hero-total-sections">10</strong> Hardware Departments</span>
-          </div>
-          <div class="stat-pill emerald">
-            <span class="material-symbols-outlined">verified_user</span>
-            <span><strong>06-Month</strong> Testing Warranty</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Dual Division Showcase Cards -->
-      <div class="divisions-grid" aria-label="Hardware Divisions">
-        <article class="division-card used-card">
-          <div>
-            <div class="division-header">
-              <div>
-                <span class="division-kicker used">DIVISION 01 · BENCH TESTED</span>
-                <h2 class="division-title">Used Parts Catalog</h2>
-                <p class="division-desc">
-                  All 358+ existing Grade-A monitors, RTX/GTX/RX VGA cards, Intel &amp; AMD processors, motherboards, SSDs/HDDs, RAM, PSUs, coolers, cables &amp; accessories.
-                </p>
-              </div>
-              <div class="division-count-badge">
-                <strong id="card-used-count">358</strong>
-                <span>Items</span>
-              </div>
-            </div>
-
-            <div class="division-tags" style="margin-top: 0.9rem;">
-              <a href="./used-parts.html?category=monitors" class="division-tag">Monitors (27)</a>
-              <a href="./used-parts.html?category=vga-cards" class="division-tag">VGA Cards (65)</a>
-              <a href="./used-parts.html?category=processors" class="division-tag">Processors (85)</a>
-              <a href="./used-parts.html?category=motherboards" class="division-tag">Motherboards (72)</a>
-              <a href="./used-parts.html?category=storage" class="division-tag">Storage (32)</a>
-              <a href="./used-parts.html?category=ram" class="division-tag">RAM (14)</a>
-              <a href="./used-parts.html?category=power-supply" class="division-tag">PSU (12)</a>
-              <a href="./used-parts.html?category=peripherals" class="division-tag">All Departments</a>
-            </div>
+      <div class="container lp-hero-grid">
+        <div class="lp-hero-copy">
+          <div class="hero-pill cyan-pill reveal" style="--d: 0ms">
+            <span class="pulse-dot"></span>
+            <span>EMBILIPITIYA'S TRUSTED HARDWARE HUB</span>
           </div>
 
-          <div class="division-footer">
-            <span class="division-warranty">
-              <span class="material-symbols-outlined">verified_user</span>
-              <span>Grade-A · 06-Month Testing Warranty</span>
+          <h1 class="lp-title reveal" style="--d: 90ms">
+            <span class="lp-title-line">Premium PC hardware,</span>
+            <span class="lp-title-line">
+              curated for
+              <span class="lp-rotator" aria-live="polite">
+                <span class="lp-rotator-word gradient-text" id="rotator-word">Graphics Cards</span>
+              </span>
             </span>
-            <a href="./used-parts.html" class="btn-division used-btn">
-              <span>Browse Used Parts</span>
+          </h1>
+
+          <p class="lp-lead reveal" style="--d: 180ms">
+            Bench-tested Grade-A used components and factory-sealed brand-new gear — priced transparently in LKR, backed by a 06-month testing warranty, and ordered in seconds on WhatsApp.
+          </p>
+
+          <div class="lp-cta-row reveal" style="--d: 270ms">
+            <a href="./used-parts.html" class="lp-btn lp-btn-primary magnetic">
+              <span>Shop Used Parts</span>
               <span class="material-symbols-outlined">arrow_forward</span>
             </a>
-          </div>
-        </article>
-
-        <article class="division-card new-card">
-          <div>
-            <div class="division-header">
-              <div>
-                <span class="division-kicker new">DIVISION 02 · FACTORY SEALED</span>
-                <h2 class="division-title">Brand New Parts Store</h2>
-                <p class="division-desc">
-                  Brand-new mice, gaming keyboards, wireless combos, HD webcams, USB mics, 5.1/7.1 sound cards &amp; sealed boxed PC hardware ready for pickup or delivery.
-                </p>
-              </div>
-              <div class="division-count-badge">
-                <strong id="card-new-count">34</strong>
-                <span>Items</span>
-              </div>
-            </div>
-
-            <div class="division-tags" style="margin-top: 0.9rem;">
-              <a href="./brand-new-parts.html?category=bn-mice" class="division-tag">Mice (6)</a>
-              <a href="./brand-new-parts.html?category=bn-combos" class="division-tag">Combos (2)</a>
-              <a href="./brand-new-parts.html?category=bn-keyboards" class="division-tag">Keyboards (10)</a>
-              <a href="./brand-new-parts.html?category=bn-webcams" class="division-tag">Webcams (3)</a>
-              <a href="./brand-new-parts.html?category=bn-microphones" class="division-tag">Microphones (1)</a>
-              <a href="./brand-new-parts.html?category=bn-sound-cards" class="division-tag">Sound Cards (6)</a>
-              <a href="./brand-new-parts.html?category=bn-components" class="division-tag">Boxed Components (6)</a>
-            </div>
-          </div>
-
-          <div class="division-footer">
-            <span class="division-warranty">
+            <a href="./brand-new-parts.html" class="lp-btn lp-btn-emerald magnetic">
+              <span>Shop Brand New</span>
               <span class="material-symbols-outlined">new_releases</span>
-              <span>Factory Sealed · Store &amp; Agent Warranty</span>
-            </span>
-            <a href="./brand-new-parts.html" class="btn-division new-btn">
-              <span>Browse Brand New Parts</span>
-              <span class="material-symbols-outlined">arrow_forward</span>
+            </a>
+            <a href="https://wa.me/94788194535" target="_blank" rel="noopener noreferrer" class="lp-btn lp-btn-ghost magnetic">
+              <span class="material-symbols-outlined">chat</span>
+              <span>Talk to a Technician</span>
             </a>
           </div>
-        </article>
-      </div>
-    </div>
-  </section>
 
-  <!-- Main Storefront Explorer -->
-  <main class="container storefront-main">
-    <!-- Quick Condition Switcher Bar -->
-    <div class="condition-bar">
-      <div class="condition-pills" role="group" aria-label="Filter catalog by condition">
-        <button type="button" class="cond-btn active" data-condition="all">
-          <span class="material-symbols-outlined">apps</span>
-          <span>All Catalog</span>
-          <span class="cond-count" id="cond-all-count">364</span>
-        </button>
-        <button type="button" class="cond-btn" data-condition="used">
-          <span class="material-symbols-outlined">verified</span>
-          <span>Used Parts</span>
-          <span class="cond-count" id="cond-used-count">358</span>
-        </button>
-        <button type="button" class="cond-btn new-cond" data-condition="new">
-          <span class="material-symbols-outlined">new_releases</span>
-          <span>Brand New Parts</span>
-          <span class="cond-count" id="cond-new-count">34</span>
-        </button>
-      </div>
-
-      <div class="cond-bar-actions">
-        <a href="./used-parts.html" class="cond-direct-link">
-          <span>Dedicated Used Page</span>
-          <span class="material-symbols-outlined" style="font-size: 15px;">open_in_new</span>
-        </a>
-        <a href="./brand-new-parts.html" class="cond-direct-link emerald">
-          <span>Dedicated Brand New Page</span>
-          <span class="material-symbols-outlined" style="font-size: 15px;">open_in_new</span>
-        </a>
-      </div>
-    </div>
-
-    <div class="storefront-grid">
-      <!-- Left Sticky Category Sidebar -->
-      <aside class="sidebar" aria-label="Hardware Departments">
-        <div class="sidebar-sticky">
-          <div class="sidebar-label">
-            <span>DEPARTMENTS</span>
-            <span id="sidebar-condition-label">ALL</span>
-          </div>
-          <nav id="category-nav" class="category-nav"></nav>
-        </div>
-      </aside>
-
-      <!-- Right Content Area -->
-      <section class="catalog-area" aria-label="Parts Catalog">
-        <!-- Toolbar -->
-        <div class="catalog-toolbar">
-          <div class="section-heading-wrap">
-            <span id="active-section-icon" class="material-symbols-outlined section-icon">grid_view</span>
-            <div>
-              <h2 id="active-section-title" class="section-title">All Parts</h2>
-              <p id="active-section-count" class="section-count">Loading catalog...</p>
+          <div class="lp-stats reveal" style="--d: 360ms">
+            <div class="lp-stat">
+              <strong data-count-bind="used-count">358</strong><span>Used parts catalogued</span>
             </div>
-          </div>
-
-          <div class="toolbar-controls">
-            <div class="view-toggle" role="group" aria-label="Layout View">
-              <button type="button" class="view-btn active" data-view="list" title="List View" aria-label="List View">
-                <span class="material-symbols-outlined">view_agenda</span>
-              </button>
-              <button type="button" class="view-btn" data-view="grid" title="Grid View" aria-label="Grid View">
-                <span class="material-symbols-outlined">grid_view</span>
-              </button>
+            <div class="lp-stat">
+              <strong data-count-bind="new-count">34</strong><span>Brand-new SKUs</span>
             </div>
-
-            <label class="priced-toggle">
-              <input id="priced-only-checkbox" type="checkbox" />
-              <span>Priced Items Only</span>
-            </label>
-
-            <div class="sort-wrap">
-              <label for="sort-select" class="sr-only">Sort products</label>
-              <select id="sort-select" class="sort-select">
-                <option value="default">Sort: Default Order</option>
-                <option value="price-asc">Price: Low → High</option>
-                <option value="price-desc">Price: High → Low</option>
-                <option value="name-asc">Name: A → Z</option>
-              </select>
+            <div class="lp-stat">
+              <strong data-count-bind="dept-count">17</strong><span>Departments</span>
+            </div>
+            <div class="lp-stat">
+              <strong data-count="24" data-suffix="h">24h</strong><span>Stress-test burn-in</span>
             </div>
           </div>
         </div>
 
-        <!-- Global WhatsApp Assistance Banner -->
-        <a
-          id="section-whatsapp-banner"
-          href="https://wa.me/94788194535"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="wa-banner"
-        >
-          <div class="wa-banner-icon">
-            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
-            </svg>
-          </div>
-          <div class="wa-banner-text">
-            <strong>Need help comparing Used vs Brand New parts or planning a custom build?</strong>
-            <span>Use <b>Customize</b> on any part for quantity &amp; delivery options, or bundle mixed Used &amp; Brand New items into your <b>Quote List</b>!</span>
-          </div>
-          <span class="material-symbols-outlined wa-banner-arrow">arrow_forward</span>
-        </a>
+        <!-- Animated chip visual -->
+        <div class="lp-hero-visual reveal" style="--d: 200ms" aria-hidden="true">
+          <div class="chip-stage" id="chip-stage">
+            <span class="chip-ring ring-1"></span>
+            <span class="chip-ring ring-2"></span>
+            <span class="chip-ring ring-3"></span>
+            <div class="chip-glow"></div>
 
-        <!-- Dynamic Categories & Items Container -->
-        <div id="catalog-list" class="catalog-list"></div>
-      </section>
-    </div>
+            <div class="chip-core">
+              <div class="chip-pins pins-top"></div>
+              <div class="chip-pins pins-bottom"></div>
+              <div class="chip-pins pins-left"></div>
+              <div class="chip-pins pins-right"></div>
+              <div class="chip-die">
+                <span class="material-symbols-outlined">memory</span>
+                <strong>AQUA</strong>
+                <em>PC&nbsp;PARTS</em>
+              </div>
+            </div>
+
+            <div class="float-badge fb-1"><span class="material-symbols-outlined">sports_esports</span>RTX · GTX · RX</div>
+            <div class="float-badge fb-2"><span class="material-symbols-outlined">developer_board</span>Ryzen · Core</div>
+            <div class="float-badge fb-3"><span class="material-symbols-outlined">storage</span>NVMe · SSD</div>
+            <div class="float-badge fb-4"><span class="material-symbols-outlined">verified_user</span>06-Mo Warranty</div>
+          </div>
+        </div>
+      </div>
+
+      <a href="#divisions" class="lp-scroll-cue" aria-label="Scroll to divisions">
+        <span class="material-symbols-outlined">keyboard_double_arrow_down</span>
+      </a>
+    </section>
+
+    <!-- ───────────── MARQUEE ───────────── -->
+    <section class="lp-marquee" aria-label="Hardware categories">
+      <div class="lp-marquee-track" id="marquee-track">
+        <span><i class="material-symbols-outlined">sports_esports</i>Graphics Cards</span>
+        <span><i class="material-symbols-outlined">memory</i>Processors</span>
+        <span><i class="material-symbols-outlined">developer_board</i>Motherboards</span>
+        <span><i class="material-symbols-outlined">dns</i>DDR3 &amp; DDR4 RAM</span>
+        <span><i class="material-symbols-outlined">storage</i>SSD · NVMe · HDD</span>
+        <span><i class="material-symbols-outlined">monitor</i>Monitors</span>
+        <span><i class="material-symbols-outlined">bolt</i>Power Supplies</span>
+        <span><i class="material-symbols-outlined">mode_fan</i>CPU Coolers</span>
+        <span><i class="material-symbols-outlined">keyboard</i>Keyboards &amp; Mice</span>
+        <span><i class="material-symbols-outlined">videocam</i>Webcams</span>
+        <span><i class="material-symbols-outlined">speaker</i>Sound Cards</span>
+      </div>
+    </section>
+
+    <!-- ───────────── DIVISIONS ───────────── -->
+    <section class="lp-section" id="divisions">
+      <div class="container">
+        <header class="lp-section-head reveal">
+          <span class="lp-eyebrow">TWO DIVISIONS · ONE STANDARD</span>
+          <h2 class="lp-h2">Choose how you want to build</h2>
+          <p class="lp-sub">Stretch your budget with certified used hardware, or go factory-fresh with sealed brand-new parts.</p>
+        </header>
+
+        <div class="lp-division-grid">
+          <a href="./used-parts.html" class="lp-division lp-division-used spotlight tilt reveal" style="--d: 0ms">
+            <div class="lp-division-glow"></div>
+            <div class="lp-division-top">
+              <span class="division-kicker used">DIVISION 01 · BENCH TESTED</span>
+              <span class="lp-division-count"><strong data-count-bind="used-count">358</strong> items</span>
+            </div>
+            <span class="material-symbols-outlined lp-division-icon">verified</span>
+            <h3>Used Parts</h3>
+            <p>Grade-A monitors, VGA cards, Intel &amp; AMD processors, motherboards, SSDs, RAM, power supplies and more — every part stress-tested for 24 hours.</p>
+            <ul class="lp-checks">
+              <li><span class="material-symbols-outlined">check_circle</span>06-month testing warranty</li>
+              <li><span class="material-symbols-outlined">check_circle</span>10 hardware departments</li>
+              <li><span class="material-symbols-outlined">check_circle</span>Honest LKR retail pricing</li>
+            </ul>
+            <span class="lp-division-cta">Browse Used Parts <span class="material-symbols-outlined">arrow_forward</span></span>
+          </a>
+
+          <a href="./brand-new-parts.html" class="lp-division lp-division-new spotlight tilt reveal" style="--d: 120ms">
+            <div class="lp-division-glow"></div>
+            <div class="lp-division-top">
+              <span class="division-kicker new">DIVISION 02 · FACTORY SEALED</span>
+              <span class="lp-division-count"><strong data-count-bind="new-count">34</strong> items</span>
+            </div>
+            <span class="material-symbols-outlined lp-division-icon">new_releases</span>
+            <h3>Brand New Parts</h3>
+            <p>Mice, gaming keyboards, combos, HD webcams, USB microphones, sound cards and sealed boxed components with live-quoted pricing.</p>
+            <ul class="lp-checks">
+              <li><span class="material-symbols-outlined">check_circle</span>Factory-sealed stock</li>
+              <li><span class="material-symbols-outlined">check_circle</span>7 brand-new departments</li>
+              <li><span class="material-symbols-outlined">check_circle</span>Agent &amp; store warranty</li>
+            </ul>
+            <span class="lp-division-cta">Browse Brand New <span class="material-symbols-outlined">arrow_forward</span></span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ───────────── DEPARTMENTS ───────────── -->
+    <section class="lp-section lp-section-alt" id="departments">
+      <div class="container">
+        <header class="lp-section-head reveal">
+          <span class="lp-eyebrow">SHOP BY DEPARTMENT</span>
+          <h2 class="lp-h2">Jump straight to what you need</h2>
+          <p class="lp-sub">Pick a division, then open any department to see the full price list.</p>
+        </header>
+
+        <div class="lp-tabs reveal" role="tablist" aria-label="Department division">
+          <span class="lp-tab-indicator" id="dept-indicator"></span>
+          <button type="button" class="lp-tab active" role="tab" aria-selected="true" data-dept-tab="used">
+            <span class="material-symbols-outlined">verified</span>Used Departments
+          </button>
+          <button type="button" class="lp-tab" role="tab" aria-selected="false" data-dept-tab="new">
+            <span class="material-symbols-outlined">new_releases</span>Brand New Departments
+          </button>
+        </div>
+
+        <div class="lp-dept-grid" id="dept-grid"></div>
+      </div>
+    </section>
+
+    <!-- ───────────── PROCESS ───────────── -->
+    <section class="lp-section" id="how-it-works">
+      <div class="container">
+        <header class="lp-section-head reveal">
+          <span class="lp-eyebrow">SIMPLE &amp; TRANSPARENT</span>
+          <h2 class="lp-h2">From browsing to doorstep in four steps</h2>
+        </header>
+
+        <ol class="lp-steps">
+          <li class="lp-step reveal" style="--d: 0ms">
+            <span class="lp-step-num">01</span>
+            <span class="material-symbols-outlined">travel_explore</span>
+            <h3>Browse</h3>
+            <p>Explore every department with clear LKR prices, condition badges and warranty details.</p>
+          </li>
+          <li class="lp-step reveal" style="--d: 110ms">
+            <span class="lp-step-num">02</span>
+            <span class="material-symbols-outlined">add_shopping_cart</span>
+            <h3>Build your quote</h3>
+            <p>Add used and brand-new items into one quote list and set quantity, delivery or pickup.</p>
+          </li>
+          <li class="lp-step reveal" style="--d: 220ms">
+            <span class="lp-step-num">03</span>
+            <span class="material-symbols-outlined">chat</span>
+            <h3>Confirm on WhatsApp</h3>
+            <p>Your customised order message opens instantly — we confirm stock and the final total.</p>
+          </li>
+          <li class="lp-step reveal" style="--d: 330ms">
+            <span class="lp-step-num">04</span>
+            <span class="material-symbols-outlined">local_shipping</span>
+            <h3>Pickup or delivery</h3>
+            <p>Collect in Embilipitiya or get ESD-safe packed courier delivery island-wide.</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ───────────── WHY AQUA ───────────── -->
+    <section class="lp-section lp-section-alt" id="why-aqua">
+      <div class="container">
+        <header class="lp-section-head reveal">
+          <span class="lp-eyebrow">WHY AQUA PC PARTS</span>
+          <h2 class="lp-h2">Built on testing, not promises</h2>
+        </header>
+
+        <div class="lp-feature-grid">
+          <article class="lp-feature spotlight reveal" style="--d: 0ms">
+            <span class="material-symbols-outlined">biotech</span>
+            <h3>24-hour bench burn-in</h3>
+            <p>Every used component is stress-tested before it reaches the shelf.</p>
+          </article>
+          <article class="lp-feature spotlight reveal" style="--d: 80ms">
+            <span class="material-symbols-outlined">verified_user</span>
+            <h3>06-month testing warranty</h3>
+            <p>Clear, written coverage on tested hardware — no fine print surprises.</p>
+          </article>
+          <article class="lp-feature spotlight reveal" style="--d: 160ms">
+            <span class="material-symbols-outlined">payments</span>
+            <h3>Transparent LKR pricing</h3>
+            <p>Retail prices shown upfront on every item. No hidden add-ons.</p>
+          </article>
+          <article class="lp-feature spotlight reveal" style="--d: 240ms">
+            <span class="lp-feature-icon material-symbols-outlined">engineering</span>
+            <h3>Workshop assembly</h3>
+            <p>Optional fitting, stress test and custom-build assembly by our technicians.</p>
+          </article>
+          <article class="lp-feature spotlight reveal" style="--d: 320ms">
+            <span class="material-symbols-outlined">local_shipping</span>
+            <h3>Island-wide delivery</h3>
+            <p>ESD-safe packaging and trusted courier partners across Sri Lanka.</p>
+          </article>
+          <article class="lp-feature spotlight reveal" style="--d: 400ms">
+            <span class="material-symbols-outlined">support_agent</span>
+            <h3>Real human support</h3>
+            <p>Chat with a technician on WhatsApp for compatibility and build advice.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ───────────── FAQ ───────────── -->
+    <section class="lp-section" id="faq">
+      <div class="container lp-faq-wrap">
+        <header class="lp-section-head reveal" style="text-align:left; margin-bottom:0">
+          <span class="lp-eyebrow">GOOD TO KNOW</span>
+          <h2 class="lp-h2">Frequently asked questions</h2>
+          <p class="lp-sub">Can't find your answer? Message us on WhatsApp and a technician will reply.</p>
+          <a href="https://wa.me/94788194535" target="_blank" rel="noopener noreferrer" class="lp-btn lp-btn-ghost" style="margin-top:1.1rem">
+            <span class="material-symbols-outlined">chat</span><span>Ask on WhatsApp</span>
+          </a>
+        </header>
+
+        <div class="lp-faq-list">
+          <details class="lp-faq reveal" style="--d: 0ms" open>
+            <summary><span>What does the 06-month testing warranty cover?</span><i class="material-symbols-outlined">add</i></summary>
+            <div class="lp-faq-body"><p>Used components that pass our 24-hour bench test are covered for six months against functional failure under normal use. Brand-new items carry store or agent warranty depending on the product.</p></div>
+          </details>
+          <details class="lp-faq reveal" style="--d: 70ms">
+            <summary><span>Are the prices final?</span><i class="material-symbols-outlined">add</i></summary>
+            <div class="lp-faq-body"><p>Listed prices are our current retail prices in LKR. Stock and market movement can change availability, so we always confirm stock and your final total on WhatsApp before you pay.</p></div>
+          </details>
+          <details class="lp-faq reveal" style="--d: 140ms">
+            <summary><span>Do you deliver outside Embilipitiya?</span><i class="material-symbols-outlined">add</i></summary>
+            <div class="lp-faq-body"><p>Yes. We ship island-wide using ESD-safe packaging and trusted couriers. You can also collect in person from our Embilipitiya workshop.</p></div>
+          </details>
+          <details class="lp-faq reveal" style="--d: 210ms">
+            <summary><span>Can I mix used and brand-new items in one order?</span><i class="material-symbols-outlined">add</i></summary>
+            <div class="lp-faq-body"><p>Absolutely. Your quote list is shared across both divisions, so you can combine them and send a single WhatsApp order.</p></div>
+          </details>
+          <details class="lp-faq reveal" style="--d: 280ms">
+            <summary><span>Can you assemble a PC for me?</span><i class="material-symbols-outlined">add</i></summary>
+            <div class="lp-faq-body"><p>Yes — choose "Workshop Assembly" in your quote or message us. Our technicians fit, cable-manage and stress-test the full build.</p></div>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- ───────────── CTA BAND ───────────── -->
+    <section class="lp-cta-band">
+      <div class="container">
+        <div class="lp-cta-card spotlight reveal">
+          <div class="lp-cta-glow"></div>
+          <div>
+            <span class="lp-eyebrow">READY WHEN YOU ARE</span>
+            <h2 class="lp-h2" style="margin-bottom:.4rem">Let's find your next upgrade.</h2>
+            <p class="lp-sub" style="margin:0">Start browsing or message our team — we usually reply within minutes during workshop hours.</p>
+          </div>
+          <div class="lp-cta-row">
+            <a href="./used-parts.html" class="lp-btn lp-btn-primary magnetic"><span>Browse Catalog</span><span class="material-symbols-outlined">arrow_forward</span></a>
+            <a href="https://wa.me/94788194535" target="_blank" rel="noopener noreferrer" class="lp-btn lp-btn-wa magnetic">
+              <svg viewBox="0 0 24 24" fill="currentColor" class="wa-svg" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" /></svg>
+              <span>WhatsApp Us</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
   </main>
-
-  <!-- Slide-Over Multi-Item Quote Drawer -->
-  <div id="quote-drawer-backdrop" class="drawer-backdrop hidden" aria-hidden="true"></div>
-  <aside
-    id="quote-drawer"
-    class="quote-drawer"
-    role="dialog"
-    aria-modal="true"
-    aria-labelledby="quote-drawer-title"
-  >
-    <div class="drawer-header">
-      <div>
-        <span class="drawer-kicker">MULTI-ITEM WHATSAPP ORDER</span>
-        <h2 id="quote-drawer-title" class="drawer-title">Your Quote List</h2>
-      </div>
-      <button id="quote-drawer-close-btn" type="button" class="btn-icon" aria-label="Close Quote List">
-        <span class="material-symbols-outlined">close</span>
-      </button>
-    </div>
-
-    <div id="quote-drawer-items" class="drawer-items"></div>
-
-    <div class="drawer-footer">
-      <div class="drawer-option-group">
-        <span class="drawer-option-label">Fulfillment Preference</span>
-        <div class="pill-row" id="quote-fulfillment-pills">
-          <button type="button" class="opt-pill active" data-quote-fulfillment="pickup">Store Pickup</button>
-          <button type="button" class="opt-pill" data-quote-fulfillment="delivery">Island-wide Delivery</button>
-          <button type="button" class="opt-pill" data-quote-fulfillment="workshop-install">Workshop Assembly</button>
-        </div>
-      </div>
-
-      <div class="drawer-summary-row">
-        <span>Estimated Subtotal</span>
-        <strong id="quote-total-val" class="tabular-nums">Rs. 0</strong>
-      </div>
-
-      <div class="drawer-actions">
-        <button id="quote-clear-btn" type="button" class="btn-secondary">Clear List</button>
-        <a
-          id="quote-send-wa-btn"
-          href="https://wa.me/94788194535"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="btn-whatsapp-full"
-        >
-          <span class="material-symbols-outlined">chat</span>
-          <span>Send Quote on WhatsApp</span>
-        </a>
-      </div>
-    </div>
-  </aside>
 
   <!-- Footer -->
   <footer class="site-footer">
@@ -447,7 +451,7 @@
           <span class="brand-badge">BY AQUA PC SOLUTIONS</span>
         </div>
         <p class="footer-desc">
-          Certified Grade-A used hardware and factory-sealed brand-new PC peripherals &amp; components in Embilipitiya, Sri Lanka. Every tested part is backed by our 06-month testing warranty.
+          Certified Grade-A used hardware and factory-sealed brand-new PC peripherals &amp; components in Embilipitiya, Sri Lanka.
         </p>
         <div class="footer-hours">
           <div><span>Mon – Fri:</span> <strong>8:00 AM – 7:00 PM</strong></div>
@@ -458,23 +462,23 @@
       </div>
 
       <div class="footer-col">
-        <h3>Store Divisions</h3>
+        <h3>Store</h3>
         <ul>
-          <li><a href="./index.html">Storefront Hub (All Catalog)</a></li>
-          <li><a href="./used-parts.html">Used Parts Catalog (358 Items)</a></li>
-          <li><a href="./brand-new-parts.html">Brand New Parts Store</a></li>
-          <li><a href="./used-parts.html?category=peripherals">Used &amp; Peripheral Catalog</a></li>
-          <li><a href="./brand-new-parts.html?category=bn-components">Boxed PC Components</a></li>
+          <li><a href="./index.html">Storefront</a></li>
+          <li><a href="./used-parts.html">Used Parts Catalog</a></li>
+          <li><a href="./brand-new-parts.html">Brand New Parts</a></li>
+          <li><a href="#how-it-works">How ordering works</a></li>
+          <li><a href="#faq">FAQ</a></li>
         </ul>
       </div>
 
       <div class="footer-col">
-        <h3>Departments</h3>
+        <h3>Popular Departments</h3>
         <ul id="footer-dept-links"></ul>
       </div>
 
       <div class="footer-col">
-        <h3>Aqua PC Solutions Main Site</h3>
+        <h3>Aqua PC Solutions</h3>
         <ul id="footer-mainsite-links"></ul>
       </div>
     </div>
@@ -487,6 +491,6 @@
   </footer>
 
   <script src="catalog.js"></script>
-  <script src="app.js"></script>
+  <script src="home.js"></script>
 </body>
 </html>

@@ -1120,4 +1120,5 @@
   renderSidebar();
   renderCatalog();
   updateQuoteDrawerUI();
+  if (urlParams.get("quote") === "open") openQuoteDrawer();
 })();
