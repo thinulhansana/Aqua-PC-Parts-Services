@@ -3,16 +3,16 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Aqua PC Parts | Premium Used &amp; Brand New PC Components — Embilipitiya, Sri Lanka</title>
+  <title>Aqua PC Parts — Hand-Tested Used &amp; Factory-Sealed PC Hardware | Embilipitiya, Sri Lanka</title>
   <meta
     name="description"
-    content="Aqua PC Parts — Grade-A bench-tested used hardware and factory-sealed brand-new PC components in Embilipitiya, Sri Lanka. Transparent LKR pricing, 06-month testing warranty, island-wide delivery and instant WhatsApp ordering."
+    content="Aqua PC Parts in Embilipitiya, Sri Lanka — 358+ Grade-A 24h bench-tested used PC components with a 06-month testing warranty, plus factory-sealed brand-new peripherals and hardware at honest LKR prices."
   />
   <script>document.documentElement.classList.add("js");</script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
-    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Syne:wght@700;800&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Syne:wght@700;800&display=swap"
     rel="stylesheet"
   />
   <link
@@ -24,30 +24,31 @@
 <body data-page="landing">
   <div class="scroll-progress" id="scroll-progress" aria-hidden="true"></div>
 
-  <!-- Ambient Background -->
+  <!-- Subtle tactile studio grain + warm ambient lighting -->
   <div class="ambient-bg" aria-hidden="true">
     <div class="ambient-orb orb-cyan"></div>
     <div class="ambient-orb orb-teal"></div>
-    <div class="ambient-grid"></div>
+    <div class="ambient-orb orb-amber"></div>
+    <div class="ambient-noise"></div>
   </div>
 
-  <!-- Top Utility Trust Bar -->
+  <!-- Top Utility Bar -->
   <div class="top-utility-bar">
     <div class="utility-inner">
       <div class="utility-group">
         <span class="utility-item">
-          <span class="material-symbols-outlined">location_on</span>
-          <span>Embilipitiya Hardware Workshop, Sri Lanka</span>
+          <span class="live-beacon" aria-hidden="true"></span>
+          <span>Embilipitiya Hardware Workshop · Open Mon–Sat</span>
         </span>
         <span class="utility-item emerald">
           <span class="material-symbols-outlined">verified_user</span>
-          <span>06-Month Testing Warranty · 24h Stress Tested</span>
+          <span>06-Month Written Testing Warranty · 24h Bench Burn-In</span>
         </span>
       </div>
       <div class="utility-group">
         <span class="utility-item">
           <span class="material-symbols-outlined">local_shipping</span>
-          <span>Island-Wide Safe Courier</span>
+          <span>ESD-Safe Island-Wide Courier</span>
         </span>
         <a href="tel:+94788194535" class="utility-item utility-link">
           <span class="material-symbols-outlined">call</span>
@@ -57,19 +58,24 @@
     </div>
   </div>
 
-  <!-- Header -->
+  <!-- Sticky Architectural Header -->
   <header class="site-header" id="site-header">
     <div class="header-inner">
       <a href="./index.html" class="brand-cluster">
         <div class="brand-logo" aria-hidden="true">
-          <span class="material-symbols-outlined">memory</span>
+          <svg viewBox="0 0 36 36" fill="none" class="brand-mark-svg">
+            <rect x="4" y="4" width="28" height="28" rx="7" stroke="currentColor" stroke-width="2" />
+            <rect x="11" y="11" width="14" height="14" rx="3" fill="currentColor" fill-opacity="0.18" stroke="currentColor" stroke-width="1.8" />
+            <path d="M18 1v4M18 31v4M1 18h4M31 18h4M11 1v4M25 1v4M11 31v4M25 31v4M1 11h4M1 25h4M31 11h4M31 25h4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+            <circle cx="18" cy="18" r="2.5" fill="currentColor" />
+          </svg>
         </div>
         <div class="brand-text">
           <div class="brand-title-row">
             <span class="brand-name">Aqua PC Parts</span>
-            <span class="brand-badge">HARDWARE STOREFRONT</span>
+            <span class="brand-badge">EMBILIPITIYA LAB</span>
           </div>
-          <span class="brand-sub">USED &amp; BRAND NEW PC COMPONENTS</span>
+          <span class="brand-sub">HAND-TESTED USED &amp; SEALED NEW HARDWARE</span>
         </div>
       </a>
 
@@ -84,8 +90,8 @@
           <span class="nav-pill-count" data-bind="used-count">358</span>
         </a>
         <a href="./brand-new-parts.html" class="page-nav-link new-tab">
-          <span class="material-symbols-outlined">new_releases</span>
-          <span>Brand New Parts</span>
+          <span class="material-symbols-outlined">inventory_2</span>
+          <span>Brand New</span>
           <span class="nav-pill-count" data-bind="new-count">34</span>
         </a>
       </nav>
@@ -95,9 +101,10 @@
         <input
           id="global-search-input"
           type="search"
-          placeholder="Search RTX 3060, Ryzen 5, SSD, keyboard...  ( / )"
+          placeholder="Find RTX 3060, Ryzen 5, 24&quot; IPS, SSD, mouse... ( / )"
           aria-label="Search the catalog"
         />
+        <div class="search-live-dropdown hidden" id="header-search-dropdown" role="listbox" aria-label="Matching parts"></div>
       </form>
 
       <div class="header-actions">
@@ -106,335 +113,806 @@
           <span>Quote (<span id="quote-count-badge" class="tabular-nums">0</span>)</span>
         </a>
 
-        <button id="theme-toggle-btn" type="button" class="btn-icon" title="Toggle Dark / Light Theme" aria-label="Toggle color theme">
+        <button id="theme-toggle-btn" type="button" class="btn-icon" title="Switch Studio Dark / Warm Paper Light Mode" aria-label="Toggle color theme">
           <span id="theme-toggle-icon" class="material-symbols-outlined">light_mode</span>
         </button>
 
         <a id="main-site-link" href="https://aquapcsolutions.yyth.workers.dev/" class="btn-main-site">
-          <span class="material-symbols-outlined">arrow_back</span>
-          <span class="hide-mobile">Main Site</span>
+          <span class="material-symbols-outlined">build_circle</span>
+          <span class="hide-mobile">Repairs &amp; Main Site</span>
         </a>
 
         <a href="https://wa.me/94788194535" target="_blank" rel="noopener noreferrer" class="btn-whatsapp-header">
           <svg viewBox="0 0 24 24" fill="currentColor" class="wa-svg" aria-hidden="true">
             <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
           </svg>
-          <span class="hide-mobile">WhatsApp</span>
+          <span class="hide-mobile">WhatsApp Bench</span>
         </a>
       </div>
     </div>
   </header>
 
   <main>
-    <!-- ───────────── HERO ───────────── -->
-    <section class="lp-hero" id="top">
-      <canvas id="hero-canvas" class="lp-canvas" aria-hidden="true"></canvas>
-      <div class="lp-hero-vignette" aria-hidden="true"></div>
-
-      <div class="container lp-hero-grid">
-        <div class="lp-hero-copy">
-          <div class="hero-pill cyan-pill reveal" style="--d: 0ms">
-            <span class="pulse-dot"></span>
-            <span>EMBILIPITIYA'S TRUSTED HARDWARE HUB</span>
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         HERO: EDITORIAL WORKBENCH + INTERACTIVE HARDWARE RIG INSPECTOR
+         ═══════════════════════════════════════════════════════════════════════ -->
+    <section class="studio-hero" id="top">
+      <div class="container studio-hero-grid">
+        <!-- Left Column: Human Editorial Copy & Live Part Finder -->
+        <div class="studio-hero-copy">
+          <div class="human-trust-chip reveal" style="--d: 0ms">
+            <div class="trust-avatars">
+              <img src="./assets/founder.jpg" alt="Thinul Hansana — Founder" width="28" height="28" loading="eager" />
+              <img src="./assets/lab-gpu-install.jpg" alt="Embilipitiya Test Bench" width="28" height="28" loading="eager" />
+            </div>
+            <span class="trust-chip-text">
+              <strong>Real technicians in Embilipitiya</strong> · Every part bench-verified before dispatch
+            </span>
           </div>
 
-          <h1 class="lp-title reveal" style="--d: 90ms">
-            <span class="lp-title-line">Premium PC hardware,</span>
-            <span class="lp-title-line">
-              curated for
+          <h1 class="studio-title reveal" style="--d: 70ms">
+            <span>Real PC hardware,</span>
+            <span class="serif-accent-line">
+              <em class="serif-italic">hand-tested</em> on our bench
+              <svg class="hand-underline" viewBox="0 0 320 18" fill="none" aria-hidden="true">
+                <path d="M4 13.5C78 4.5 215 3.2 316 11.8" stroke="url(#warmStroke)" stroke-width="3.2" stroke-linecap="round" />
+                <defs>
+                  <linearGradient id="warmStroke" x1="0" y1="0" x2="320" y2="0" gradientUnits="userSpaceOnUse">
+                    <stop stop-color="#f59e0b" />
+                    <stop offset="0.55" stop-color="#38bdf8" />
+                    <stop offset="1" stop-color="#10b981" />
+                  </linearGradient>
+                </defs>
+              </svg>
+            </span>
+            <span class="studio-title-sub">
+              for your next
               <span class="lp-rotator" aria-live="polite">
-                <span class="lp-rotator-word gradient-text" id="rotator-word">Graphics Cards</span>
+                <span class="lp-rotator-word" id="rotator-word">1080p Gaming Rig.</span>
               </span>
             </span>
           </h1>
 
-          <p class="lp-lead reveal" style="--d: 180ms">
-            Bench-tested Grade-A used components and factory-sealed brand-new gear — priced transparently in LKR, backed by a 06-month testing warranty, and ordered in seconds on WhatsApp.
+          <p class="studio-lead reveal" style="--d: 140ms">
+            No mystery boxes or untested imports. Browse <strong data-bind="used-count">358</strong> Grade-A used components stress-tested for 24 hours with a <strong>06-month written warranty</strong>, alongside <strong data-bind="new-count">34</strong> factory-sealed brand-new peripherals and boxed gear at transparent LKR prices.
           </p>
 
-          <div class="lp-cta-row reveal" style="--d: 270ms">
+          <!-- Hero Interactive Instant Search & Quick Jump -->
+          <div class="hero-finder-box reveal" style="--d: 210ms">
+            <form class="hero-finder-form" id="hero-finder-form" role="search" autocomplete="off">
+              <span class="material-symbols-outlined finder-icon" aria-hidden="true">manage_search</span>
+              <input
+                id="hero-finder-input"
+                type="search"
+                placeholder="Type a part name: RTX 3060, GTX 1660, i5, B450, 24&quot; monitor, SSD, mouse..."
+                aria-label="Quick search across all 392 parts"
+              />
+              <button type="submit" class="finder-submit-btn">
+                <span>Find Part</span>
+                <span class="material-symbols-outlined">arrow_forward</span>
+              </button>
+            </form>
+            <div class="hero-finder-results hidden" id="hero-finder-results" role="region" aria-label="Instant search matches"></div>
+
+            <div class="hero-quick-tags" aria-label="Popular hardware searches">
+              <span class="quick-tags-label">Popular right now:</span>
+              <a href="./used-parts.html?category=vga-cards" class="quick-tag">
+                <span class="tag-dot cyan"></span>VGA Cards · from Rs. 4,450
+              </a>
+              <a href="./used-parts.html?category=monitors" class="quick-tag">
+                <span class="tag-dot cyan"></span>IPS Monitors · from Rs. 8,500
+              </a>
+              <a href="./used-parts.html?category=processors" class="quick-tag">
+                <span class="tag-dot cyan"></span>Intel &amp; Ryzen CPUs
+              </a>
+              <a href="./used-parts.html?category=storage" class="quick-tag">
+                <span class="tag-dot amber"></span>NVMe &amp; SATA SSDs
+              </a>
+              <a href="./brand-new-parts.html" class="quick-tag">
+                <span class="tag-dot emerald"></span>Sealed Mice &amp; Keyboards · from Rs. 1,020
+              </a>
+            </div>
+          </div>
+
+          <!-- Primary Action Row -->
+          <div class="studio-cta-row reveal" style="--d: 280ms">
             <a href="./used-parts.html" class="lp-btn lp-btn-primary magnetic">
-              <span>Shop Used Parts</span>
+              <span>Browse Used Parts (<span data-bind="used-count">358</span>)</span>
               <span class="material-symbols-outlined">arrow_forward</span>
             </a>
             <a href="./brand-new-parts.html" class="lp-btn lp-btn-emerald magnetic">
-              <span>Shop Brand New</span>
-              <span class="material-symbols-outlined">new_releases</span>
+              <span>Shop Brand New (<span data-bind="new-count">34</span>)</span>
+              <span class="material-symbols-outlined">inventory_2</span>
             </a>
-            <a href="https://wa.me/94788194535" target="_blank" rel="noopener noreferrer" class="lp-btn lp-btn-ghost magnetic">
+            <a href="https://wa.me/94788194535?text=Hi%20Aqua%20PC%20Parts!%20I%20need%20help%20picking%20parts%20for%20my%20PC." target="_blank" rel="noopener noreferrer" class="lp-btn lp-btn-ghost magnetic">
               <span class="material-symbols-outlined">chat</span>
-              <span>Talk to a Technician</span>
+              <span>Ask a Bench Technician</span>
             </a>
           </div>
 
-          <div class="lp-stats reveal" style="--d: 360ms">
-            <div class="lp-stat">
-              <strong data-count-bind="used-count">358</strong><span>Used parts catalogued</span>
+          <!-- Tactile Ledger Metrics -->
+          <div class="studio-ledger reveal" style="--d: 340ms">
+            <div class="ledger-item">
+              <div class="ledger-num"><strong data-count-bind="used-count">358</strong><span>parts</span></div>
+              <span class="ledger-label">Grade-A Used Inventory</span>
             </div>
-            <div class="lp-stat">
-              <strong data-count-bind="new-count">34</strong><span>Brand-new SKUs</span>
+            <div class="ledger-divider" aria-hidden="true"></div>
+            <div class="ledger-item">
+              <div class="ledger-num"><strong data-count-bind="new-count">34</strong><span>SKUs</span></div>
+              <span class="ledger-label">Factory-Sealed Gear</span>
             </div>
-            <div class="lp-stat">
-              <strong data-count-bind="dept-count">17</strong><span>Departments</span>
+            <div class="ledger-divider" aria-hidden="true"></div>
+            <div class="ledger-item">
+              <div class="ledger-num"><strong>24h</strong><span>load</span></div>
+              <span class="ledger-label">FurMark &amp; OCCT Burn-In</span>
             </div>
-            <div class="lp-stat">
-              <strong data-count="24" data-suffix="h">24h</strong><span>Stress-test burn-in</span>
+            <div class="ledger-divider" aria-hidden="true"></div>
+            <div class="ledger-item">
+              <div class="ledger-num"><strong>06</strong><span>mos</span></div>
+              <span class="ledger-label">Written Testing Warranty</span>
             </div>
           </div>
         </div>
 
-        <!-- Animated chip visual -->
-        <div class="lp-hero-visual reveal" style="--d: 200ms" aria-hidden="true">
-          <div class="chip-stage" id="chip-stage">
-            <span class="chip-ring ring-1"></span>
-            <span class="chip-ring ring-2"></span>
-            <span class="chip-ring ring-3"></span>
-            <div class="chip-glow"></div>
-
-            <div class="chip-core">
-              <div class="chip-pins pins-top"></div>
-              <div class="chip-pins pins-bottom"></div>
-              <div class="chip-pins pins-left"></div>
-              <div class="chip-pins pins-right"></div>
-              <div class="chip-die">
-                <span class="material-symbols-outlined">memory</span>
-                <strong>AQUA</strong>
-                <em>PC&nbsp;PARTS</em>
+        <!-- Right Column: Interactive Multi-Layer Hardware Rig & Schematic Inspector -->
+        <div class="studio-hero-stage reveal" style="--d: 160ms">
+          <div class="rig-inspector" id="rig-inspector">
+            <!-- Top Studio Bezel Bar -->
+            <div class="rig-bezel-top">
+              <div class="bezel-status">
+                <span class="live-beacon"></span>
+                <span class="bezel-code" id="rig-bezel-code">BENCH-INSPECTOR // NODE 01: GRAPHICS</span>
+              </div>
+              <div class="bezel-temp" id="rig-bezel-telemetry">
+                <span class="material-symbols-outlined">device_thermostat</span>
+                <span>63°C FurMark Pass</span>
               </div>
             </div>
 
-            <div class="float-badge fb-1"><span class="material-symbols-outlined">sports_esports</span>RTX · GTX · RX</div>
-            <div class="float-badge fb-2"><span class="material-symbols-outlined">developer_board</span>Ryzen · Core</div>
-            <div class="float-badge fb-3"><span class="material-symbols-outlined">storage</span>NVMe · SSD</div>
-            <div class="float-badge fb-4"><span class="material-symbols-outlined">verified_user</span>06-Mo Warranty</div>
+            <!-- Main Visual Viewport: Real Photography + Interactive Hotspots + Animated SVG Schematic -->
+            <div class="rig-viewport" id="rig-viewport">
+              <img
+                id="rig-main-photo"
+                src="./assets/hero-rig.jpg"
+                alt="Aqua PC Parts custom hardware showcase rig"
+                class="rig-photo"
+                loading="eager"
+              />
+              <div class="rig-photo-scrim" aria-hidden="true"></div>
+
+              <!-- Interactive Hardware Pin Hotspots on the Photo -->
+              <button
+                type="button"
+                class="rig-pin active"
+                data-rig-node="0"
+                style="top: 56%; left: 44%;"
+                aria-label="Inspect Graphics Cards"
+              >
+                <span class="pin-pulse"></span>
+                <span class="pin-num">01</span>
+                <span class="pin-tag">VGA / GPUs</span>
+              </button>
+
+              <button
+                type="button"
+                class="rig-pin"
+                data-rig-node="1"
+                style="top: 34%; left: 53%;"
+                aria-label="Inspect Processors and Motherboards"
+              >
+                <span class="pin-pulse"></span>
+                <span class="pin-num">02</span>
+                <span class="pin-tag">CPU &amp; Boards</span>
+              </button>
+
+              <button
+                type="button"
+                class="rig-pin"
+                data-rig-node="2"
+                style="top: 42%; left: 76%;"
+                aria-label="Inspect Monitors and NVMe Storage"
+              >
+                <span class="pin-pulse"></span>
+                <span class="pin-num">03</span>
+                <span class="pin-tag">Monitors &amp; SSD</span>
+              </button>
+
+              <button
+                type="button"
+                class="rig-pin"
+                data-rig-node="3"
+                style="top: 76%; left: 66%;"
+                aria-label="Inspect Brand-New Peripherals"
+              >
+                <span class="pin-pulse"></span>
+                <span class="pin-num">04</span>
+                <span class="pin-tag">Brand-New Gear</span>
+              </button>
+
+              <!-- Floating Live Hardware Schematic & Telemetry Card -->
+              <div class="rig-schematic-card" id="rig-schematic-card">
+                <div class="schematic-visual" id="rig-schematic-svg" aria-hidden="true">
+                  <!-- Populated dynamically by home.js with animated SVG hardware schematics -->
+                </div>
+                <div class="schematic-info">
+                  <div class="schematic-kicker-row">
+                    <span class="schematic-badge" id="rig-node-badge">GRADE-A BENCH TESTED</span>
+                    <span class="schematic-count" id="rig-node-count">34 models</span>
+                  </div>
+                  <h2 class="schematic-title" id="rig-node-title">NVIDIA RTX &amp; AMD Radeon GPUs</h2>
+                  <p class="schematic-desc" id="rig-node-desc">
+                    Stress-tested for 24h in FurMark &amp; 3DMark. Thermal paste refreshed, fans silent, HDMI/DP ports verified.
+                  </p>
+                  <div class="schematic-footer">
+                    <div class="schematic-price">
+                      <span>Starting from</span>
+                      <strong id="rig-node-price">Rs. 4,450</strong>
+                    </div>
+                    <a href="./used-parts.html?category=vga-cards" class="schematic-link" id="rig-node-link">
+                      <span>Open Department</span>
+                      <span class="material-symbols-outlined">arrow_outward</span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Bottom Interactive Node Selector Dock -->
+            <div class="rig-dock" role="tablist" aria-label="Hardware showcase nodes">
+              <button type="button" class="rig-dock-btn active" role="tab" aria-selected="true" data-rig-node="0">
+                <span class="dock-index">01</span>
+                <span class="dock-name">Graphics Cards</span>
+                <span class="dock-sub">GTX · RTX · Radeon</span>
+                <span class="dock-bar"><span class="dock-bar-fill"></span></span>
+              </button>
+              <button type="button" class="rig-dock-btn" role="tab" aria-selected="false" data-rig-node="1">
+                <span class="dock-index">02</span>
+                <span class="dock-name">CPUs &amp; Boards</span>
+                <span class="dock-sub">Intel · Ryzen · B450/H510</span>
+                <span class="dock-bar"><span class="dock-bar-fill"></span></span>
+              </button>
+              <button type="button" class="rig-dock-btn" role="tab" aria-selected="false" data-rig-node="2">
+                <span class="dock-index">03</span>
+                <span class="dock-name">Displays &amp; SSD</span>
+                <span class="dock-sub">19"–27" IPS · NVMe</span>
+                <span class="dock-bar"><span class="dock-bar-fill"></span></span>
+              </button>
+              <button type="button" class="rig-dock-btn" role="tab" aria-selected="false" data-rig-node="3">
+                <span class="dock-index">04</span>
+                <span class="dock-name">Brand-New Gear</span>
+                <span class="dock-sub">Mice · Keyboards · Audio</span>
+                <span class="dock-bar"><span class="dock-bar-fill"></span></span>
+              </button>
+            </div>
           </div>
         </div>
       </div>
-
-      <a href="#divisions" class="lp-scroll-cue" aria-label="Scroll to divisions">
-        <span class="material-symbols-outlined">keyboard_double_arrow_down</span>
-      </a>
     </section>
 
-    <!-- ───────────── MARQUEE ───────────── -->
-    <section class="lp-marquee" aria-label="Hardware categories">
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         LIVE HARDWARE TICKER RIBBON
+         ═══════════════════════════════════════════════════════════════════════ -->
+    <section class="lp-marquee" aria-label="Live store highlights">
       <div class="lp-marquee-track" id="marquee-track">
-        <span><i class="material-symbols-outlined">sports_esports</i>Graphics Cards</span>
-        <span><i class="material-symbols-outlined">memory</i>Processors</span>
-        <span><i class="material-symbols-outlined">developer_board</i>Motherboards</span>
-        <span><i class="material-symbols-outlined">dns</i>DDR3 &amp; DDR4 RAM</span>
-        <span><i class="material-symbols-outlined">storage</i>SSD · NVMe · HDD</span>
-        <span><i class="material-symbols-outlined">monitor</i>Monitors</span>
-        <span><i class="material-symbols-outlined">bolt</i>Power Supplies</span>
-        <span><i class="material-symbols-outlined">mode_fan</i>CPU Coolers</span>
-        <span><i class="material-symbols-outlined">keyboard</i>Keyboards &amp; Mice</span>
-        <span><i class="material-symbols-outlined">videocam</i>Webcams</span>
-        <span><i class="material-symbols-outlined">speaker</i>Sound Cards</span>
+        <span><i class="material-symbols-outlined">verified</i>24-Hour FurMark &amp; OCCT Bench Tested</span>
+        <span><i class="material-symbols-outlined">memory</i>Intel Core &amp; AMD Ryzen Processors · From Rs. 1,100</span>
+        <span><i class="material-symbols-outlined">sports_esports</i>GTX 1660 Super · RTX 2060 · RTX 3060 Ti · RX 6600</span>
+        <span><i class="material-symbols-outlined">monitor</i>Frameless 22" &amp; 24" FHD IPS Monitors · From Rs. 8,500</span>
+        <span><i class="material-symbols-outlined">keyboard</i>Brand-New Gaming Keyboards, Mice &amp; Combos · From Rs. 1,020</span>
+        <span><i class="material-symbols-outlined">storage</i>NVMe M.2 &amp; SATA SSDs · 100% Health Verified</span>
+        <span><i class="material-symbols-outlined">local_shipping</i>ESD-Safe Packing &amp; Island-Wide Courier Delivery</span>
       </div>
     </section>
 
-    <!-- ───────────── DIVISIONS ───────────── -->
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         TWO STOREFRONT DIVISIONS: EDITORIAL PHOTOGRAPHIC BENTO
+         ═══════════════════════════════════════════════════════════════════════ -->
     <section class="lp-section" id="divisions">
       <div class="container">
-        <header class="lp-section-head reveal">
-          <span class="lp-eyebrow">TWO DIVISIONS · ONE STANDARD</span>
-          <h2 class="lp-h2">Choose how you want to build</h2>
-          <p class="lp-sub">Stretch your budget with certified used hardware, or go factory-fresh with sealed brand-new parts.</p>
-        </header>
+        <div class="editorial-section-head reveal">
+          <div>
+            <span class="section-tag">TWO DEDICATED CATALOGS · ONESHARED QUOTE LIST</span>
+            <h2 class="editorial-h2">
+              Stretch your budget with <em class="serif-italic">bench-tested used</em>, or unbox <em class="serif-italic">factory-sealed new.</em>
+            </h2>
+          </div>
+          <p class="editorial-sub">
+            We separated our store into two clean catalogs so you always know the exact condition, warranty coverage, and LKR retail price of every single item.
+          </p>
+        </div>
 
-        <div class="lp-division-grid">
-          <a href="./used-parts.html" class="lp-division lp-division-used spotlight tilt reveal" style="--d: 0ms">
-            <div class="lp-division-glow"></div>
-            <div class="lp-division-top">
-              <span class="division-kicker used">DIVISION 01 · BENCH TESTED</span>
-              <span class="lp-division-count"><strong data-count-bind="used-count">358</strong> items</span>
+        <div class="division-bento-grid">
+          <!-- USED PARTS SHOWCASE CARD -->
+          <article class="division-showcase used-showcase spotlight reveal" style="--d: 0ms">
+            <div class="division-media">
+              <img src="./assets/lab-gpu-install.jpg" alt="Technician testing a used graphics card on our Embilipitiya workbench" loading="lazy" />
+              <div class="division-media-overlay"></div>
+              <div class="division-media-badges">
+                <span class="media-pill cyan">
+                  <span class="live-beacon"></span>
+                  GRADE-A BENCH TESTED
+                </span>
+                <span class="media-pill dark">
+                  <strong data-bind="used-count">358</strong>&nbsp;Catalogued Items
+                </span>
+              </div>
+              <!-- Animated SVG Telemetry Strip over Photo -->
+              <div class="media-telemetry-bar" aria-hidden="true">
+                <svg viewBox="0 0 260 32" fill="none" class="telemetry-wave-svg">
+                  <path
+                    class="telemetry-path"
+                    d="M2 22 L28 22 L38 10 L48 26 L58 14 L70 20 L110 20 L122 8 L132 25 L144 12 L156 20 L205 20 L216 9 L226 24 L238 15 L258 15"
+                    stroke="#38bdf8"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+                <span>24h Load Pass · 06-Mo Warranty</span>
+              </div>
             </div>
-            <span class="material-symbols-outlined lp-division-icon">verified</span>
-            <h3>Used Parts</h3>
-            <p>Grade-A monitors, VGA cards, Intel &amp; AMD processors, motherboards, SSDs, RAM, power supplies and more — every part stress-tested for 24 hours.</p>
-            <ul class="lp-checks">
-              <li><span class="material-symbols-outlined">check_circle</span>06-month testing warranty</li>
-              <li><span class="material-symbols-outlined">check_circle</span>10 hardware departments</li>
-              <li><span class="material-symbols-outlined">check_circle</span>Honest LKR retail pricing</li>
-            </ul>
-            <span class="lp-division-cta">Browse Used Parts <span class="material-symbols-outlined">arrow_forward</span></span>
-          </a>
 
-          <a href="./brand-new-parts.html" class="lp-division lp-division-new spotlight tilt reveal" style="--d: 120ms">
-            <div class="lp-division-glow"></div>
-            <div class="lp-division-top">
-              <span class="division-kicker new">DIVISION 02 · FACTORY SEALED</span>
-              <span class="lp-division-count"><strong data-count-bind="new-count">34</strong> items</span>
+            <div class="division-body">
+              <div class="division-title-wrap">
+                <h3>Used PC Parts Catalog</h3>
+                <span class="division-sub-pill">10 Hardware Departments</span>
+              </div>
+              <p>
+                Monitors, graphics cards, Intel &amp; AMD processors, motherboards, SSDs, hard drives, DDR3/DDR4 RAM, 80+ power supplies, cooling fans, and workshop cables — each inspected and stress-tested on our bench.
+              </p>
+
+              <div class="division-price-chips">
+                <a href="./used-parts.html?category=monitors" class="price-chip">
+                  <span>Monitors</span><strong>from Rs. 8,500</strong>
+                </a>
+                <a href="./used-parts.html?category=vga-cards" class="price-chip">
+                  <span>VGA Cards</span><strong>from Rs. 4,450</strong>
+                </a>
+                <a href="./used-parts.html?category=processors" class="price-chip">
+                  <span>Processors</span><strong>from Rs. 1,100</strong>
+                </a>
+                <a href="./used-parts.html?category=motherboards" class="price-chip">
+                  <span>Motherboards</span><strong>from Rs. 5,300</strong>
+                </a>
+                <a href="./used-parts.html?category=storage" class="price-chip">
+                  <span>SSD &amp; HDD</span><strong>from Rs. 2,500</strong>
+                </a>
+                <a href="./used-parts.html?category=memory" class="price-chip">
+                  <span>RAM Memory</span><strong>from Rs. 2,100</strong>
+                </a>
+              </div>
+
+              <div class="division-actions-row">
+                <a href="./used-parts.html" class="lp-btn lp-btn-primary">
+                  <span>Open Used Parts (<span data-bind="used-count">358</span>)</span>
+                  <span class="material-symbols-outlined">arrow_forward</span>
+                </a>
+                <span class="division-guarantee">
+                  <span class="material-symbols-outlined">verified_user</span>
+                  Request live test video on WhatsApp
+                </span>
+              </div>
             </div>
-            <span class="material-symbols-outlined lp-division-icon">new_releases</span>
-            <h3>Brand New Parts</h3>
-            <p>Mice, gaming keyboards, combos, HD webcams, USB microphones, sound cards and sealed boxed components with live-quoted pricing.</p>
-            <ul class="lp-checks">
-              <li><span class="material-symbols-outlined">check_circle</span>Factory-sealed stock</li>
-              <li><span class="material-symbols-outlined">check_circle</span>7 brand-new departments</li>
-              <li><span class="material-symbols-outlined">check_circle</span>Agent &amp; store warranty</li>
-            </ul>
-            <span class="lp-division-cta">Browse Brand New <span class="material-symbols-outlined">arrow_forward</span></span>
-          </a>
+          </article>
+
+          <!-- BRAND NEW PARTS SHOWCASE CARD -->
+          <article class="division-showcase new-showcase spotlight reveal" style="--d: 110ms">
+            <div class="division-media">
+              <img src="./assets/cooling-loop.jpg" alt="Factory-sealed brand new PC peripherals and components" loading="lazy" />
+              <div class="division-media-overlay"></div>
+              <div class="division-media-badges">
+                <span class="media-pill emerald">
+                  <span class="material-symbols-outlined" style="font-size:14px">new_releases</span>
+                  100% FACTORY SEALED
+                </span>
+                <span class="media-pill dark">
+                  <strong data-bind="new-count">34</strong>&nbsp;Brand-New SKUs
+                </span>
+              </div>
+              <!-- Custom SVG Peripheral Vector Overlay -->
+              <div class="media-telemetry-bar emerald-bar" aria-hidden="true">
+                <svg viewBox="0 0 260 32" fill="none" class="telemetry-wave-svg">
+                  <rect x="6" y="7" width="18" height="18" rx="5" stroke="#10b981" stroke-width="1.8" />
+                  <path d="M12 16l3 3 5-6" stroke="#10b981" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+                  <path d="M36 16h190" stroke="#10b981" stroke-width="1.5" stroke-dasharray="4 4" />
+                </svg>
+                <span>Sealed Retail Box · Agent &amp; Store Warranty</span>
+              </div>
+            </div>
+
+            <div class="division-body">
+              <div class="division-title-wrap">
+                <h3>Brand New Parts Store</h3>
+                <span class="division-sub-pill emerald">7 Sealed Departments</span>
+              </div>
+              <p>
+                Fresh-out-of-the-box wired &amp; wireless mice, RGB gaming keyboards, keyboard + mouse combos, 720p/1080p HD webcams, USB microphones, 5.1/7.1 sound cards, and live-quoted sealed PC hardware.
+              </p>
+
+              <div class="division-price-chips emerald-chips">
+                <a href="./brand-new-parts.html?category=bn-mice" class="price-chip">
+                  <span>Mice</span><strong>from Rs. 1,020</strong>
+                </a>
+                <a href="./brand-new-parts.html?category=bn-keyboards" class="price-chip">
+                  <span>Keyboards</span><strong>from Rs. 1,310</strong>
+                </a>
+                <a href="./brand-new-parts.html?category=bn-combos" class="price-chip">
+                  <span>K+M Combos</span><strong>from Rs. 2,700</strong>
+                </a>
+                <a href="./brand-new-parts.html?category=bn-webcams" class="price-chip">
+                  <span>HD Webcams</span><strong>from Rs. 1,940</strong>
+                </a>
+                <a href="./brand-new-parts.html?category=bn-microphones" class="price-chip">
+                  <span>USB Mics</span><strong>Rs. 1,500</strong>
+                </a>
+                <a href="./brand-new-parts.html?category=bn-sound-cards" class="price-chip">
+                  <span>Sound Cards</span><strong>from Rs. 980</strong>
+                </a>
+              </div>
+
+              <div class="division-actions-row">
+                <a href="./brand-new-parts.html" class="lp-btn lp-btn-emerald">
+                  <span>Open Brand New Store (<span data-bind="new-count">34</span>)</span>
+                  <span class="material-symbols-outlined">arrow_forward</span>
+                </a>
+                <span class="division-guarantee">
+                  <span class="material-symbols-outlined">inventory_2</span>
+                  Same-day courier or Embilipitiya pickup
+                </span>
+              </div>
+            </div>
+          </article>
         </div>
       </div>
     </section>
 
-    <!-- ───────────── DEPARTMENTS ───────────── -->
-    <section class="lp-section lp-section-alt" id="departments">
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         INTERACTIVE UPGRADE ADVISOR: HUMAN USE-CASE WORKBENCH
+         ═══════════════════════════════════════════════════════════════════════ -->
+    <section class="lp-section lp-section-alt" id="upgrade-advisor">
       <div class="container">
-        <header class="lp-section-head reveal">
-          <span class="lp-eyebrow">SHOP BY DEPARTMENT</span>
-          <h2 class="lp-h2">Jump straight to what you need</h2>
-          <p class="lp-sub">Pick a division, then open any department to see the full price list.</p>
-        </header>
+        <div class="editorial-section-head reveal">
+          <div>
+            <span class="section-tag">INTERACTIVE UPGRADE PATHFINDER</span>
+            <h2 class="editorial-h2">
+              What are you <em class="serif-italic">building or upgrading</em> today?
+            </h2>
+          </div>
+          <p class="editorial-sub">
+            Pick how you use your PC and explore the exact hardware departments, recommended specs, and starting LKR budgets curated by our workshop technicians.
+          </p>
+        </div>
 
-        <div class="lp-tabs reveal" role="tablist" aria-label="Department division">
-          <span class="lp-tab-indicator" id="dept-indicator"></span>
-          <button type="button" class="lp-tab active" role="tab" aria-selected="true" data-dept-tab="used">
-            <span class="material-symbols-outlined">verified</span>Used Departments
+        <!-- Persona Selector Buttons -->
+        <div class="advisor-persona-bar reveal" role="tablist" aria-label="Select your PC use case">
+          <button type="button" class="persona-btn active" role="tab" aria-selected="true" data-persona="gaming">
+            <span class="persona-icon">
+              <svg viewBox="0 0 28 28" fill="none"><rect x="3" y="8" width="22" height="12" rx="6" stroke="currentColor" stroke-width="2"/><path d="M9 12v4M7 14h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="18" cy="13" r="1.3" fill="currentColor"/><circle cx="20.5" cy="15" r="1.3" fill="currentColor"/></svg>
+            </span>
+            <span class="persona-text">
+              <strong>1080p / 1440p Gaming</strong>
+              <small>High-FPS GPUs, 16GB RAM &amp; RGB Gear</small>
+            </span>
           </button>
-          <button type="button" class="lp-tab" role="tab" aria-selected="false" data-dept-tab="new">
-            <span class="material-symbols-outlined">new_releases</span>Brand New Departments
+
+          <button type="button" class="persona-btn" role="tab" aria-selected="false" data-persona="office">
+            <span class="persona-icon">
+              <svg viewBox="0 0 28 28" fill="none"><rect x="3" y="5" width="22" height="15" rx="2.5" stroke="currentColor" stroke-width="2"/><path d="M9 23h10M14 20v3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            </span>
+            <span class="persona-text">
+              <strong>Home Office &amp; Study</strong>
+              <small>IPS Monitors, Fast SSDs &amp; Webcams</small>
+            </span>
           </button>
+
+          <button type="button" class="persona-btn" role="tab" aria-selected="false" data-persona="creator">
+            <span class="persona-icon">
+              <svg viewBox="0 0 28 28" fill="none"><circle cx="14" cy="14" r="9" stroke="currentColor" stroke-width="2"/><polygon points="12,10 19,14 12,18" fill="currentColor"/></svg>
+            </span>
+            <span class="persona-text">
+              <strong>Editing, 3D &amp; Streaming</strong>
+              <small>RTX CUDA, Ryzen/i7, NVMe &amp; Studio Mic</small>
+            </span>
+          </button>
+
+          <button type="button" class="persona-btn" role="tab" aria-selected="false" data-persona="budget">
+            <span class="persona-icon">
+              <svg viewBox="0 0 28 28" fill="none"><path d="M15 3L6 16h7l-1 9 9-13h-7l1-9z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+            </span>
+            <span class="persona-text">
+              <strong>Under Rs. 10,000 Revival</strong>
+              <small>SSD Boot Drive, RAM Boost &amp; Combos</small>
+            </span>
+          </button>
+        </div>
+
+        <!-- Dynamic Advisor Stage (Populated by home.js) -->
+        <div class="advisor-stage reveal" id="advisor-stage"></div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         BESPOKE ILLUSTRATED DEPARTMENT EXPLORER
+         ═══════════════════════════════════════════════════════════════════════ -->
+    <section class="lp-section" id="departments">
+      <div class="container">
+        <div class="editorial-section-head reveal">
+          <div>
+            <span class="section-tag">17 HARDWARE DEPARTMENTS · CUSTOM SCHEMATICS</span>
+            <h2 class="editorial-h2">
+              Jump straight to the <em class="serif-italic">department</em> you need.
+            </h2>
+          </div>
+          <div class="lp-tabs" role="tablist" aria-label="Department division">
+            <span class="lp-tab-indicator" id="dept-indicator"></span>
+            <button type="button" class="lp-tab active" role="tab" aria-selected="true" data-dept-tab="used">
+              <span class="material-symbols-outlined">verified</span>
+              <span>Used Hardware (10)</span>
+            </button>
+            <button type="button" class="lp-tab" role="tab" aria-selected="false" data-dept-tab="new">
+              <span class="material-symbols-outlined">inventory_2</span>
+              <span>Brand New (7)</span>
+            </button>
+          </div>
         </div>
 
         <div class="lp-dept-grid" id="dept-grid"></div>
       </div>
     </section>
 
-    <!-- ───────────── PROCESS ───────────── -->
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         INSIDE OUR EMBILIPITIYA WORKSHOP: INTERACTIVE 4-STAGE BENCH & FOUNDER
+         ═══════════════════════════════════════════════════════════════════════ -->
+    <section class="lp-section lp-section-alt" id="workshop-bench">
+      <div class="container">
+        <div class="editorial-section-head reveal">
+          <div>
+            <span class="section-tag">INSIDE THE EMBILIPITIYA BENCH</span>
+            <h2 class="editorial-h2">
+              Why builders trust our <em class="serif-italic">24-hour stress test</em> over random classifieds.
+            </h2>
+          </div>
+          <p class="editorial-sub">
+            Buying used PC parts on social media is a gamble. At Aqua PC Parts, every component goes through our 4-stage physical diagnostic bench before it ever gets a price tag.
+          </p>
+        </div>
+
+        <div class="bench-lab-grid">
+          <!-- Left: Interactive 4-Step Diagnostic Bench -->
+          <div class="bench-steps-col reveal">
+            <div class="bench-step-card active" data-bench-step="0" tabindex="0" role="button" aria-pressed="true">
+              <div class="bench-step-num">01</div>
+              <div class="bench-step-body">
+                <div class="bench-step-top">
+                  <h3>Microscope PCB &amp; Port Inspection</h3>
+                  <span class="bench-step-tag">Visual &amp; Electrical</span>
+                </div>
+                <p>We check every capacitor, VRM phase, PCIe gold finger, CPU socket pin, and display output port for oxidation or physical wear.</p>
+              </div>
+            </div>
+
+            <div class="bench-step-card" data-bench-step="1" tabindex="0" role="button" aria-pressed="false">
+              <div class="bench-step-num">02</div>
+              <div class="bench-step-body">
+                <div class="bench-step-top">
+                  <h3>Ultrasonic Dust Clean &amp; Thermal Repaste</h3>
+                  <span class="bench-step-tag">-12°C Cooler Temps</span>
+                </div>
+                <p>Used GPUs and coolers are cleaned of dust buildup and repasted with high-conductivity thermal compound so they run quiet and cool.</p>
+              </div>
+            </div>
+
+            <div class="bench-step-card" data-bench-step="2" tabindex="0" role="button" aria-pressed="false">
+              <div class="bench-step-num">03</div>
+              <div class="bench-step-body">
+                <div class="bench-step-top">
+                  <h3>24-Hour Load Burn-In (FurMark, OCCT &amp; SMART)</h3>
+                  <span class="bench-step-tag">Zero Artifact Policy</span>
+                </div>
+                <p>GPUs run continuous 3D load; CPUs and RAM pass MemTest86 &amp; OCCT stability; SSDs and HDDs must show 100% clean SMART health with zero bad sectors.</p>
+              </div>
+            </div>
+
+            <div class="bench-step-card" data-bench-step="3" tabindex="0" role="button" aria-pressed="false">
+              <div class="bench-step-num">04</div>
+              <div class="bench-step-body">
+                <div class="bench-step-top">
+                  <h3>06-Month Written Warranty &amp; ESD-Safe Packing</h3>
+                  <span class="bench-step-tag">Island-Wide Courier</span>
+                </div>
+                <p>Every tested part leaves with our written 06-month functional testing warranty, packed in anti-static shielding and high-density foam.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right: Live Visual Bench Monitor + Founder Guarantee -->
+          <div class="bench-monitor-col reveal" style="--d: 120ms">
+            <div class="bench-visual-frame" id="bench-visual-frame">
+              <img
+                id="bench-stage-photo"
+                src="./assets/micro-solder.jpg"
+                alt="Board-level hardware inspection at Aqua PC Parts"
+                class="bench-stage-img"
+                loading="lazy"
+              />
+              <div class="bench-stage-overlay"></div>
+              <div class="bench-hud">
+                <div class="bench-hud-top">
+                  <span class="hud-badge" id="bench-hud-step">STAGE 01 // PCB &amp; PORT DIAGNOSTIC</span>
+                  <span class="hud-pass">PASSED ✓</span>
+                </div>
+                <div class="bench-hud-bottom">
+                  <div class="hud-svg-wrap" id="bench-hud-svg" aria-hidden="true"></div>
+                  <div class="hud-caption">
+                    <strong id="bench-hud-title">Zero Reworked Dies · Clean VRM Rails</strong>
+                    <span id="bench-hud-sub">Multimeter &amp; microscope verified in Embilipitiya</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Human Founder Guarantee Card -->
+            <div class="founder-guarantee-card">
+              <img
+                src="./assets/founder.jpg"
+                alt="S.L.K Thinul Hansana — Founder of Aqua PC Solutions"
+                class="founder-avatar"
+                loading="lazy"
+              />
+              <div class="founder-copy">
+                <p class="founder-quote">
+                  &ldquo;When you message us on WhatsApp, you talk directly to our workshop bench — not a chatbot or middleman. Ask us for a live test video or bench photo of any used GPU, monitor, or board before we pack your order.&rdquo;
+                </p>
+                <div class="founder-meta">
+                  <div>
+                    <strong>S.L.K Thinul Hansana</strong>
+                    <span>Founder &amp; Lead Hardware Technician · Embilipitiya</span>
+                  </div>
+                  <a
+                    href="https://wa.me/94788194535?text=Hi%20Thinul!%20I%27m%20browsing%20Aqua%20PC%20Parts%20and%20would%20like%20some%20advice."
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="founder-wa-link"
+                  >
+                    <span>Message Our Bench</span>
+                    <span class="material-symbols-outlined">arrow_outward</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         HOW ORDERING WORKS + FAQ SPLIT
+         ═══════════════════════════════════════════════════════════════════════ -->
     <section class="lp-section" id="how-it-works">
       <div class="container">
-        <header class="lp-section-head reveal">
-          <span class="lp-eyebrow">SIMPLE &amp; TRANSPARENT</span>
-          <h2 class="lp-h2">From browsing to doorstep in four steps</h2>
-        </header>
+        <div class="editorial-section-head reveal">
+          <div>
+            <span class="section-tag">SIMPLE, HUMAN &amp; FAST</span>
+            <h2 class="editorial-h2">
+              From our test bench to your desk in <em class="serif-italic">four easy steps.</em>
+            </h2>
+          </div>
+        </div>
 
-        <ol class="lp-steps">
-          <li class="lp-step reveal" style="--d: 0ms">
-            <span class="lp-step-num">01</span>
-            <span class="material-symbols-outlined">travel_explore</span>
-            <h3>Browse</h3>
-            <p>Explore every department with clear LKR prices, condition badges and warranty details.</p>
+        <ol class="craft-steps">
+          <li class="craft-step reveal" style="--d: 0ms">
+            <div class="craft-step-head">
+              <span class="craft-step-num">01</span>
+              <span class="craft-step-tag">Transparent LKR List</span>
+            </div>
+            <h3>Browse Used or Brand-New</h3>
+            <p>Filter by department, search by model, or sort from lowest to highest LKR retail price.</p>
           </li>
-          <li class="lp-step reveal" style="--d: 110ms">
-            <span class="lp-step-num">02</span>
-            <span class="material-symbols-outlined">add_shopping_cart</span>
-            <h3>Build your quote</h3>
-            <p>Add used and brand-new items into one quote list and set quantity, delivery or pickup.</p>
+
+          <li class="craft-step reveal" style="--d: 90ms">
+            <div class="craft-step-head">
+              <span class="craft-step-num">02</span>
+              <span class="craft-step-tag">Shared Quote Drawer</span>
+            </div>
+            <h3>Build Your Multi-Part Quote</h3>
+            <p>Mix bench-tested used parts and sealed brand-new peripherals in one saved Quote List.</p>
           </li>
-          <li class="lp-step reveal" style="--d: 220ms">
-            <span class="lp-step-num">03</span>
-            <span class="material-symbols-outlined">chat</span>
-            <h3>Confirm on WhatsApp</h3>
-            <p>Your customised order message opens instantly — we confirm stock and the final total.</p>
+
+          <li class="craft-step reveal" style="--d: 180ms">
+            <div class="craft-step-head">
+              <span class="craft-step-num">03</span>
+              <span class="craft-step-tag">Direct Technician Chat</span>
+            </div>
+            <h3>Confirm Stock on WhatsApp</h3>
+            <p>Click <b>Order</b> or <b>Send Quote</b> — we verify live stock, compatibility, and send bench photos.</p>
           </li>
-          <li class="lp-step reveal" style="--d: 330ms">
-            <span class="lp-step-num">04</span>
-            <span class="material-symbols-outlined">local_shipping</span>
-            <h3>Pickup or delivery</h3>
-            <p>Collect in Embilipitiya or get ESD-safe packed courier delivery island-wide.</p>
+
+          <li class="craft-step reveal" style="--d: 270ms">
+            <div class="craft-step-head">
+              <span class="craft-step-num">04</span>
+              <span class="craft-step-tag">Pickup or Courier</span>
+            </div>
+            <h3>Collect or Island-Wide Delivery</h3>
+            <p>Pick up at our Embilipitiya workshop, book full PC assembly, or receive ESD-safe courier delivery.</p>
           </li>
         </ol>
       </div>
     </section>
 
-    <!-- ───────────── WHY AQUA ───────────── -->
-    <section class="lp-section lp-section-alt" id="why-aqua">
-      <div class="container">
-        <header class="lp-section-head reveal">
-          <span class="lp-eyebrow">WHY AQUA PC PARTS</span>
-          <h2 class="lp-h2">Built on testing, not promises</h2>
-        </header>
-
-        <div class="lp-feature-grid">
-          <article class="lp-feature spotlight reveal" style="--d: 0ms">
-            <span class="material-symbols-outlined">biotech</span>
-            <h3>24-hour bench burn-in</h3>
-            <p>Every used component is stress-tested before it reaches the shelf.</p>
-          </article>
-          <article class="lp-feature spotlight reveal" style="--d: 80ms">
-            <span class="material-symbols-outlined">verified_user</span>
-            <h3>06-month testing warranty</h3>
-            <p>Clear, written coverage on tested hardware — no fine print surprises.</p>
-          </article>
-          <article class="lp-feature spotlight reveal" style="--d: 160ms">
-            <span class="material-symbols-outlined">payments</span>
-            <h3>Transparent LKR pricing</h3>
-            <p>Retail prices shown upfront on every item. No hidden add-ons.</p>
-          </article>
-          <article class="lp-feature spotlight reveal" style="--d: 240ms">
-            <span class="lp-feature-icon material-symbols-outlined">engineering</span>
-            <h3>Workshop assembly</h3>
-            <p>Optional fitting, stress test and custom-build assembly by our technicians.</p>
-          </article>
-          <article class="lp-feature spotlight reveal" style="--d: 320ms">
-            <span class="material-symbols-outlined">local_shipping</span>
-            <h3>Island-wide delivery</h3>
-            <p>ESD-safe packaging and trusted courier partners across Sri Lanka.</p>
-          </article>
-          <article class="lp-feature spotlight reveal" style="--d: 400ms">
-            <span class="material-symbols-outlined">support_agent</span>
-            <h3>Real human support</h3>
-            <p>Chat with a technician on WhatsApp for compatibility and build advice.</p>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <!-- ───────────── FAQ ───────────── -->
-    <section class="lp-section" id="faq">
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         FAQ SECTION
+         ═══════════════════════════════════════════════════════════════════════ -->
+    <section class="lp-section lp-section-alt" id="faq">
       <div class="container lp-faq-wrap">
-        <header class="lp-section-head reveal" style="text-align:left; margin-bottom:0">
-          <span class="lp-eyebrow">GOOD TO KNOW</span>
-          <h2 class="lp-h2">Frequently asked questions</h2>
-          <p class="lp-sub">Can't find your answer? Message us on WhatsApp and a technician will reply.</p>
-          <a href="https://wa.me/94788194535" target="_blank" rel="noopener noreferrer" class="lp-btn lp-btn-ghost" style="margin-top:1.1rem">
-            <span class="material-symbols-outlined">chat</span><span>Ask on WhatsApp</span>
+        <header class="reveal" style="text-align:left;">
+          <span class="section-tag">COMMON QUESTIONS</span>
+          <h2 class="editorial-h2" style="margin-bottom:0.75rem;">
+            Honest answers before <em class="serif-italic">you buy.</em>
+          </h2>
+          <p class="editorial-sub" style="margin-bottom:1.25rem;">
+            Not sure if a processor fits your motherboard or if your power supply can handle an RTX card? Send us a photo of your PC on WhatsApp and we will check compatibility for free.
+          </p>
+          <a href="https://wa.me/94788194535?text=Hi%20Aqua%20PC%20Parts!%20Can%20you%20help%20me%20check%20part%20compatibility%3F" target="_blank" rel="noopener noreferrer" class="lp-btn lp-btn-ghost">
+            <span class="material-symbols-outlined">chat</span>
+            <span>Ask a Compatibility Question</span>
           </a>
         </header>
 
         <div class="lp-faq-list">
           <details class="lp-faq reveal" style="--d: 0ms" open>
-            <summary><span>What does the 06-month testing warranty cover?</span><i class="material-symbols-outlined">add</i></summary>
-            <div class="lp-faq-body"><p>Used components that pass our 24-hour bench test are covered for six months against functional failure under normal use. Brand-new items carry store or agent warranty depending on the product.</p></div>
+            <summary><span>What does your 06-month testing warranty cover on used parts?</span><i class="material-symbols-outlined">add</i></summary>
+            <div class="lp-faq-body"><p>Every Grade-A used monitor, graphics card, processor, motherboard, RAM stick, SSD, and PSU that passes our 24-hour stress test includes a 06-month functional testing warranty against hardware failure under normal use. Brand-new items carry official agent or store warranty.</p></div>
           </details>
-          <details class="lp-faq reveal" style="--d: 70ms">
-            <summary><span>Are the prices final?</span><i class="material-symbols-outlined">add</i></summary>
-            <div class="lp-faq-body"><p>Listed prices are our current retail prices in LKR. Stock and market movement can change availability, so we always confirm stock and your final total on WhatsApp before you pay.</p></div>
+          <details class="lp-faq reveal" style="--d: 60ms">
+            <summary><span>Can I see real photos or a working video of a used GPU or monitor before paying?</span><i class="material-symbols-outlined">add</i></summary>
+            <div class="lp-faq-body"><p>Yes! On any item in the catalog, click <b>Customize</b> or <b>Order</b> to message us on WhatsApp. Our technicians will gladly send you live bench photos and a FurMark / display test video of the exact serial-numbered unit.</p></div>
           </details>
-          <details class="lp-faq reveal" style="--d: 140ms">
-            <summary><span>Do you deliver outside Embilipitiya?</span><i class="material-symbols-outlined">add</i></summary>
-            <div class="lp-faq-body"><p>Yes. We ship island-wide using ESD-safe packaging and trusted couriers. You can also collect in person from our Embilipitiya workshop.</p></div>
+          <details class="lp-faq reveal" style="--d: 120ms">
+            <summary><span>Are the LKR prices shown on the website current?</span><i class="material-symbols-outlined">add</i></summary>
+            <div class="lp-faq-body"><p>Yes — all listed prices are our transparent retail LKR prices. Because used hardware stock moves fast, we always confirm live stock availability and your exact total on WhatsApp before you make any payment.</p></div>
           </details>
-          <details class="lp-faq reveal" style="--d: 210ms">
-            <summary><span>Can I mix used and brand-new items in one order?</span><i class="material-symbols-outlined">add</i></summary>
-            <div class="lp-faq-body"><p>Absolutely. Your quote list is shared across both divisions, so you can combine them and send a single WhatsApp order.</p></div>
+          <details class="lp-faq reveal" style="--d: 180ms">
+            <summary><span>Do you courier to Colombo, Kandy, Galle, Jaffna and island-wide?</span><i class="material-symbols-outlined">add</i></summary>
+            <div class="lp-faq-body"><p>Yes. We ship across Sri Lanka using anti-static ESD bags, bubble wrap, and rigid boxing via trusted courier partners, or you can visit our Embilipitiya workshop in person.</p></div>
           </details>
-          <details class="lp-faq reveal" style="--d: 280ms">
-            <summary><span>Can you assemble a PC for me?</span><i class="material-symbols-outlined">add</i></summary>
-            <div class="lp-faq-body"><p>Yes — choose "Workshop Assembly" in your quote or message us. Our technicians fit, cable-manage and stress-test the full build.</p></div>
+          <details class="lp-faq reveal" style="--d: 240ms">
+            <summary><span>Can I combine Used Parts and Brand-New Peripherals in one order?</span><i class="material-symbols-outlined">add</i></summary>
+            <div class="lp-faq-body"><p>Absolutely. Your <b>Quote List</b> automatically saves items across both the Used Parts and Brand New catalogs so you can send a single combined order to WhatsApp.</p></div>
           </details>
         </div>
       </div>
     </section>
 
-    <!-- ───────────── CTA BAND ───────────── -->
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         CLOSING WORKSHOP BANNER
+         ═══════════════════════════════════════════════════════════════════════ -->
     <section class="lp-cta-band">
       <div class="container">
         <div class="lp-cta-card spotlight reveal">
-          <div class="lp-cta-glow"></div>
-          <div>
-            <span class="lp-eyebrow">READY WHEN YOU ARE</span>
-            <h2 class="lp-h2" style="margin-bottom:.4rem">Let's find your next upgrade.</h2>
-            <p class="lp-sub" style="margin:0">Start browsing or message our team — we usually reply within minutes during workshop hours.</p>
+          <div class="lp-cta-media" aria-hidden="true">
+            <img src="./assets/rgb-ram-macro.jpg" alt="" loading="lazy" />
+          </div>
+          <div class="lp-cta-copy">
+            <span class="section-tag">READY TO UPGRADE YOUR RIG?</span>
+            <h2 class="editorial-h2" style="margin-bottom:0.45rem;">
+              Explore <span data-bind="used-count">358</span> used &amp; <span data-bind="new-count">34</span> brand-new parts right now.
+            </h2>
+            <p class="editorial-sub" style="margin:0;">
+              Open either catalog below or message our Embilipitiya workshop bench — we reply within minutes during working hours.
+            </p>
           </div>
           <div class="lp-cta-row">
-            <a href="./used-parts.html" class="lp-btn lp-btn-primary magnetic"><span>Browse Catalog</span><span class="material-symbols-outlined">arrow_forward</span></a>
+            <a href="./used-parts.html" class="lp-btn lp-btn-primary magnetic">
+              <span>Used Parts Catalog</span>
+              <span class="material-symbols-outlined">arrow_forward</span>
+            </a>
+            <a href="./brand-new-parts.html" class="lp-btn lp-btn-emerald magnetic">
+              <span>Brand New Store</span>
+              <span class="material-symbols-outlined">inventory_2</span>
+            </a>
             <a href="https://wa.me/94788194535" target="_blank" rel="noopener noreferrer" class="lp-btn lp-btn-wa magnetic">
               <svg viewBox="0 0 24 24" fill="currentColor" class="wa-svg" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" /></svg>
-              <span>WhatsApp Us</span>
+              <span>Chat on WhatsApp</span>
             </a>
           </div>
         </div>
@@ -451,24 +929,25 @@
           <span class="brand-badge">BY AQUA PC SOLUTIONS</span>
         </div>
         <p class="footer-desc">
-          Certified Grade-A used hardware and factory-sealed brand-new PC peripherals &amp; components in Embilipitiya, Sri Lanka.
+          Hand-tested Grade-A used PC hardware and factory-sealed brand-new peripherals &amp; components in Embilipitiya, Sri Lanka.
         </p>
         <div class="footer-hours">
           <div><span>Mon – Fri:</span> <strong>8:00 AM – 7:00 PM</strong></div>
           <div><span>Saturday:</span> <strong>10:00 AM – 5:00 PM</strong></div>
-          <div><span>Phone:</span> <a href="tel:+94788194535">+94 78 819 4535</a></div>
+          <div><span>Phone / WhatsApp:</span> <a href="tel:+94788194535">+94 78 819 4535</a></div>
           <div><span>Email:</span> <a href="mailto:thinulhansana.business@gmail.com">thinulhansana.business@gmail.com</a></div>
         </div>
       </div>
 
       <div class="footer-col">
-        <h3>Store</h3>
+        <h3>Storefront</h3>
         <ul>
-          <li><a href="./index.html">Storefront</a></li>
-          <li><a href="./used-parts.html">Used Parts Catalog</a></li>
-          <li><a href="./brand-new-parts.html">Brand New Parts</a></li>
-          <li><a href="#how-it-works">How ordering works</a></li>
-          <li><a href="#faq">FAQ</a></li>
+          <li><a href="./index.html">Storefront Home</a></li>
+          <li><a href="./used-parts.html">Used Parts Catalog (358)</a></li>
+          <li><a href="./brand-new-parts.html">Brand New Parts Store (34)</a></li>
+          <li><a href="#upgrade-advisor">Upgrade Pathfinder</a></li>
+          <li><a href="#workshop-bench">24h Bench Testing</a></li>
+          <li><a href="#faq">Warranty &amp; FAQ</a></li>
         </ul>
       </div>
 
@@ -484,8 +963,8 @@
     </div>
     <div class="footer-bottom">
       <div class="container footer-bottom-inner">
-        <span>&copy; <span id="footer-year"></span> Aqua PC Parts · Aqua PC Solutions. All rights reserved.</span>
-        <span>Embilipitiya, Sri Lanka · ESD-Safe Bench Tested Hardware</span>
+        <span>&copy; <span id="footer-year"></span> Aqua PC Parts · Aqua PC Solutions. Crafted in Embilipitiya, Sri Lanka.</span>
+        <span>06-Month Testing Warranty · ESD-Safe Island-Wide Delivery</span>
       </div>
     </div>
   </footer>

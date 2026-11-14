@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Used PC Parts (358+ Grade-A Items) | Aqua PC Parts — Embilipitiya, Sri Lanka</title>
+  <title>Used PC Parts (358+ Hand-Tested Items) | Aqua PC Parts — Embilipitiya, Sri Lanka</title>
   <meta
     name="description"
     content="Browse all 358+ Grade-A bench-tested Used PC Parts at Aqua PC Parts — monitors, VGA cards, Intel/AMD processors, motherboards, SSDs, HDDs, RAM, PSUs, cooling, cables, and peripherals with 06-month testing warranty."
@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
-    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Syne:wght@700;800&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Syne:wght@700;800&display=swap"
     rel="stylesheet"
   />
   <link
@@ -21,11 +21,12 @@
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body data-page="used">
-  <!-- Ambient Background -->
+  <!-- Ambient Studio Background -->
   <div class="ambient-bg" aria-hidden="true">
     <div class="ambient-orb orb-cyan"></div>
     <div class="ambient-orb orb-teal"></div>
-    <div class="ambient-grid"></div>
+    <div class="ambient-orb orb-amber"></div>
+    <div class="ambient-noise"></div>
   </div>
 
   <!-- Top Utility Trust Bar -->
@@ -33,12 +34,12 @@
     <div class="utility-inner">
       <div class="utility-group">
         <span class="utility-item">
-          <span class="material-symbols-outlined">location_on</span>
-          <span>Embilipitiya Hardware Workshop, Sri Lanka</span>
+          <span class="live-beacon" aria-hidden="true"></span>
+          <span>Embilipitiya Hardware Workshop · Open Mon–Sat</span>
         </span>
         <span class="utility-item emerald">
           <span class="material-symbols-outlined">verified_user</span>
-          <span>06-Month Testing Warranty · ESD-Safe 24h Stress Tested</span>
+          <span>06-Month Written Testing Warranty · ESD-Safe 24h Stress Tested</span>
         </span>
       </div>
       <div class="utility-group">
@@ -59,12 +60,17 @@
     <div class="header-inner">
       <a href="./index.html" class="brand-cluster">
         <div class="brand-logo" aria-hidden="true">
-          <span class="material-symbols-outlined">memory</span>
+          <svg viewBox="0 0 36 36" fill="none" class="brand-mark-svg">
+            <rect x="4" y="4" width="28" height="28" rx="7" stroke="currentColor" stroke-width="2" />
+            <rect x="11" y="11" width="14" height="14" rx="3" fill="currentColor" fill-opacity="0.18" stroke="currentColor" stroke-width="1.8" />
+            <path d="M18 1v4M18 31v4M1 18h4M31 18h4M11 1v4M25 1v4M11 31v4M25 31v4M1 11h4M1 25h4M31 11h4M31 25h4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+            <circle cx="18" cy="18" r="2.5" fill="currentColor" />
+          </svg>
         </div>
         <div class="brand-text">
           <div class="brand-title-row">
             <span class="brand-name">Aqua PC Parts</span>
-            <span class="brand-badge">USED PARTS DIVISION</span>
+            <span class="brand-badge">USED PARTS CATALOG</span>
           </div>
           <span class="brand-sub">GRADE-A BENCH-TESTED · 06-MO WARRANTY</span>
         </div>
@@ -82,9 +88,9 @@
           <span class="nav-pill-count" id="nav-used-count">358</span>
         </a>
         <a href="./brand-new-parts.html" class="page-nav-link new-tab">
-          <span class="material-symbols-outlined">new_releases</span>
-          <span>Brand New Parts</span>
-          <span class="nav-pill-count" id="nav-new-count">New</span>
+          <span class="material-symbols-outlined">inventory_2</span>
+          <span>Brand New</span>
+          <span class="nav-pill-count" id="nav-new-count">34</span>
         </a>
       </nav>
 
@@ -135,7 +141,7 @@
           href="https://aquapcsolutions.yyth.workers.dev/"
           class="btn-main-site"
         >
-          <span class="material-symbols-outlined">arrow_back</span>
+          <span class="material-symbols-outlined">build_circle</span>
           <span class="hide-mobile">Main Site</span>
         </a>
 
@@ -155,7 +161,7 @@
     </div>
   </header>
 
-  <!-- Used Parts Hero Banner -->
+  <!-- Used Parts Editorial Hero Banner -->
   <section class="hero-section compact-hero">
     <div class="container">
       <div class="hero-top-grid">
@@ -165,22 +171,17 @@
             <span>/</span>
             <span class="current-crumb">Used Parts Catalog</span>
           </div>
-          <div class="hero-pill cyan-pill">
-            <span class="pulse-dot"></span>
-            <span>USED HARDWARE DIVISION · 06-MONTH TESTING WARRANTY</span>
-          </div>
           <h1 class="hero-title">
-            <span class="gradient-text">Used PC Parts</span>
-            <span class="hero-subtitle-inline">— Grade-A Tested Inventory</span>
+            <span>Grade-A <em class="serif-italic">Bench-Tested</em> Used Parts</span>
           </h1>
           <p class="hero-desc">
-            Every existing catalog item — monitors, VGA cards, Intel &amp; AMD processors, motherboards, SSDs, HDDs, RAM, PSUs, cooling fans, cables, and peripherals — professionally stress-tested for 24 hours with transparent LKR pricing.
+            Every monitor, graphics card, Intel &amp; AMD processor, motherboard, SSD, hard drive, RAM module, and power supply below has completed a 24-hour stress test in our Embilipitiya workshop and carries our written 06-month testing warranty.
           </p>
 
           <div class="hero-stats-strip">
             <div class="stat-pill">
               <span class="material-symbols-outlined">inventory_2</span>
-              <span><strong id="hero-total-items">358</strong> Total Catalog Items</span>
+              <span><strong id="hero-total-items">358</strong> Tested Items</span>
             </div>
             <div class="stat-pill">
               <span class="material-symbols-outlined">category</span>
@@ -188,27 +189,30 @@
             </div>
             <div class="stat-pill emerald">
               <span class="material-symbols-outlined">verified_user</span>
-              <span><strong>24h</strong> Bench Stability Verified</span>
+              <span><strong>06-Month</strong> Testing Warranty</span>
             </div>
           </div>
         </div>
 
-        <!-- Cross-Navigation Card -->
-        <aside class="hero-switch-card" aria-label="Switch Store Division">
-          <span class="hero-switch-kicker">LOOKING FOR FACTORY-SEALED GEAR?</span>
-          <h2 class="hero-switch-title">Explore Our Brand New Parts Store</h2>
-          <p class="hero-switch-desc">
-            Shop factory-sealed gaming mice, keyboards, combos, webcams, USB mics, sound cards, and live-quoted boxed PC components.
-          </p>
-          <div class="hero-switch-actions">
-            <a href="./brand-new-parts.html" class="btn-division new-btn">
-              <span>Go to Brand New Parts</span>
-              <span class="material-symbols-outlined">arrow_forward</span>
-            </a>
-            <a href="./index.html" class="btn-main-site">
-              <span class="material-symbols-outlined">storefront</span>
-              <span>All Divisions</span>
-            </a>
+        <!-- Cross-Navigation Card with Real Studio Photo -->
+        <aside class="hero-switch-card has-photo" aria-label="Switch Store Division">
+          <img src="./assets/lab-gpu-install.jpg" alt="" class="switch-card-bg" loading="eager" aria-hidden="true" />
+          <div class="switch-card-inner">
+            <span class="hero-switch-kicker">LOOKING FOR FACTORY-SEALED GEAR?</span>
+            <h2 class="hero-switch-title">Explore Our Brand New Store</h2>
+            <p class="hero-switch-desc">
+              Shop sealed mice, RGB keyboards, combos, HD webcams, USB studio mics, sound cards, and boxed components.
+            </p>
+            <div class="hero-switch-actions">
+              <a href="./brand-new-parts.html" class="btn-division new-btn">
+                <span>Brand New Store (34)</span>
+                <span class="material-symbols-outlined">arrow_forward</span>
+              </a>
+              <a href="./index.html" class="btn-main-site">
+                <span class="material-symbols-outlined">storefront</span>
+                <span>Storefront Home</span>
+              </a>
+            </div>
           </div>
         </aside>
       </div>
@@ -282,8 +286,8 @@
             </svg>
           </div>
           <div class="wa-banner-text">
-            <strong>Need real-time stock photos or compatibility check for a used component?</strong>
-            <span>Click <b>Customize</b> on any item to request bench photos/testing video, or add multiple items to your <b>Quote List</b>!</span>
+            <strong>Want a live test video or bench photo of any used component?</strong>
+            <span>Click <b>Customize</b> on any item to request a FurMark/display test video, or add multiple items to your <b>Quote List</b>!</span>
           </div>
           <span class="material-symbols-outlined wa-banner-arrow">arrow_forward</span>
         </a>
@@ -397,4 +401,3 @@
   <script src="app.js"></script>
 </body>
 </html>
-

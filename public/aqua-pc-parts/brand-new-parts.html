@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
-    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Syne:wght@700;800&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Syne:wght@700;800&display=swap"
     rel="stylesheet"
   />
   <link
@@ -21,11 +21,12 @@
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body data-page="new">
-  <!-- Ambient Background -->
+  <!-- Ambient Studio Background -->
   <div class="ambient-bg" aria-hidden="true">
     <div class="ambient-orb orb-teal"></div>
     <div class="ambient-orb orb-cyan"></div>
-    <div class="ambient-grid"></div>
+    <div class="ambient-orb orb-amber"></div>
+    <div class="ambient-noise"></div>
   </div>
 
   <!-- Top Utility Trust Bar -->
@@ -33,11 +34,11 @@
     <div class="utility-inner">
       <div class="utility-group">
         <span class="utility-item">
-          <span class="material-symbols-outlined">location_on</span>
-          <span>Embilipitiya Hardware Workshop, Sri Lanka</span>
+          <span class="live-beacon" aria-hidden="true"></span>
+          <span>Embilipitiya Hardware Workshop · Open Mon–Sat</span>
         </span>
         <span class="utility-item emerald">
-          <span class="material-symbols-outlined">new_releases</span>
+          <span class="material-symbols-outlined">inventory_2</span>
           <span>100% Factory-Sealed Brand New Stock · Official Warranty</span>
         </span>
       </div>
@@ -59,12 +60,17 @@
     <div class="header-inner">
       <a href="./index.html" class="brand-cluster">
         <div class="brand-logo" aria-hidden="true">
-          <span class="material-symbols-outlined">new_releases</span>
+          <svg viewBox="0 0 36 36" fill="none" class="brand-mark-svg">
+            <rect x="4" y="4" width="28" height="28" rx="7" stroke="currentColor" stroke-width="2" />
+            <rect x="11" y="11" width="14" height="14" rx="3" fill="currentColor" fill-opacity="0.18" stroke="currentColor" stroke-width="1.8" />
+            <path d="M18 1v4M18 31v4M1 18h4M31 18h4M11 1v4M25 1v4M11 31v4M25 31v4M1 11h4M1 25h4M31 11h4M31 25h4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+            <circle cx="18" cy="18" r="2.5" fill="currentColor" />
+          </svg>
         </div>
         <div class="brand-text">
           <div class="brand-title-row">
             <span class="brand-name">Aqua PC Parts</span>
-            <span class="brand-badge">BRAND NEW DIVISION</span>
+            <span class="brand-badge">BRAND NEW STORE</span>
           </div>
           <span class="brand-sub">SEALED PERIPHERALS &amp; BOXED HARDWARE</span>
         </div>
@@ -82,8 +88,8 @@
           <span class="nav-pill-count" id="nav-used-count">358</span>
         </a>
         <a href="./brand-new-parts.html" class="page-nav-link new-tab active" aria-current="page">
-          <span class="material-symbols-outlined">new_releases</span>
-          <span>Brand New Parts</span>
+          <span class="material-symbols-outlined">inventory_2</span>
+          <span>Brand New</span>
           <span class="nav-pill-count" id="nav-new-count">34</span>
         </a>
       </nav>
@@ -135,7 +141,7 @@
           href="https://aquapcsolutions.yyth.workers.dev/"
           class="btn-main-site"
         >
-          <span class="material-symbols-outlined">arrow_back</span>
+          <span class="material-symbols-outlined">build_circle</span>
           <span class="hide-mobile">Main Site</span>
         </a>
 
@@ -155,7 +161,7 @@
     </div>
   </header>
 
-  <!-- Brand New Hero Banner -->
+  <!-- Brand New Editorial Hero Banner -->
   <section class="hero-section compact-hero">
     <div class="container">
       <div class="hero-top-grid">
@@ -165,50 +171,48 @@
             <span>/</span>
             <span class="current-crumb">Brand New Parts Store</span>
           </div>
-          <div class="hero-pill">
-            <span class="pulse-dot"></span>
-            <span>BRAND NEW DIVISION · FACTORY-SEALED &amp; AGENT WARRANTY</span>
-          </div>
           <h1 class="hero-title">
-            <span class="gradient-text-emerald">Brand New Parts</span>
-            <span class="hero-subtitle-inline">— Peripherals, Audio &amp; Boxed PC Gear</span>
+            <span>Factory-Sealed <em class="serif-italic">Brand New</em> Peripherals &amp; Gear</span>
           </h1>
           <p class="hero-desc">
-            Brand-new wired &amp; wireless mice, gaming keyboards, combos, HD webcams, USB studio microphones, 5.1/7.1 sound cards, and factory-sealed boxed PC components available via direct WhatsApp order.
+            Unbox brand-new wired &amp; wireless mice, gaming keyboards, combos, HD webcams, USB studio microphones, 5.1/7.1 sound cards, and live-quoted sealed PC components with official warranty.
           </p>
 
           <div class="hero-stats-strip">
             <div class="stat-pill emerald">
-              <span class="material-symbols-outlined">new_releases</span>
-              <span><strong id="hero-total-items">34</strong> Brand New Categories &amp; SKUs</span>
+              <span class="material-symbols-outlined">inventory_2</span>
+              <span><strong id="hero-total-items">34</strong> Brand New SKUs</span>
             </div>
             <div class="stat-pill emerald">
               <span class="material-symbols-outlined">category</span>
-              <span><strong id="hero-total-sections">7</strong> Brand New Departments</span>
+              <span><strong id="hero-total-sections">7</strong> Sealed Departments</span>
             </div>
             <div class="stat-pill">
               <span class="material-symbols-outlined">local_shipping</span>
-              <span><strong>Same-Day Dispatch</strong> &amp; Store Pickup</span>
+              <span><strong>Same-Day Dispatch</strong> &amp; Pickup</span>
             </div>
           </div>
         </div>
 
-        <!-- Cross-Navigation Card -->
-        <aside class="hero-switch-card" aria-label="Switch Store Division">
-          <span class="hero-switch-kicker">LOOKING FOR HIGH-VALUE TESTED PARTS?</span>
-          <h2 class="hero-switch-title">Explore Grade-A Used PC Parts</h2>
-          <p class="hero-switch-desc">
-            Browse all 358+ bench-tested used monitors, VGA cards, CPUs, motherboards, SSDs, RAM &amp; power supplies with our 06-month testing warranty.
-          </p>
-          <div class="hero-switch-actions">
-            <a href="./used-parts.html" class="btn-division used-btn">
-              <span>Go to Used Parts (358)</span>
-              <span class="material-symbols-outlined">arrow_forward</span>
-            </a>
-            <a href="./index.html" class="btn-main-site">
-              <span class="material-symbols-outlined">storefront</span>
-              <span>All Divisions</span>
-            </a>
+        <!-- Cross-Navigation Card with Real Studio Photo -->
+        <aside class="hero-switch-card has-photo" aria-label="Switch Store Division">
+          <img src="./assets/rgb-ram-macro.jpg" alt="" class="switch-card-bg" loading="eager" aria-hidden="true" />
+          <div class="switch-card-inner">
+            <span class="hero-switch-kicker">LOOKING FOR HIGH-VALUE TESTED PARTS?</span>
+            <h2 class="hero-switch-title">Explore Grade-A Used PC Parts</h2>
+            <p class="hero-switch-desc">
+              Browse 358+ bench-tested used monitors, VGA cards, CPUs, motherboards, SSDs, RAM &amp; power supplies with a 06-month warranty.
+            </p>
+            <div class="hero-switch-actions">
+              <a href="./used-parts.html" class="btn-division used-btn">
+                <span>Used Parts (358)</span>
+                <span class="material-symbols-outlined">arrow_forward</span>
+              </a>
+              <a href="./index.html" class="btn-main-site">
+                <span class="material-symbols-outlined">storefront</span>
+                <span>Storefront Home</span>
+              </a>
+            </div>
           </div>
         </aside>
       </div>
@@ -234,7 +238,7 @@
         <!-- Toolbar -->
         <div class="catalog-toolbar">
           <div class="section-heading-wrap">
-            <span id="active-section-icon" class="material-symbols-outlined section-icon">new_releases</span>
+            <span id="active-section-icon" class="material-symbols-outlined section-icon">inventory_2</span>
             <div>
               <h2 id="active-section-title" class="section-title">All Brand New Parts</h2>
               <p id="active-section-count" class="section-count">Loading catalog...</p>
@@ -397,4 +401,3 @@
   <script src="app.js"></script>
 </body>
 </html>
-
