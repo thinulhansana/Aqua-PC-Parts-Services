@@ -261,13 +261,15 @@ select {
 }
 
 .brand-logo {
-  width: 42px;
-  height: 42px;
+  width: 44px;
+  height: 44px;
   border-radius: 11px;
+  overflow: hidden;
+  padding: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(145deg, rgba(56, 189, 248, 0.16), rgba(16, 185, 129, 0.12));
+  background: #07121e;
   border: 1px solid var(--border-strong);
   color: var(--cyan);
   transition: transform 0.25s ease;
@@ -275,6 +277,23 @@ select {
 
 .brand-cluster:hover .brand-logo {
   transform: rotate(-4deg) scale(1.04);
+}
+
+.brand-logo .site-logo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  border-radius: inherit;
+}
+
+.footer-logo-img {
+  width: 38px;
+  height: 38px;
+  border-radius: 9px;
+  object-fit: cover;
+  display: block;
+  flex-shrink: 0;
 }
 
 .brand-mark-svg {

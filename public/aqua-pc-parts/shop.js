@@ -245,7 +245,7 @@ th{background:#f1f5f9;color:#0f172a}
 .tot{margin-top:18px;text-align:right;font-size:18px}
 .note{margin-top:24px;padding:12px;background:#f8fafc;border-left:4px solid #ff6a1a;font-size:12.5px;color:#475569}
 @media print{.noprint{display:none}}</style></head><body>
-<div class="top"><div><h1>AQUA PC PARTS</h1><div>Aqua PC Solutions · Embilipitiya, Sri Lanka</div><div>Tel / WhatsApp: +94 78 819 4535</div></div>
+<div class="top"><div style="display:flex;align-items:center;gap:14px"><img src="assets/logo.jpg" alt="Aqua PC Parts" style="width:52px;height:52px;border-radius:10px;object-fit:cover" /><div><h1>AQUA PC PARTS</h1><div>Aqua PC Solutions · Embilipitiya, Sri Lanka</div><div>Tel / WhatsApp: +94 78 819 4535</div></div></div>
 <div style="text-align:right"><strong>QUOTATION #${quoteNo}</strong><div>Date: ${new Date().toLocaleDateString("en-LK")}</div></div></div>
 <table><thead><tr><th>#</th><th>Item &amp; Warranty</th><th>Condition</th><th>Qty</th><th>Unit Price</th><th>Line Total</th></tr></thead><tbody>${rows}</tbody></table>
 <div class="tot"><strong>Estimated Total: ${fmt(total)}${unpriced ? " (+ " + unpriced + " item TBC)" : ""}</strong></div>
