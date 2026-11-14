@@ -14,6 +14,10 @@
     typeof window.getAquaPartImage === "function"
       ? window.getAquaPartImage
       : () => "assets/parts/gpu-prime.webp";
+  const getPartFallback =
+    typeof window.getAquaPartFallback === "function"
+      ? window.getAquaPartFallback
+      : () => "assets/parts/gpu-prime.webp";
   const getCatImg =
     typeof window.getAquaCategoryIcon === "function"
       ? window.getAquaCategoryIcon
@@ -55,6 +59,7 @@
           const isNew = it.condition === "new" || div === "new";
           const price = typeof it.price === "number" ? it.price : null;
           const img = getPartImg(it, sec.id, sub.name);
+          const fallbackImg = getPartFallback(it, sec.id, sub.name);
 
           PRODUCTS.push({
             id: it.id,
@@ -68,6 +73,7 @@
             secLabel: sec.label,
             sub: sub.name || "",
             img,
+            fallbackImg,
             order: PRODUCTS.length,
           });
           cat.count++;
@@ -135,7 +141,9 @@
           ({ c, p, price }) =>
             '<div class="cart-row"><img src="' +
             esc(p ? p.img : "assets/parts/gpu-prime.webp") +
-            '" alt="" /><div class="cr-info"><b>' +
+            '" onerror="this.onerror=null;this.src=\'' +
+            esc(p ? p.fallbackImg : "assets/parts/gpu-prime.webp") +
+            '\'" alt="" /><div class="cr-info"><b>' +
             esc(c.name) +
             "</b><span>" +
             (price != null ? fmtLKR(price) : "Call for price") +
@@ -251,7 +259,7 @@ th{background:#1c1c1c;color:#ff9400}
       '<div class="ty-productBlock-wrap">' +
       '<div class="ty-productBlock">' +
       '<div class="ty-specialIconHolder"><span class="' + badgeCls + '">' + badgeTxt + "</span></div>" +
-      '<div class="ty-productBlock-imgHolder"><img src="' + esc(p.img) + '" alt="' + esc(p.name) + '" loading="lazy" /></div>' +
+      '<div class="ty-productBlock-imgHolder"><img src="' + esc(p.img) + '" onerror="this.onerror=null;this.src=\'' + esc(p.fallbackImg) + '\'" alt="' + esc(p.name) + '" loading="lazy" /></div>' +
       '<div class="ty-productBlock-content">' +
       '<div class="ty-productBlock-title"><h1 title="' + esc(p.name) + '">' + esc(p.name) + "</h1></div>" +
       '<span class="ty-productBlock-cat" title="' + esc(catLine) + '">' + esc(catLine) + "</span>" +
@@ -442,7 +450,7 @@ th{background:#1c1c1c;color:#ff9400}
         ? hits
             .map(
               (p) =>
-                '<button type="button" data-q="' + esc(p.name) + '"><img src="' + esc(p.img) + '" alt="" />' +
+                '<button type="button" data-q="' + esc(p.name) + '"><img src="' + esc(p.img) + '" onerror="this.onerror=null;this.src=\'' + esc(p.fallbackImg) + '\'" alt="" />' +
                 '<span class="suggest-meta"><strong>' + esc(p.name) + "</strong><small>" +
                 esc(p.secLabel) + " · " + esc(p.warranty) + "</small></span><b>" +
                 (p.price != null ? fmtLKR(p.price) : "Call") + "</b></button>"
@@ -489,7 +497,7 @@ th{background:#1c1c1c;color:#ff9400}
       mRes.innerHTML = hits
         .map(
           (p) =>
-            '<li><button type="button" data-mq="' + esc(p.name) + '"><img src="' + esc(p.img) + '" alt="" /><strong>' +
+            '<li><button type="button" data-mq="' + esc(p.name) + '"><img src="' + esc(p.img) + '" onerror="this.onerror=null;this.src=\'' + esc(p.fallbackImg) + '\'" alt="" /><strong>' +
             esc(p.name) + "</strong><span>" + (p.price != null ? fmtLKR(p.price) : "Call") + "</span></button></li>"
         )
         .join("");

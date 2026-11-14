@@ -523,6 +523,13 @@
     thumbImg.alt = item.name;
     thumbImg.loading = "lazy";
     thumbImg.decoding = "async";
+    thumbImg.onerror = () => {
+      thumbImg.onerror = null;
+      thumbImg.src =
+        typeof window.getAquaPartFallback === "function"
+          ? window.getAquaPartFallback(item, sec && sec.id, categoryName)
+          : "assets/cats/expansion.webp";
+    };
     thumb.appendChild(thumbImg);
 
     const metaWrap = document.createElement("div");
