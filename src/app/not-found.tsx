@@ -4,6 +4,7 @@ import React from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { fadeUpVariants } from "@/components/ui/MotionPrimitives";
+import { AQUA_PC_PARTS_URL } from "@/lib/constants";
 
 export default function NotFound() {
   return (
@@ -61,12 +62,12 @@ export default function NotFound() {
             <span className="absolute inset-0 animate-shimmer opacity-0 group-hover:opacity-100 transition-opacity" />
             <span className="relative z-10">Return Home</span>
           </Link>
-          <Link
-            href="/shop"
+          <a
+            href={AQUA_PC_PARTS_URL}
             className="px-space-xl py-space-md rounded-xl bg-surface-container-high hover:bg-surface-bright text-on-surface font-syne text-title-md border border-outline-variant/30 transition-all hover:border-primary/40 hover:-translate-y-0.5"
           >
-            Browse PC Parts
-          </Link>
+            Browse Aqua PC Parts
+          </a>
           <Link
             href="/contact"
             className="px-space-xl py-space-md rounded-xl bg-surface-container hover:bg-surface-container-high text-on-surface-variant hover:text-on-surface font-syne text-title-md border border-outline-variant/20 transition-all hover:-translate-y-0.5"

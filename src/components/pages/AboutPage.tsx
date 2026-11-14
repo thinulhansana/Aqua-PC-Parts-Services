@@ -14,6 +14,7 @@ import {
   SITE_PHONE_DISPLAY,
   SITE_PHONE_HREF,
   SITE_WHATSAPP_URL,
+  AQUA_PC_PARTS_URL,
 } from "@/lib/constants";
 import {
   RevealSection,
@@ -455,13 +456,13 @@ export default function AboutPage() {
               </svg>
               <span>WhatsApp Inquiry</span>
             </a>
-            <Link
-              href="/shop"
+            <a
+              href={AQUA_PC_PARTS_URL}
               className="relative overflow-hidden group px-space-xl py-space-md rounded-xl bg-gradient-to-r from-primary to-secondary text-surface font-syne text-title-md font-bold shadow-cyan-glow hover:shadow-cyan-glow-lg hover:-translate-y-0.5 transition-all"
             >
               <span className="absolute inset-0 animate-shimmer opacity-0 group-hover:opacity-100 transition-opacity" />
-              <span className="relative z-10">Explore Shop Parts</span>
-            </Link>
+              <span className="relative z-10">Explore Aqua PC Parts</span>
+            </a>
             <Link
               href="/contact"
               className="px-space-xl py-space-md rounded-xl bg-surface-container-high hover:bg-surface-bright text-on-surface font-syne text-title-md border border-outline-variant/30 transition-all hover:-translate-y-0.5"

@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useMemo, useState } from "react";
-import Link from "next/link";
 import { motion } from "framer-motion";
 import {
   SHOP_SECTIONS,
@@ -10,6 +9,7 @@ import {
   buildWhatsAppUrl,
   formatPriceLKR,
 } from "@/lib/shopData";
+import { AQUA_PC_PARTS_URL } from "@/lib/constants";
 import { EASE_PREMIUM } from "@/components/ui/MotionPrimitives";
 
 interface FlatCatalogItem {
@@ -96,13 +96,13 @@ export default function InteractiveCatalog() {
           </p>
         </div>
 
-        <Link
-          href="/shop"
+        <a
+          href={AQUA_PC_PARTS_URL}
           className="inline-flex items-center gap-1.5 px-space-md py-space-xs rounded-lg bg-surface-container-high hover:bg-surface-bright text-primary font-syne text-title-md border border-primary/30 transition-all shrink-0 self-start lg:self-auto"
         >
           <span className="material-symbols-outlined text-[18px]">storefront</span>
-          <span>Open Full Category Shop</span>
-        </Link>
+          <span>Open Aqua PC Parts Storefront</span>
+        </a>
       </div>
 
       {/* Category Pill Bar */}

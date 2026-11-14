@@ -8,6 +8,7 @@ import { signOut, useSession } from "next-auth/react";
 import { motion, AnimatePresence } from "framer-motion";
 import type { PublicUserProfile } from "@/lib/auth-users";
 import { TOTAL_SHOP_ITEMS } from "@/lib/shopData";
+import { AQUA_PC_PARTS_URL } from "@/lib/constants";
 import {
   CircuitFlowBackdrop,
   MaskedReveal,
@@ -275,7 +276,7 @@ export default function AccountPage({ initialProfile }: AccountPageProps) {
             </SpotlightCard>
           </Link>
 
-          <Link href="/shop" className="block h-full">
+          <a href={AQUA_PC_PARTS_URL} className="block h-full">
             <SpotlightCard className="p-space-lg rounded-xl bg-surface-container-low border border-outline-variant/20 hover:border-tertiary/45 transition-all h-full flex flex-col justify-between gap-4 hover:-translate-y-1">
               <div className="flex items-start justify-between relative z-10">
                 <div className="w-11 h-11 rounded-xl bg-tertiary/10 border border-tertiary/25 flex items-center justify-center text-tertiary">
@@ -299,7 +300,7 @@ export default function AccountPage({ initialProfile }: AccountPageProps) {
                 </p>
               </div>
             </SpotlightCard>
-          </Link>
+          </a>
         </motion.div>
 
         {/* Profile & Hardware Blueprint Editor */}

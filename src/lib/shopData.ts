@@ -753,6 +753,85 @@ export const SHOP_SECTIONS: ShopSection[] = [
       },
     ],
   },
+
+  // ── PERIPHERALS & AUDIO (BRAND NEW) ─────────────────────────────────────
+  {
+    id: "peripherals",
+    label: "Peripherals & Audio",
+    icon: "devices",
+    categories: [
+      {
+        id: "mouse",
+        name: "Mouse",
+        icon: "mouse",
+        items: [
+          { id: "mouse-jedel-220", name: "USB MINI MOUSE JEDEL 220", specs: "Brand New", retailPrice: 270, price: 1020 },
+          { id: "mouse-b300-dell-ms111", name: "USB MOUSE B300, Dell MS111", specs: "Brand New", retailPrice: 340, price: 1090 },
+          { id: "mouse-office-op10", name: "USB OFFICE MOUSE OP-10", specs: "Brand New", retailPrice: 380, price: 1130 },
+          { id: "mouse-x500-hp", name: "USB MOUSE X500 HP", specs: "Brand New", retailPrice: 420, price: 1170 },
+          { id: "mouse-game-x1", name: "USB GAME MOUSE X1", specs: "Brand New", retailPrice: 450, price: 1200 },
+          { id: "mouse-game-op40-g102", name: "USB GAME MOUSE OP-40, G102", specs: "Brand New", retailPrice: 600, price: 1350 },
+        ],
+      },
+      {
+        id: "keyboard-mouse-combo",
+        name: "Keyboard & Mouse Combo",
+        icon: "keyboard",
+        items: [
+          { id: "combo-gaming-gtx360", name: "GAMING KEYBOARD & MOUSE GTX360", specs: "Brand New", retailPrice: 1950, price: 2700 },
+          { id: "combo-wl-w500", name: "W/L KEYBOARD & MOUSE W500", specs: "Brand New", retailPrice: 2100, price: 2850 },
+        ],
+      },
+      {
+        id: "keyboards",
+        name: "Keyboards",
+        icon: "keyboard",
+        items: [
+          { id: "kb-ps2-hym-k1000-amy-kp8000", name: "PS2 KEYBOARD HYM K1000 / AMY KP8000", specs: "Brand New", retailPrice: 560, price: 1310 },
+          { id: "kb-ps2-bw08-jedel", name: "PS2 KEYBOARD BW-08 / JEDEL", specs: "Brand New", retailPrice: 810, price: 1560 },
+          { id: "kb-usb-three-language", name: "USB KEYBOARD THREE LANGUAGE", specs: "Brand New", retailPrice: 840, price: 1590 },
+          { id: "kb-usb-mini-hp-dell", name: "USB MINI KEYBOARD HP / DELL", specs: "Brand New", retailPrice: 1190, price: 1940 },
+          { id: "kb-usb-flexible-small", name: "USB FLEXIBLE KEYBOARD SMALL", specs: "Brand New", retailPrice: 1250, price: 2000 },
+          { id: "kb-usb-flexible-big", name: "USB FLEXIBLE KEYBOARD BIG", specs: "Brand New", retailPrice: 1530, price: 2280 },
+          { id: "kb-usb-gaming-banda-v3", name: "USB GAMING KEYBOARD BANDA V3", specs: "Brand New", retailPrice: 1580, price: 2330 },
+          { id: "kb-usb-multimedia-banda-v5", name: "USB MULTIMEDIA KEYBOARD BANDA V5", specs: "Brand New", retailPrice: 1980, price: 2730 },
+          { id: "kb-usb-gaming-banda-v2", name: "USB GAMING KEYBOARD BANDA V2", specs: "Brand New", retailPrice: 2450, price: 3200 },
+          { id: "kb-wireless-multimedia-helios", name: "WRILESS MULTIMEDIA KEYBOARD HELIOS", specs: "Brand New", retailPrice: 1290, price: 2040 },
+        ],
+      },
+      {
+        id: "webcams",
+        name: "Web Cam",
+        icon: "videocam",
+        items: [
+          { id: "webcam-usb-m928-ms901", name: "USB WEB CAMERA M928 / MS901", specs: "Brand New", retailPrice: 1190, price: 1940 },
+          { id: "webcam-usb-720p-sound", name: "USB WEB CAMERA 720p (USB + SOUND)", specs: "Brand New", retailPrice: 1390, price: 2140 },
+          { id: "webcam-usb-1080p", name: "USB WEB CAMERA 1080P (USB)", specs: "Brand New", retailPrice: 2100, price: 2850 },
+        ],
+      },
+      {
+        id: "microphones",
+        name: "Micro Phone",
+        icon: "mic",
+        items: [
+          { id: "mic-usb-tucci-mk100", name: "USB MIC TUCCI MK-100", specs: "Brand New", retailPrice: 750, price: 1500 },
+        ],
+      },
+      {
+        id: "sound-cards",
+        name: "Sound Card",
+        icon: "speaker",
+        items: [
+          { id: "sc-51-usb", name: "5.1 CHANNEL USB SOUND CARD", specs: "Brand New", retailPrice: 230, price: 980 },
+          { id: "sc-71-usb", name: "7.1 CHANNEL USB SOUND CARD", specs: "Brand New", retailPrice: 300, price: 1050 },
+          { id: "sc-71-usb-hifi", name: "7.1 CHANNEL USB SOUND CARD (HIFI)", specs: "Brand New", retailPrice: 430, price: 1180 },
+          { id: "sc-71x2-usb", name: "7.1 X 2 CHANNEL USB SOUND CARD", specs: "Brand New", retailPrice: 520, price: 1270 },
+          { id: "sc-pci", name: "PCI SOUND CARD", specs: "Brand New", retailPrice: 1150, price: 1900 },
+          { id: "sc-pcie-51", name: "PCI EXPRESS SOUND CARD 5.1", specs: "Brand New", retailPrice: 3250, price: 4000 },
+        ],
+      },
+    ],
+  },
 ];
 
 export const SECTION_ITEM_COUNTS: Record<string, number> = Object.fromEntries(

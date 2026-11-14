@@ -33,6 +33,8 @@ import {
   SITE_LOCATION,
   SITE_PHONE_DISPLAY,
   SITE_PHONE_HREF,
+  AQUA_PC_PARTS_URL,
+  getAquaPcPartsUrl,
 } from "@/lib/constants";
 
 const WHATSAPP_BASE = WHATSAPP_LINK;
@@ -165,6 +167,16 @@ const CATEGORIES = [
     color: "from-yellow-500/20 to-amber-500/10",
     border: "border-yellow-500/30",
     iconColor: "text-yellow-400",
+  },
+  {
+    id: "peripherals",
+    name: "Peripherals & Audio",
+    desc: "Brand New Mice, Keyboards, Combos, Webcams, Mics & Sound Cards",
+    count: `${SECTION_ITEM_COUNTS.peripherals} Items`,
+    icon: "devices",
+    color: "from-pink-500/20 to-rose-500/10",
+    border: "border-pink-500/30",
+    iconColor: "text-primary",
   },
   {
     id: "cooling",
@@ -510,15 +522,15 @@ export default function HomePage() {
                 className="flex flex-wrap items-center gap-space-md pt-space-xs"
               >
                 <MagneticWrap>
-                  <Link
-                    href="/shop"
+                  <a
+                    href={AQUA_PC_PARTS_URL}
                     className="relative sheen-hover inline-flex items-center justify-center gap-space-sm px-space-xl py-space-md rounded-xl bg-gradient-to-r from-primary to-secondary text-surface font-syne text-title-md font-bold shadow-cyan-glow hover:shadow-cyan-glow-lg hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-300 group"
                   >
                     <span className="material-symbols-outlined text-[20px] relative z-10 group-hover:rotate-12 transition-transform duration-300">
                       grid_view
                     </span>
                     <span className="relative z-10">Browse {TOTAL_SHOP_ITEMS} Parts</span>
-                  </Link>
+                  </a>
                 </MagneticWrap>
 
                 <MagneticWrap>
@@ -808,15 +820,15 @@ export default function HomePage() {
               </h2>
             </motion.div>
             <motion.div variants={fadeInVariants} custom={1}>
-              <Link
-                href="/shop"
+              <a
+                href={AQUA_PC_PARTS_URL}
                 className="inline-flex items-center gap-space-xs text-primary hover:text-primary-fixed font-syne text-title-md transition-colors group"
               >
-                <span>View Full {TOTAL_SHOP_ITEMS}-Item Shop Catalog</span>
+                <span>View Full {TOTAL_SHOP_ITEMS}-Item Aqua PC Parts Catalog</span>
                 <span className="material-symbols-outlined text-[18px] group-hover:translate-x-1 transition-transform">
                   arrow_forward
                 </span>
-              </Link>
+              </a>
             </motion.div>
           </div>
 
@@ -829,8 +841,8 @@ export default function HomePage() {
                   maxTilt={5}
                   className="rounded-2xl bg-surface-container hover:bg-surface-container-high border border-outline-variant/15 hover:border-primary/40 shadow-sm hover:shadow-xl transition-all duration-300 card-glow h-full"
                 >
-                  <Link
-                    href={`/shop?category=${cat.id}`}
+                  <a
+                    href={getAquaPcPartsUrl(cat.id)}
                     className="p-space-lg flex flex-col justify-between h-full relative z-10"
                   >
                     <div className="flex flex-col gap-space-sm">
@@ -864,7 +876,7 @@ export default function HomePage() {
                         arrow_forward
                       </span>
                     </div>
-                  </Link>
+                  </a>
                 </TiltSpotlightCard>
               </motion.div>
             ))}
@@ -888,13 +900,13 @@ export default function HomePage() {
               </p>
             </motion.div>
             <motion.div variants={fadeInVariants} custom={1}>
-              <Link
-                href="/shop"
+              <a
+                href={AQUA_PC_PARTS_URL}
                 className="px-space-md py-space-sm rounded-xl bg-surface-container-high hover:bg-surface-bright text-on-surface font-syne text-body-md font-semibold border border-outline-variant/30 transition-all flex items-center gap-2 self-start md:self-auto hover:border-primary/40 hover:-translate-y-0.5"
               >
                 <span>View All {TOTAL_SHOP_ITEMS} Products</span>
                 <span className="material-symbols-outlined text-[16px]">arrow_forward</span>
-              </Link>
+              </a>
             </motion.div>
           </div>
 
@@ -965,13 +977,13 @@ export default function HomePage() {
                       <WhatsAppIcon className="w-4 h-4 shrink-0" />
                       <span>Check Price on WhatsApp</span>
                     </a>
-                    <Link
-                      href="/shop"
+                    <a
+                      href={AQUA_PC_PARTS_URL}
                       className="w-full sm:w-auto p-2.5 rounded-xl bg-surface-container-high hover:bg-surface-bright text-on-surface-variant hover:text-on-surface flex items-center justify-center border border-outline-variant/20 transition-colors hover:border-primary/30"
-                      title="View in Shop"
+                      title="View in Aqua PC Parts"
                     >
                       <span className="material-symbols-outlined text-[18px]">open_in_new</span>
-                    </Link>
+                    </a>
                   </div>
                 </SpotlightCard>
               </motion.div>
@@ -1100,13 +1112,13 @@ export default function HomePage() {
                           <span>Request {activeBlueprint.label} Quote</span>
                         </a>
                       </MagneticWrap>
-                      <Link
-                        href="/shop"
+                      <a
+                        href={AQUA_PC_PARTS_URL}
                         className="inline-flex items-center gap-1.5 px-space-lg py-3 rounded-xl bg-surface-container hover:bg-surface-container-high text-on-surface font-syne text-body-md font-semibold border border-outline-variant/30 hover:border-primary/40 transition-all"
                       >
                         <span>Customize Parts</span>
                         <span className="material-symbols-outlined text-[18px]">tune</span>
-                      </Link>
+                      </a>
                     </div>
                   </div>
 
@@ -1373,12 +1385,12 @@ export default function HomePage() {
             </MagneticWrap>
 
             <MagneticWrap>
-              <Link
-                href="/shop"
+              <a
+                href={AQUA_PC_PARTS_URL}
                 className="relative sheen-hover px-space-xl py-space-md rounded-xl bg-gradient-to-r from-primary to-secondary text-surface font-syne text-title-md font-bold shadow-cyan-glow hover:shadow-cyan-glow-lg hover:-translate-y-0.5 transition-all duration-300 inline-block"
               >
                 <span className="relative z-10">Browse {TOTAL_SHOP_ITEMS} Parts Shop</span>
-              </Link>
+              </a>
             </MagneticWrap>
 
             <MagneticWrap strength={0.16}>

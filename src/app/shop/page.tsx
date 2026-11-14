@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import ShopPage from "@/components/pages/ShopPage";
 
 export const metadata: Metadata = {
-  title: "Shop PC Parts & Components | Aqua PC Solutions",
+  title: "Redirecting to Aqua PC Parts | Aqua PC Solutions",
   description:
-    "Browse 328 quality-tested PC parts including monitors, VGA cards, processors, motherboards, storage, RAM, PSUs, cooling, and cables. Instant WhatsApp price inquiry.",
+    "Redirecting to Aqua PC Parts — our dedicated storefront for 330+ quality-tested PC parts, monitors, VGA cards, processors, motherboards, RAM, SSDs, PSUs, cooling, and cables.",
   keywords: [
     "Aqua PC Solutions",
     "PC parts",

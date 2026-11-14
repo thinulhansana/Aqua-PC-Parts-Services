@@ -118,7 +118,11 @@ export default function Header() {
           {/* ── Center: Nav Links (desktop) ── */}
           <ul className="hidden lg:flex items-center gap-1">
             {NAV_LINKS.map((link, i) => {
-              const isActive = pathname === link.href;
+              const isExternalSite =
+                link.label === "Shop" ||
+                link.href.includes("aqua-pc-parts") ||
+                link.href.startsWith("http");
+              const isActive = !isExternalSite && pathname === link.href;
               return (
                 <motion.li
                   key={link.href}
@@ -126,26 +130,40 @@ export default function Header() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.05 * i + 0.2, duration: 0.4 }}
                 >
-                  <Link
-                    href={link.href}
-                    className={`relative px-2.5 xl:px-3 py-2 text-body-md transition-all duration-200 rounded-lg group ${
-                      isActive
-                        ? "text-primary font-semibold"
-                        : "text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high/50"
-                    }`}
-                  >
-                    {link.label}
-                    {isActive && (
-                      <motion.span
-                        layoutId="nav-active"
-                        className="absolute inset-0 rounded-lg bg-primary/10 border border-primary/20 -z-10"
-                        transition={{ type: "spring", stiffness: 350, damping: 30 }}
-                      />
-                    )}
-                    {!isActive && (
+                  {isExternalSite ? (
+                    <a
+                      href={link.href}
+                      className="relative inline-flex items-center gap-1 px-2.5 xl:px-3 py-2 text-body-md transition-all duration-200 rounded-lg group text-on-surface-variant hover:text-primary hover:bg-surface-container-high/50"
+                      title="Visit Aqua PC Parts Storefront"
+                    >
+                      <span>{link.label}</span>
+                      <span className="material-symbols-outlined text-[14px] text-primary/75 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform">
+                        open_in_new
+                      </span>
                       <span className="absolute bottom-0 left-1/2 -translate-x-1/2 h-0.5 w-0 bg-primary rounded-full group-hover:w-4/5 transition-all duration-300" />
-                    )}
-                  </Link>
+                    </a>
+                  ) : (
+                    <Link
+                      href={link.href}
+                      className={`relative px-2.5 xl:px-3 py-2 text-body-md transition-all duration-200 rounded-lg group ${
+                        isActive
+                          ? "text-primary font-semibold"
+                          : "text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high/50"
+                      }`}
+                    >
+                      {link.label}
+                      {isActive && (
+                        <motion.span
+                          layoutId="nav-active"
+                          className="absolute inset-0 rounded-lg bg-primary/10 border border-primary/20 -z-10"
+                          transition={{ type: "spring", stiffness: 350, damping: 30 }}
+                        />
+                      )}
+                      {!isActive && (
+                        <span className="absolute bottom-0 left-1/2 -translate-x-1/2 h-0.5 w-0 bg-primary rounded-full group-hover:w-4/5 transition-all duration-300" />
+                      )}
+                    </Link>
+                  )}
                 </motion.li>
               );
             })}
@@ -324,26 +342,45 @@ export default function Header() {
               className="lg:hidden mt-2 rounded-2xl bg-surface-container/95 backdrop-blur-xl border border-outline-variant/25 p-4 shadow-glass overflow-hidden"
             >
               <ul className="flex flex-col gap-1">
-                {NAV_LINKS.map((link, i) => (
-                  <motion.li
-                    key={link.href}
-                    initial={{ opacity: 0, x: -12 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: i * 0.05, duration: 0.25 }}
-                  >
-                    <Link
-                      href={link.href}
-                      className={`block px-4 py-3 text-body-lg rounded-lg transition-colors ${
-                        pathname === link.href
-                          ? "text-primary bg-primary/10 font-semibold"
-                          : "text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high/50"
-                      }`}
-                      onClick={() => setMobileOpen(false)}
+                {NAV_LINKS.map((link, i) => {
+                  const isExternalSite =
+                    link.label === "Shop" ||
+                    link.href.includes("aqua-pc-parts") ||
+                    link.href.startsWith("http");
+                  return (
+                    <motion.li
+                      key={link.href}
+                      initial={{ opacity: 0, x: -12 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: i * 0.05, duration: 0.25 }}
                     >
-                      {link.label}
-                    </Link>
-                  </motion.li>
-                ))}
+                      {isExternalSite ? (
+                        <a
+                          href={link.href}
+                          className="flex items-center justify-between px-4 py-3 text-body-lg rounded-lg transition-colors text-on-surface-variant hover:text-primary hover:bg-surface-container-high/50"
+                          onClick={() => setMobileOpen(false)}
+                        >
+                          <span>{link.label} (Aqua PC Parts)</span>
+                          <span className="material-symbols-outlined text-[18px] text-primary">
+                            open_in_new
+                          </span>
+                        </a>
+                      ) : (
+                        <Link
+                          href={link.href}
+                          className={`block px-4 py-3 text-body-lg rounded-lg transition-colors ${
+                            pathname === link.href
+                              ? "text-primary bg-primary/10 font-semibold"
+                              : "text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high/50"
+                          }`}
+                          onClick={() => setMobileOpen(false)}
+                        >
+                          {link.label}
+                        </Link>
+                      )}
+                    </motion.li>
+                  );
+                })}
               </ul>
               <motion.div
                 initial={{ opacity: 0 }}

@@ -32,13 +32,14 @@ function FooterLinkColumn({
       <ul className="flex flex-col gap-2.5">
         {links.map((link) => {
           const isExternal = link.href.startsWith("http");
+          const isPartsSite = link.href.includes("aqua-pc-parts");
           return (
             <li key={link.href}>
-              {isExternal ? (
+              {isExternal || isPartsSite ? (
                 <a
                   href={link.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  target={isExternal ? "_blank" : undefined}
+                  rel={isExternal ? "noopener noreferrer" : undefined}
                   className="text-body-md text-on-surface-variant hover:text-primary transition-colors inline-flex items-center gap-1.5 group"
                 >
                   <span>{link.label}</span>

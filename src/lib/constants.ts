@@ -21,6 +21,16 @@ export const SITE_MAPS_URL =
   "https://www.google.com/maps/search/?api=1&query=Embilipitiya,+Sri+Lanka";
 export const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL || "https://aquapcsolutions.workers.dev";
+export const AQUA_PC_PARTS_SITE_NAME = "Aqua PC Parts";
+export const AQUA_PC_PARTS_URL =
+  process.env.NEXT_PUBLIC_AQUA_PC_PARTS_URL || "/aqua-pc-parts/index.html";
+
+export function getAquaPcPartsUrl(category?: string): string {
+  if (!category) return AQUA_PC_PARTS_URL;
+  const sep = AQUA_PC_PARTS_URL.includes("?") ? "&" : "?";
+  return `${AQUA_PC_PARTS_URL}${sep}category=${encodeURIComponent(category)}`;
+}
+
 export const SITE_HOURS = {
   weekdays: "8:00 AM – 7:00 PM",
   saturday: "10:00 AM – 5:00 PM",
@@ -29,7 +39,7 @@ export const SITE_HOURS = {
 
 export const NAV_LINKS = [
   { label: "Home", href: "/" },
-  { label: "Shop", href: "/shop" },
+  { label: "Shop", href: AQUA_PC_PARTS_URL },
   { label: "Services", href: "/services" },
   { label: "Pricing", href: "/pricing" },
   { label: "About", href: "/about" },
@@ -38,14 +48,15 @@ export const NAV_LINKS = [
 
 export const FOOTER_LINKS = {
   products: {
-    title: "Shop Parts",
+    title: "Aqua PC Parts",
     links: [
-      { label: "Processors", href: "/shop?category=processors" },
-      { label: "VGA Cards", href: "/shop?category=vga-cards" },
-      { label: "Motherboards", href: "/shop?category=motherboards" },
-      { label: "Storage & SSDs", href: "/shop?category=storage" },
-      { label: "Monitors", href: "/shop?category=monitors" },
-      { label: "RAM & Power Supplies", href: "/shop?category=ram" },
+      { label: "Processors", href: getAquaPcPartsUrl("processors") },
+      { label: "VGA Cards", href: getAquaPcPartsUrl("vga-cards") },
+      { label: "Motherboards", href: getAquaPcPartsUrl("motherboards") },
+      { label: "Storage & SSDs", href: getAquaPcPartsUrl("storage") },
+      { label: "Monitors", href: getAquaPcPartsUrl("monitors") },
+      { label: "RAM & Power Supplies", href: getAquaPcPartsUrl("ram") },
+      { label: "Peripherals & Audio", href: getAquaPcPartsUrl("peripherals") },
     ],
   },
   services: {
