@@ -8,6 +8,7 @@ import {
   TOTAL_SHOP_ITEMS,
   SECTION_ITEM_COUNTS,
   buildWhatsAppUrl,
+  formatPriceLKR,
 } from "@/lib/shopData";
 import { EASE_PREMIUM } from "@/components/ui/MotionPrimitives";
 
@@ -15,6 +16,8 @@ interface FlatCatalogItem {
   id: string;
   name: string;
   specs?: string;
+  retailPrice?: number;
+  price?: number;
   sectionId: string;
   sectionLabel: string;
   categoryName: string;
@@ -27,6 +30,8 @@ const ALL_CATALOG_ITEMS: FlatCatalogItem[] = SHOP_SECTIONS.flatMap((section) =>
       id: item.id,
       name: item.name,
       specs: item.specs,
+      retailPrice: item.retailPrice,
+      price: item.price,
       sectionId: section.id,
       sectionLabel: section.label,
       categoryName: category.name,
@@ -190,9 +195,16 @@ export default function InteractiveCatalog() {
           <tbody className="divide-y divide-outline-variant/10 text-body-md text-on-surface">
             {displayedParts.map((part) => {
               const withInstall = !!installOptions[part.id];
+              const hasPrice =
+                typeof part.price === "number" && Number.isFinite(part.price);
+              const priceDisplay = formatPriceLKR(part.price);
+              const totalWithInstall = hasPrice
+                ? formatPriceLKR(part.price! + 1500)
+                : undefined;
+
               const whatsappMessage = withInstall
-                ? `Hi Aqua PC Solutions, I'd like to check the latest LKR price and availability for: ${part.name} (${part.categoryName}) WITH Workshop Install & Stress Check (+From Rs. 1,500).`
-                : `Hi Aqua PC Solutions, I'd like to check the latest LKR price and availability for: ${part.name} (${part.categoryName}).`;
+                ? `Hi Aqua PC Solutions, I'd like to order / check availability for: ${part.name} (${part.categoryName}) — Listed Price: ${priceDisplay} WITH Workshop Install & Stress Check (+Rs. 1,500${totalWithInstall ? `, Total: ${totalWithInstall}` : ""}).`
+                : `Hi Aqua PC Solutions, I'd like to order / check availability for: ${part.name} (${part.categoryName}) — Listed Price: ${priceDisplay}.`;
 
               return (
                 <tr
@@ -228,10 +240,12 @@ export default function InteractiveCatalog() {
                         <span className="w-1.5 h-1.5 rounded-full bg-secondary" />
                         Grade-A Tested · 06 Mo. Warranty
                       </span>
-                      <span className="font-mono text-[11px] text-primary">
+                      <span className="font-syne text-title-sm font-bold text-primary whitespace-nowrap">
                         {withInstall
-                          ? "LKR Part Rate + Rs. 1,500 Install"
-                          : "Live Daily LKR Market Rate"}
+                          ? hasPrice
+                            ? `${priceDisplay} + Rs. 1,500 Install = ${totalWithInstall}`
+                            : "Price on Inquiry + Rs. 1,500 Install"
+                          : priceDisplay}
                       </span>
                     </div>
                   </td>
