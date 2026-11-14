@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { motion, useScroll, useSpring, AnimatePresence } from "framer-motion";
 import { WHATSAPP_LINK } from "@/lib/shopData";
+import RoseAssistant from "@/components/ui/RoseAssistant";
 
 export default function FloatingActions() {
   const { scrollYProgress } = useScroll();
@@ -56,6 +57,8 @@ export default function FloatingActions() {
             </motion.button>
           )}
         </AnimatePresence>
+
+        <RoseAssistant />
 
         <motion.a
           href={WHATSAPP_LINK}
