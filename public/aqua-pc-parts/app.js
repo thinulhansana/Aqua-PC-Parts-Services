@@ -512,8 +512,18 @@
     // Left: Info
     const infoDiv = document.createElement("div");
     infoDiv.className = "item-info";
-    const dot = document.createElement("span");
-    dot.className = "item-dot" + (isBrandNew ? " new-dot" : "");
+    const imgSrc =
+      typeof window.getAquaPartImage === "function"
+        ? window.getAquaPartImage(item, sec && sec.id, categoryName)
+        : "assets/cats/expansion.webp";
+    const thumb = document.createElement("div");
+    thumb.className = "part-thumb" + (isBrandNew ? " new-thumb" : "");
+    const thumbImg = document.createElement("img");
+    thumbImg.src = imgSrc;
+    thumbImg.alt = item.name;
+    thumbImg.loading = "lazy";
+    thumbImg.decoding = "async";
+    thumb.appendChild(thumbImg);
 
     const metaWrap = document.createElement("div");
     const titleEl = document.createElement("div");
@@ -540,7 +550,7 @@
 
     metaWrap.appendChild(titleEl);
     metaWrap.appendChild(badgesEl);
-    infoDiv.appendChild(dot);
+    infoDiv.appendChild(thumb);
     infoDiv.appendChild(metaWrap);
 
     // Right: Price + Buttons
