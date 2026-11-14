@@ -7,10 +7,42 @@
     whatsappDirectBase: "https://wa.me/94788194535",
     mainSiteUrl: "https://aquapcsolutions.yyth.workers.dev/",
     totalItems: 0,
+    usedTotalItems: 0,
+    brandNewTotalItems: 0,
     sections: [],
+    usedSections: [],
+    brandNewSections: [],
   };
 
-  // Resolve Main Site base URL (same origin if served under /aqua-pc-parts/, else mainSiteUrl)
+  const PAGE_MODE = document.body.getAttribute("data-page") || "home";
+  const QUOTE_STORAGE_KEY = "aqua-parts-quote-v1";
+  const THEME_STORAGE_KEY = "aqua-parts-theme";
+  const VIEW_STORAGE_KEY = "aqua-parts-view";
+
+  const USED_SECTIONS = catalog.usedSections && catalog.usedSections.length > 0
+    ? catalog.usedSections
+    : catalog.sections || [];
+  const BRAND_NEW_SECTIONS = catalog.brandNewSections || [];
+
+  function countItemsInSections(sections) {
+    return sections.reduce(
+      (sum, sec) => sum + sec.categories.reduce((cs, c) => cs + c.items.length, 0),
+      0
+    );
+  }
+
+  // On Home "all" view, show the 9 used hardware departments + all 7 Brand New departments
+  // cleanly without duplicating the 28 peripheral items that exist in both catalogs.
+  const COMBINED_ALL_SECTIONS = [
+    ...USED_SECTIONS.filter((s) => s.id !== "peripherals"),
+    ...BRAND_NEW_SECTIONS,
+  ];
+
+  const TOTAL_USED = catalog.usedTotalItems || countItemsInSections(USED_SECTIONS);
+  const TOTAL_NEW = catalog.brandNewTotalItems || countItemsInSections(BRAND_NEW_SECTIONS);
+  const TOTAL_ALL = countItemsInSections(COMBINED_ALL_SECTIONS);
+
+  // Resolve Main Site base URL
   const isSameHostSubpath = window.location.pathname.includes("/aqua-pc-parts");
   const MAIN_SITE_BASE = isSameHostSubpath
     ? "/"
@@ -50,30 +82,32 @@
 
   // App State
   const state = {
+    condition: PAGE_MODE === "used" ? "used" : PAGE_MODE === "new" ? "new" : "all",
     activeSection: "all",
     searchQuery: "",
     sortOrder: "default",
     pricedOnly: false,
+    viewMode: "list",
     openCustomizers: new Set(),
-    itemOptions: {}, // itemId -> { quantity, intent, fulfillment, customNote }
-    quoteList: {}, // itemId -> { item, categoryName, sectionLabel, quantity }
+    itemOptions: {},
+    quoteList: {},
     quoteFulfillment: "pickup",
   };
 
-  // Index all items by id for quick lookup
-  const itemLookup = new Map();
-  catalog.sections.forEach((sec) => {
-    sec.categories.forEach((cat) => {
-      cat.items.forEach((item) => {
-        itemLookup.set(item.id, {
-          item,
-          categoryName: cat.name,
-          sectionLabel: sec.label,
-          sectionId: sec.id,
-        });
-      });
-    });
-  });
+  function getActiveConditionSections() {
+    if (PAGE_MODE === "used" || state.condition === "used") return USED_SECTIONS;
+    if (PAGE_MODE === "new" || state.condition === "new") return BRAND_NEW_SECTIONS;
+    return COMBINED_ALL_SECTIONS;
+  }
+
+  function isNewConditionItem(item, sec) {
+    return (
+      item.condition === "new" ||
+      item.specs === "Brand New" ||
+      (item.specs && item.specs.toLowerCase().includes("brand new")) ||
+      (sec && sec.condition === "new")
+    );
+  }
 
   function formatPriceLKR(price) {
     if (typeof price !== "number" || !Number.isFinite(price)) {
@@ -94,16 +128,19 @@
     return state.itemOptions[itemId];
   }
 
-  function buildItemWhatsAppMessage(item, categoryName, sectionLabel, opts) {
+  function buildItemWhatsAppMessage(item, categoryName, sectionLabel, opts, isBrandNew) {
     const qty = Math.max(1, Math.min(20, Math.floor(opts.quantity || 1)));
     const unitPriceText = formatPriceLKR(item.price);
-    const warrantyText = item.warranty || "06 Months Testing Warranty";
+    const warrantyText =
+      item.warranty || (isBrandNew ? "Brand New · Store Warranty" : "06 Months Testing Warranty");
+    const conditionText = isBrandNew ? "Brand New" : "Used (Grade A Bench Tested)";
     const categoryLine = [sectionLabel, categoryName].filter(Boolean).join(" › ");
 
     const lines = [
       "Hello Aqua PC Parts / Aqua PC Solutions! I'm contacting you about this item:",
       "",
       "• Item: " + item.name,
+      "• Condition: " + conditionText,
     ];
     if (categoryLine) lines.push("• Category: " + categoryLine);
     if (item.specs) lines.push("• Specs: " + item.specs);
@@ -116,7 +153,9 @@
     }
     lines.push("• Warranty: " + warrantyText);
     lines.push("• Inquiry Type: " + (INTENT_LABELS[opts.intent] || INTENT_LABELS.order));
-    lines.push("• Preferred Option: " + (FULFILLMENT_LABELS[opts.fulfillment] || FULFILLMENT_LABELS.pickup));
+    lines.push(
+      "• Preferred Option: " + (FULFILLMENT_LABELS[opts.fulfillment] || FULFILLMENT_LABELS.pickup)
+    );
     if (opts.customNote && opts.customNote.trim()) {
       lines.push("• Note: " + opts.customNote.trim());
     }
@@ -128,12 +167,42 @@
     return catalog.whatsappDirectBase + "?text=" + encodeURIComponent(message);
   }
 
-  // Elements
+  // Quote persistence helpers
+  function loadPersistedQuote() {
+    try {
+      const raw = localStorage.getItem(QUOTE_STORAGE_KEY);
+      if (!raw) return;
+      const parsed = JSON.parse(raw);
+      if (parsed && typeof parsed === "object") {
+        if (parsed.quoteList && typeof parsed.quoteList === "object") {
+          state.quoteList = parsed.quoteList;
+        }
+        if (typeof parsed.quoteFulfillment === "string") {
+          state.quoteFulfillment = parsed.quoteFulfillment;
+        }
+      }
+    } catch (_) {}
+  }
+
+  function savePersistedQuote() {
+    try {
+      localStorage.setItem(
+        QUOTE_STORAGE_KEY,
+        JSON.stringify({
+          quoteList: state.quoteList,
+          quoteFulfillment: state.quoteFulfillment,
+        })
+      );
+    } catch (_) {}
+  }
+
+  // DOM Elements
   const categoryNavEl = document.getElementById("category-nav");
   const catalogListEl = document.getElementById("catalog-list");
   const activeSectionIconEl = document.getElementById("active-section-icon");
   const activeSectionTitleEl = document.getElementById("active-section-title");
   const activeSectionCountEl = document.getElementById("active-section-count");
+  const sidebarCondLabelEl = document.getElementById("sidebar-condition-label");
   const globalSearchInput = document.getElementById("global-search-input");
   const globalSearchClear = document.getElementById("global-search-clear");
   const sortSelect = document.getElementById("sort-select");
@@ -154,27 +223,51 @@
   const quoteClearBtn = document.getElementById("quote-clear-btn");
   const quoteSendWaBtn = document.getElementById("quote-send-wa-btn");
 
-  // Init header & footer links
+  // Populate dynamic counters in header, cards & hero
+  const setText = (id, val) => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = String(val);
+  };
+
+  setText("nav-used-count", TOTAL_USED);
+  setText("nav-new-count", TOTAL_NEW);
+  setText("card-used-count", TOTAL_USED);
+  setText("card-new-count", TOTAL_NEW);
+  setText("cond-all-count", TOTAL_ALL);
+  setText("cond-used-count", TOTAL_USED);
+  setText("cond-new-count", TOTAL_NEW);
+
+  if (PAGE_MODE === "new") {
+    setText("hero-total-items", TOTAL_NEW);
+    setText("hero-total-sections", BRAND_NEW_SECTIONS.length);
+  } else {
+    setText("hero-total-items", TOTAL_USED);
+    setText("hero-new-items", TOTAL_NEW);
+    setText("hero-total-sections", USED_SECTIONS.length);
+  }
+
   if (mainSiteLink) {
     mainSiteLink.href = mainSiteHref("");
   }
 
-  const heroTotalItemsEl = document.getElementById("hero-total-items");
-  const heroTotalSectionsEl = document.getElementById("hero-total-sections");
-  if (heroTotalItemsEl) heroTotalItemsEl.textContent = String(catalog.totalItems);
-  if (heroTotalSectionsEl) heroTotalSectionsEl.textContent = String(catalog.sections.length);
-
   const footerYearEl = document.getElementById("footer-year");
   if (footerYearEl) footerYearEl.textContent = String(new Date().getFullYear());
 
+  // Footer department links match the active page's division
   const footerDeptLinksEl = document.getElementById("footer-dept-links");
   if (footerDeptLinksEl) {
-    catalog.sections.forEach((sec) => {
+    const footerSections = PAGE_MODE === "new" ? BRAND_NEW_SECTIONS : USED_SECTIONS;
+    footerSections.forEach((sec) => {
+      const count = sec.categories.reduce((s, c) => s + c.items.length, 0);
       const li = document.createElement("li");
       const btn = document.createElement("button");
       btn.type = "button";
-      btn.textContent = sec.label + " (" + (catalog.sectionItemCounts[sec.id] || 0) + ")";
+      btn.textContent = sec.label + " (" + count + ")";
       btn.addEventListener("click", () => {
+        if (PAGE_MODE === "home") {
+          state.condition = "used";
+          syncConditionButtonsUI();
+        }
         setActiveSection(sec.id);
         window.scrollTo({ top: 0, behavior: "smooth" });
       });
@@ -208,12 +301,12 @@
       themeToggleIcon.textContent = theme === "dark" ? "light_mode" : "dark_mode";
     }
     try {
-      localStorage.setItem("aqua-parts-theme", theme);
+      localStorage.setItem(THEME_STORAGE_KEY, theme);
     } catch (_) {}
   }
 
   try {
-    const savedTheme = localStorage.getItem("aqua-parts-theme");
+    const savedTheme = localStorage.getItem(THEME_STORAGE_KEY);
     if (savedTheme === "light" || savedTheme === "dark") applyTheme(savedTheme);
   } catch (_) {}
 
@@ -224,13 +317,86 @@
     });
   }
 
-  // Read URL params (?category=...&q=...)
+  // View Mode (List / Grid)
+  function applyViewMode(mode) {
+    state.viewMode = mode === "grid" ? "grid" : "list";
+    if (catalogListEl) {
+      catalogListEl.classList.toggle("catalog-grid-mode", state.viewMode === "grid");
+    }
+    document.querySelectorAll(".view-btn").forEach((btn) => {
+      btn.classList.toggle("active", btn.getAttribute("data-view") === state.viewMode);
+    });
+    try {
+      localStorage.setItem(VIEW_STORAGE_KEY, state.viewMode);
+    } catch (_) {}
+  }
+
+  try {
+    const savedView = localStorage.getItem(VIEW_STORAGE_KEY);
+    if (savedView === "grid" || savedView === "list") {
+      state.viewMode = savedView;
+    }
+  } catch (_) {}
+
+  document.querySelectorAll(".view-btn").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      applyViewMode(btn.getAttribute("data-view") || "list");
+    });
+  });
+
+  // Condition Switcher (on Storefront Hub home)
+  function syncConditionButtonsUI() {
+    document.querySelectorAll(".cond-btn").forEach((btn) => {
+      btn.classList.toggle("active", btn.getAttribute("data-condition") === state.condition);
+    });
+    if (sidebarCondLabelEl) {
+      sidebarCondLabelEl.textContent =
+        PAGE_MODE === "used" || state.condition === "used"
+          ? "USED"
+          : PAGE_MODE === "new" || state.condition === "new"
+          ? "NEW"
+          : "ALL";
+    }
+  }
+
+  document.querySelectorAll(".cond-btn").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const next = btn.getAttribute("data-condition") || "all";
+      state.condition = next;
+      state.activeSection = "all";
+      const url = new URL(window.location.href);
+      if (next === "all") url.searchParams.delete("condition");
+      else url.searchParams.set("condition", next);
+      url.searchParams.delete("category");
+      window.history.replaceState({}, "", url.toString());
+      syncConditionButtonsUI();
+      renderSidebar();
+      renderCatalog();
+    });
+  });
+
+  // Read URL params (?condition=...&category=...&q=...)
   const urlParams = new URLSearchParams(window.location.search);
+  const initialCond = urlParams.get("condition");
   const initialCat = urlParams.get("category");
   const initialQ = urlParams.get("q");
-  if (initialCat && catalog.sections.some((s) => s.id === initialCat)) {
+
+  if (PAGE_MODE === "home" && (initialCond === "used" || initialCond === "new" || initialCond === "all")) {
+    state.condition = initialCond;
+  }
+
+  const activeConditionSections = getActiveConditionSections();
+  if (initialCat && activeConditionSections.some((s) => s.id === initialCat)) {
+    state.activeSection = initialCat;
+  } else if (
+    initialCat &&
+    PAGE_MODE === "home" &&
+    USED_SECTIONS.some((s) => s.id === initialCat)
+  ) {
+    state.condition = "used";
     state.activeSection = initialCat;
   }
+
   if (initialQ) {
     state.searchQuery = initialQ;
     if (globalSearchInput) globalSearchInput.value = initialQ;
@@ -254,19 +420,28 @@
     if (!categoryNavEl) return;
     categoryNavEl.innerHTML = "";
 
+    const sections = getActiveConditionSections();
+    const sectionTotal = countItemsInSections(sections);
+    const allLabel =
+      PAGE_MODE === "used" || state.condition === "used"
+        ? "All Used Parts"
+        : PAGE_MODE === "new" || state.condition === "new"
+        ? "All Brand New Parts"
+        : "All Parts";
+
     const allBtn = document.createElement("button");
     allBtn.type = "button";
     allBtn.className = "cat-tab" + (state.activeSection === "all" ? " active" : "");
     allBtn.innerHTML = `
       <span class="material-symbols-outlined">apps</span>
-      <span class="cat-tab-label">All Parts</span>
-      <span class="cat-tab-count">${catalog.totalItems}</span>
+      <span class="cat-tab-label">${allLabel}</span>
+      <span class="cat-tab-count">${sectionTotal}</span>
     `;
     allBtn.addEventListener("click", () => setActiveSection("all"));
     categoryNavEl.appendChild(allBtn);
 
-    catalog.sections.forEach((sec) => {
-      const count = catalog.sectionItemCounts[sec.id] || 0;
+    sections.forEach((sec) => {
+      const count = sec.categories.reduce((sum, c) => sum + c.items.length, 0);
       const btn = document.createElement("button");
       btn.type = "button";
       btn.className = "cat-tab" + (state.activeSection === sec.id ? " active" : "");
@@ -291,7 +466,6 @@
       if (state.sortOrder === "price-asc") {
         return pa - pb;
       }
-      // price-desc: keep unpriced items at bottom
       if (pa === Number.POSITIVE_INFINITY && pb === Number.POSITIVE_INFINITY) return 0;
       if (pa === Number.POSITIVE_INFINITY) return 1;
       if (pb === Number.POSITIVE_INFINITY) return -1;
@@ -314,17 +488,21 @@
     return svg;
   }
 
-  function renderItemCard(item, categoryName, sectionLabel) {
+  function renderItemCard(item, categoryName, sectionLabel, sec) {
     const hasPrice = typeof item.price === "number" && Number.isFinite(item.price);
+    const isBrandNew = isNewConditionItem(item, sec);
     const isCustomizing = state.openCustomizers.has(item.id);
     const inQuote = Boolean(state.quoteList[item.id]);
     const opts = getItemOpts(item.id);
     const waUrl = buildWhatsAppUrl(
-      buildItemWhatsAppMessage(item, categoryName, sectionLabel, opts)
+      buildItemWhatsAppMessage(item, categoryName, sectionLabel, opts, isBrandNew)
     );
 
     const card = document.createElement("div");
-    card.className = "item-card" + (isCustomizing ? " customizing" : "");
+    card.className =
+      "item-card" +
+      (isBrandNew ? " is-new-item" : "") +
+      (isCustomizing ? " customizing" : "");
 
     const mainRow = document.createElement("div");
     mainRow.className = "item-main-row";
@@ -333,7 +511,7 @@
     const infoDiv = document.createElement("div");
     infoDiv.className = "item-info";
     const dot = document.createElement("span");
-    dot.className = "item-dot";
+    dot.className = "item-dot" + (isBrandNew ? " new-dot" : "");
 
     const metaWrap = document.createElement("div");
     const titleEl = document.createElement("div");
@@ -342,9 +520,18 @@
 
     const badgesEl = document.createElement("div");
     badgesEl.className = "item-badges";
+    const condBadgeText =
+      item.specs && item.specs.toLowerCase().includes("sealed")
+        ? "Brand New · Sealed"
+        : isBrandNew
+        ? "Brand New"
+        : "Used · Grade A";
+    const warrantyText =
+      item.warranty || (isBrandNew ? "Store Warranty" : "06 Mo. Warranty");
+
     badgesEl.innerHTML = `
-      <span class="badge-warranty">${item.warranty || "06 Mo. Warranty"}</span>
-      <span class="badge-grade">Grade A</span>
+      <span class="badge-condition ${isBrandNew ? "new" : "used"}">${condBadgeText}</span>
+      <span class="badge-warranty">${warrantyText}</span>
       <span class="badge-grade">${categoryName}</span>
     `;
 
@@ -376,9 +563,11 @@
           item,
           categoryName,
           sectionLabel,
+          isBrandNew,
           quantity: opts.quantity || 1,
         };
       }
+      savePersistedQuote();
       updateQuoteDrawerUI();
       renderCatalog();
     });
@@ -399,7 +588,7 @@
     waBtn.rel = "noopener noreferrer";
     waBtn.appendChild(createWhatsAppSvg());
     const waLabel = document.createElement("span");
-    waLabel.textContent = hasPrice ? "Buy / Ask" : "Inquire";
+    waLabel.textContent = hasPrice ? "Buy / Ask" : "Get Quote";
     waBtn.appendChild(waLabel);
 
     actionsDiv.appendChild(priceBadge);
@@ -416,7 +605,7 @@
     customizerPanel.className = "customizer-panel" + (isCustomizing ? "" : " hidden");
 
     function updateCustomizerPreview() {
-      const msg = buildItemWhatsAppMessage(item, categoryName, sectionLabel, opts);
+      const msg = buildItemWhatsAppMessage(item, categoryName, sectionLabel, opts, isBrandNew);
       const nextUrl = buildWhatsAppUrl(msg);
       waBtn.href = nextUrl;
       const sendCustomBtn = customizerPanel.querySelector(".send-custom-wa");
@@ -436,7 +625,6 @@
     }
 
     if (isCustomizing) {
-      // Top row: Quantity & Total
       const topRow = document.createElement("div");
       topRow.className = "customizer-top-row";
 
@@ -557,7 +745,7 @@
       previewBox.className = "preview-box";
       const pre = document.createElement("pre");
       pre.className = "preview-msg";
-      pre.textContent = buildItemWhatsAppMessage(item, categoryName, sectionLabel, opts);
+      pre.textContent = buildItemWhatsAppMessage(item, categoryName, sectionLabel, opts, isBrandNew);
 
       const sendBtn = document.createElement("a");
       sendBtn.className = "btn-wa send-custom-wa";
@@ -592,15 +780,23 @@
     catalogListEl.innerHTML = "";
 
     const q = state.searchQuery.trim().toLowerCase();
+    const sections = getActiveConditionSections();
     const targetSections =
       state.activeSection === "all"
-        ? catalog.sections
-        : catalog.sections.filter((s) => s.id === state.activeSection);
+        ? sections
+        : sections.filter((s) => s.id === state.activeSection);
+
+    const defaultAllMeta =
+      PAGE_MODE === "used" || state.condition === "used"
+        ? { label: "All Used Parts", icon: "verified" }
+        : PAGE_MODE === "new" || state.condition === "new"
+        ? { label: "All Brand New Parts", icon: "new_releases" }
+        : { label: "All Parts (Used & Brand New)", icon: "apps" };
 
     const activeMeta =
       state.activeSection === "all"
-        ? { label: "All Parts", icon: "apps" }
-        : targetSections[0] || { label: "Parts", icon: "memory" };
+        ? defaultAllMeta
+        : targetSections[0] || defaultAllMeta;
 
     if (activeSectionIconEl) activeSectionIconEl.textContent = activeMeta.icon;
     if (activeSectionTitleEl) activeSectionTitleEl.textContent = activeMeta.label;
@@ -621,7 +817,8 @@
             item.name.toLowerCase().includes(q) ||
             cat.name.toLowerCase().includes(q) ||
             sec.label.toLowerCase().includes(q) ||
-            (item.specs && item.specs.toLowerCase().includes(q))
+            (item.specs && item.specs.toLowerCase().includes(q)) ||
+            (isNewConditionItem(item, sec) ? "brand new" : "used grade a").includes(q)
           );
         });
 
@@ -644,7 +841,7 @@
         const stack = document.createElement("div");
         stack.className = "items-stack";
         sorted.forEach((item) => {
-          stack.appendChild(renderItemCard(item, cat.name, sec.label));
+          stack.appendChild(renderItemCard(item, cat.name, sec.label, sec));
         });
 
         block.appendChild(header);
@@ -663,7 +860,7 @@
       empty.innerHTML = `
         <span class="material-symbols-outlined">search_off</span>
         <h3>No matching hardware found</h3>
-        <p>Try clearing your search filter or switching to All Parts.</p>
+        <p>Try clearing your search filter or resetting department filters.</p>
       `;
       const resetBtn = document.createElement("button");
       resetBtn.type = "button";
@@ -673,6 +870,10 @@
         state.searchQuery = "";
         state.pricedOnly = false;
         state.sortOrder = "default";
+        if (PAGE_MODE === "home") {
+          state.condition = "all";
+          syncConditionButtonsUI();
+        }
         if (globalSearchInput) globalSearchInput.value = "";
         if (globalSearchClear) globalSearchClear.classList.add("hidden");
         if (pricedOnlyCheckbox) pricedOnlyCheckbox.checked = false;
@@ -700,6 +901,13 @@
     const totalCount = entries.reduce((sum, e) => sum + e.quantity, 0);
     if (quoteCountBadge) quoteCountBadge.textContent = String(totalCount);
 
+    document.querySelectorAll("[data-quote-fulfillment]").forEach((btn) => {
+      btn.classList.toggle(
+        "active",
+        btn.getAttribute("data-quote-fulfillment") === state.quoteFulfillment
+      );
+    });
+
     let totalLkr = 0;
     let hasUnpriced = false;
     entries.forEach((e) => {
@@ -724,20 +932,21 @@
           <div class="empty-state">
             <span class="material-symbols-outlined">shopping_bag</span>
             <h3>Your Quote List is empty</h3>
-            <p>Click <b>+ Quote</b> on any hardware item to bundle multiple parts into a single WhatsApp order.</p>
+            <p>Click <b>+ Quote</b> on any Used or Brand New item to bundle parts into a single WhatsApp order.</p>
           </div>
         `;
       } else {
         entries.forEach((entry) => {
           const row = document.createElement("div");
           row.className = "drawer-item-row";
+          const condTag = entry.isBrandNew ? "Brand New" : "Used · Grade A";
 
           const top = document.createElement("div");
           top.className = "drawer-item-top";
           top.innerHTML = `
             <div>
               <div class="drawer-item-name">${entry.item.name}</div>
-              <div class="drawer-item-cat">${entry.sectionLabel} › ${entry.categoryName}</div>
+              <div class="drawer-item-cat">${condTag} · ${entry.sectionLabel} › ${entry.categoryName}</div>
             </div>
             <div class="price-badge ${typeof entry.item.price === "number" ? "" : "inquiry"}">
               ${
@@ -759,6 +968,7 @@
           mBtn.disabled = entry.quantity <= 1;
           mBtn.addEventListener("click", () => {
             entry.quantity = Math.max(1, entry.quantity - 1);
+            savePersistedQuote();
             updateQuoteDrawerUI();
           });
           const qSpan = document.createElement("span");
@@ -769,6 +979,7 @@
           pBtn.disabled = entry.quantity >= 20;
           pBtn.addEventListener("click", () => {
             entry.quantity = Math.min(20, entry.quantity + 1);
+            savePersistedQuote();
             updateQuoteDrawerUI();
           });
           stepper.appendChild(mBtn);
@@ -781,6 +992,7 @@
           remBtn.textContent = "Remove";
           remBtn.addEventListener("click", () => {
             delete state.quoteList[entry.item.id];
+            savePersistedQuote();
             updateQuoteDrawerUI();
             renderCatalog();
           });
@@ -809,12 +1021,20 @@
             typeof e.item.price === "number"
               ? formatPriceLKR(e.item.price * e.quantity)
               : "Price on Inquiry";
-          lines.push(`${idx + 1}. ${e.item.name} × ${e.quantity} — ${linePrice}`);
+          const condTag = e.isBrandNew ? "Brand New" : "Used Grade-A";
+          lines.push(`${idx + 1}. ${e.item.name} [${condTag}] × ${e.quantity} — ${linePrice}`);
         });
         lines.push("");
-        lines.push(`• Estimated Subtotal: ${formatPriceLKR(totalLkr)}${hasUnpriced ? " (+ Inquiry items)" : ""}`);
-        lines.push(`• Preferred Option: ${FULFILLMENT_LABELS[state.quoteFulfillment]}`);
-        lines.push("• Warranty: 06 Months Testing Warranty");
+        lines.push(
+          `• Estimated Subtotal: ${formatPriceLKR(totalLkr)}${
+            hasUnpriced ? " (+ Inquiry items)" : ""
+          }`
+        );
+        lines.push(
+          `• Preferred Option: ${
+            FULFILLMENT_LABELS[state.quoteFulfillment] || FULFILLMENT_LABELS.pickup
+          }`
+        );
         lines.push("", "Please confirm stock availability and total. Thank you!");
         quoteSendWaBtn.href = buildWhatsAppUrl(lines.join("\n"));
       }
@@ -862,6 +1082,7 @@
   if (quoteClearBtn) {
     quoteClearBtn.addEventListener("click", () => {
       state.quoteList = {};
+      savePersistedQuote();
       updateQuoteDrawerUI();
       renderCatalog();
     });
@@ -870,14 +1091,32 @@
   document.querySelectorAll("[data-quote-fulfillment]").forEach((btn) => {
     btn.addEventListener("click", () => {
       state.quoteFulfillment = btn.getAttribute("data-quote-fulfillment") || "pickup";
-      document
-        .querySelectorAll("[data-quote-fulfillment]")
-        .forEach((b) => b.classList.toggle("active", b === btn));
+      savePersistedQuote();
       updateQuoteDrawerUI();
     });
   });
 
-  // Initial Render
+  // Keyboard shortcuts: "/" focuses search, "Escape" closes Quote Drawer
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") {
+      closeQuoteDrawer();
+      return;
+    }
+    if (
+      e.key === "/" &&
+      globalSearchInput &&
+      document.activeElement &&
+      !["INPUT", "TEXTAREA", "SELECT"].includes(document.activeElement.tagName)
+    ) {
+      e.preventDefault();
+      globalSearchInput.focus();
+    }
+  });
+
+  // Initial Boot
+  loadPersistedQuote();
+  applyViewMode(state.viewMode);
+  syncConditionButtonsUI();
   renderSidebar();
   renderCatalog();
   updateQuoteDrawerUI();

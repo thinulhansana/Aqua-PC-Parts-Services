@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Aqua PC Parts | Official PC Components &amp; Hardware Storefront — Embilipitiya, Sri Lanka</title>
+  <title>Aqua PC Parts | Used &amp; Brand New PC Components — Embilipitiya, Sri Lanka</title>
   <meta
     name="description"
-    content="Browse 358+ Grade-A tested PC parts & brand-new peripherals — monitors, VGA cards, processors, motherboards, RAM, SSDs, PSUs, cooling, cables, mice, keyboards, webcams, microphones, and sound cards with transparent LKR pricing and instant customized WhatsApp ordering."
+    content="Shop Grade-A bench-tested Used PC Parts (358+ items) and Factory-Sealed Brand New Peripherals & Boxed Components at Aqua PC Parts, Embilipitiya, Sri Lanka. Transparent LKR prices & instant WhatsApp ordering."
   />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -20,12 +20,38 @@
   />
   <link rel="stylesheet" href="styles.css" />
 </head>
-<body>
+<body data-page="home">
   <!-- Ambient Background -->
   <div class="ambient-bg" aria-hidden="true">
     <div class="ambient-orb orb-cyan"></div>
     <div class="ambient-orb orb-teal"></div>
     <div class="ambient-grid"></div>
+  </div>
+
+  <!-- Top Utility Trust Bar -->
+  <div class="top-utility-bar">
+    <div class="utility-inner">
+      <div class="utility-group">
+        <span class="utility-item">
+          <span class="material-symbols-outlined">location_on</span>
+          <span>Embilipitiya Hardware Workshop, Sri Lanka</span>
+        </span>
+        <span class="utility-item emerald">
+          <span class="material-symbols-outlined">verified_user</span>
+          <span>06-Month Testing Warranty · 24h Stress Tested</span>
+        </span>
+      </div>
+      <div class="utility-group">
+        <span class="utility-item">
+          <span class="material-symbols-outlined">local_shipping</span>
+          <span>Island-Wide Safe Courier</span>
+        </span>
+        <a href="tel:+94788194535" class="utility-item utility-link">
+          <span class="material-symbols-outlined">call</span>
+          <span>+94 78 819 4535</span>
+        </a>
+      </div>
+    </div>
   </div>
 
   <!-- Top Storefront Header -->
@@ -38,11 +64,29 @@
         <div class="brand-text">
           <div class="brand-title-row">
             <span class="brand-name">Aqua PC Parts</span>
-            <span class="brand-badge">OFFICIAL HARDWARE STOREFRONT</span>
+            <span class="brand-badge">HARDWARE STOREFRONT</span>
           </div>
-          <span class="brand-sub">GRADE-A TESTED PARTS · 06-MONTH WARRANTY</span>
+          <span class="brand-sub">USED &amp; BRAND NEW PC COMPONENTS</span>
         </div>
       </a>
+
+      <!-- Page Navigation Tabs -->
+      <nav class="page-nav" aria-label="Primary Storefront Divisions">
+        <a href="./index.html" class="page-nav-link active" aria-current="page">
+          <span class="material-symbols-outlined">storefront</span>
+          <span>Storefront Hub</span>
+        </a>
+        <a href="./used-parts.html" class="page-nav-link">
+          <span class="material-symbols-outlined">verified</span>
+          <span>Used Parts</span>
+          <span class="nav-pill-count" id="nav-used-count">358</span>
+        </a>
+        <a href="./brand-new-parts.html" class="page-nav-link new-tab">
+          <span class="material-symbols-outlined">new_releases</span>
+          <span>Brand New Parts</span>
+          <span class="nav-pill-count" id="nav-new-count">New</span>
+        </a>
+      </nav>
 
       <!-- Global Header Search -->
       <div class="header-search-wrap">
@@ -50,7 +94,7 @@
         <input
           id="global-search-input"
           type="search"
-          placeholder="Search all 358+ PC parts, GPUs, CPUs, peripherals, monitors..."
+          placeholder="Search all 358+ parts, GPUs, CPUs, peripherals... ( / )"
           aria-label="Search all PC parts"
           autocomplete="off"
         />
@@ -73,7 +117,7 @@
           aria-label="Open Multi-Item Quote List"
         >
           <span class="material-symbols-outlined">shopping_bag</span>
-          <span>Quote List (<span id="quote-count-badge">0</span>)</span>
+          <span>Quote (<span id="quote-count-badge" class="tabular-nums">0</span>)</span>
         </button>
 
         <button
@@ -92,7 +136,7 @@
           class="btn-main-site"
         >
           <span class="material-symbols-outlined">arrow_back</span>
-          <span>Main Site <span class="hide-mobile">(Aqua PC Solutions)</span></span>
+          <span class="hide-mobile">Main Site</span>
         </a>
 
         <a
@@ -111,51 +155,168 @@
     </div>
   </header>
 
-  <!-- Hero Banner -->
+  <!-- Hero & Dual Division Showcase -->
   <section class="hero-section">
     <div class="container">
       <div class="hero-content">
-        <div class="hero-pill">
+        <div class="hero-pill cyan-pill">
           <span class="pulse-dot"></span>
-          <span>AQUA PC PARTS · EMBILIPITIYA HARDWARE HUB</span>
+          <span>AQUA PC PARTS · USED &amp; BRAND NEW DIVISIONS</span>
         </div>
         <h1 class="hero-title">
           <span class="gradient-text">Aqua PC Parts</span>
-          <span class="hero-subtitle-inline">— Certified Grade-A PC Components &amp; Accessories</span>
+          <span class="hero-subtitle-inline">— Grade-A Used Hardware &amp; Brand New Store</span>
         </h1>
         <p class="hero-desc">
-          Browse verified monitors, graphics cards, processors, motherboards, NVMe SSDs, RAM, power supplies, cooling fans, cables, and brand-new mice, keyboards, webcams, microphones, and sound cards with transparent LKR pricing. Customize your WhatsApp order for any item in seconds.
+          Explore our two dedicated hardware divisions: bench-tested Grade-A used components backed by our 06-month testing warranty, and factory-sealed brand-new peripherals, audio gear &amp; boxed components — all with transparent LKR pricing and instant WhatsApp ordering.
         </p>
 
         <div class="hero-stats-strip">
           <div class="stat-pill">
             <span class="material-symbols-outlined">inventory_2</span>
-            <span><strong id="hero-total-items">358</strong>+ Total Parts</span>
+            <span><strong id="hero-total-items">358</strong> Used Parts Catalog</span>
+          </div>
+          <div class="stat-pill emerald">
+            <span class="material-symbols-outlined">new_releases</span>
+            <span><strong id="hero-new-items">34</strong> Brand New Categories</span>
           </div>
           <div class="stat-pill">
             <span class="material-symbols-outlined">category</span>
             <span><strong id="hero-total-sections">10</strong> Hardware Departments</span>
           </div>
-          <div class="stat-pill">
+          <div class="stat-pill emerald">
             <span class="material-symbols-outlined">verified_user</span>
             <span><strong>06-Month</strong> Testing Warranty</span>
           </div>
-          <div class="stat-pill">
-            <span class="material-symbols-outlined">local_shipping</span>
-            <span><strong>Island-wide</strong> Delivery &amp; Store Pickup</span>
-          </div>
         </div>
+      </div>
+
+      <!-- Dual Division Showcase Cards -->
+      <div class="divisions-grid" aria-label="Hardware Divisions">
+        <article class="division-card used-card">
+          <div>
+            <div class="division-header">
+              <div>
+                <span class="division-kicker used">DIVISION 01 · BENCH TESTED</span>
+                <h2 class="division-title">Used Parts Catalog</h2>
+                <p class="division-desc">
+                  All 358+ existing Grade-A monitors, RTX/GTX/RX VGA cards, Intel &amp; AMD processors, motherboards, SSDs/HDDs, RAM, PSUs, coolers, cables &amp; accessories.
+                </p>
+              </div>
+              <div class="division-count-badge">
+                <strong id="card-used-count">358</strong>
+                <span>Items</span>
+              </div>
+            </div>
+
+            <div class="division-tags" style="margin-top: 0.9rem;">
+              <a href="./used-parts.html?category=monitors" class="division-tag">Monitors (27)</a>
+              <a href="./used-parts.html?category=vga-cards" class="division-tag">VGA Cards (65)</a>
+              <a href="./used-parts.html?category=processors" class="division-tag">Processors (85)</a>
+              <a href="./used-parts.html?category=motherboards" class="division-tag">Motherboards (72)</a>
+              <a href="./used-parts.html?category=storage" class="division-tag">Storage (32)</a>
+              <a href="./used-parts.html?category=ram" class="division-tag">RAM (14)</a>
+              <a href="./used-parts.html?category=power-supply" class="division-tag">PSU (12)</a>
+              <a href="./used-parts.html?category=peripherals" class="division-tag">All Departments</a>
+            </div>
+          </div>
+
+          <div class="division-footer">
+            <span class="division-warranty">
+              <span class="material-symbols-outlined">verified_user</span>
+              <span>Grade-A · 06-Month Testing Warranty</span>
+            </span>
+            <a href="./used-parts.html" class="btn-division used-btn">
+              <span>Browse Used Parts</span>
+              <span class="material-symbols-outlined">arrow_forward</span>
+            </a>
+          </div>
+        </article>
+
+        <article class="division-card new-card">
+          <div>
+            <div class="division-header">
+              <div>
+                <span class="division-kicker new">DIVISION 02 · FACTORY SEALED</span>
+                <h2 class="division-title">Brand New Parts Store</h2>
+                <p class="division-desc">
+                  Brand-new mice, gaming keyboards, wireless combos, HD webcams, USB mics, 5.1/7.1 sound cards &amp; sealed boxed PC hardware ready for pickup or delivery.
+                </p>
+              </div>
+              <div class="division-count-badge">
+                <strong id="card-new-count">34</strong>
+                <span>Items</span>
+              </div>
+            </div>
+
+            <div class="division-tags" style="margin-top: 0.9rem;">
+              <a href="./brand-new-parts.html?category=bn-mice" class="division-tag">Mice (6)</a>
+              <a href="./brand-new-parts.html?category=bn-combos" class="division-tag">Combos (2)</a>
+              <a href="./brand-new-parts.html?category=bn-keyboards" class="division-tag">Keyboards (10)</a>
+              <a href="./brand-new-parts.html?category=bn-webcams" class="division-tag">Webcams (3)</a>
+              <a href="./brand-new-parts.html?category=bn-microphones" class="division-tag">Microphones (1)</a>
+              <a href="./brand-new-parts.html?category=bn-sound-cards" class="division-tag">Sound Cards (6)</a>
+              <a href="./brand-new-parts.html?category=bn-components" class="division-tag">Boxed Components (6)</a>
+            </div>
+          </div>
+
+          <div class="division-footer">
+            <span class="division-warranty">
+              <span class="material-symbols-outlined">new_releases</span>
+              <span>Factory Sealed · Store &amp; Agent Warranty</span>
+            </span>
+            <a href="./brand-new-parts.html" class="btn-division new-btn">
+              <span>Browse Brand New Parts</span>
+              <span class="material-symbols-outlined">arrow_forward</span>
+            </a>
+          </div>
+        </article>
       </div>
     </div>
   </section>
 
-  <!-- Main Storefront Layout -->
+  <!-- Main Storefront Explorer -->
   <main class="container storefront-main">
+    <!-- Quick Condition Switcher Bar -->
+    <div class="condition-bar">
+      <div class="condition-pills" role="group" aria-label="Filter catalog by condition">
+        <button type="button" class="cond-btn active" data-condition="all">
+          <span class="material-symbols-outlined">apps</span>
+          <span>All Catalog</span>
+          <span class="cond-count" id="cond-all-count">364</span>
+        </button>
+        <button type="button" class="cond-btn" data-condition="used">
+          <span class="material-symbols-outlined">verified</span>
+          <span>Used Parts</span>
+          <span class="cond-count" id="cond-used-count">358</span>
+        </button>
+        <button type="button" class="cond-btn new-cond" data-condition="new">
+          <span class="material-symbols-outlined">new_releases</span>
+          <span>Brand New Parts</span>
+          <span class="cond-count" id="cond-new-count">34</span>
+        </button>
+      </div>
+
+      <div class="cond-bar-actions">
+        <a href="./used-parts.html" class="cond-direct-link">
+          <span>Dedicated Used Page</span>
+          <span class="material-symbols-outlined" style="font-size: 15px;">open_in_new</span>
+        </a>
+        <a href="./brand-new-parts.html" class="cond-direct-link emerald">
+          <span>Dedicated Brand New Page</span>
+          <span class="material-symbols-outlined" style="font-size: 15px;">open_in_new</span>
+        </a>
+      </div>
+    </div>
+
     <div class="storefront-grid">
       <!-- Left Sticky Category Sidebar -->
       <aside class="sidebar" aria-label="Hardware Departments">
         <div class="sidebar-sticky">
-          <div class="sidebar-label">DEPARTMENTS</div>
+          <div class="sidebar-label">
+            <span>DEPARTMENTS</span>
+            <span id="sidebar-condition-label">ALL</span>
+          </div>
           <nav id="category-nav" class="category-nav"></nav>
         </div>
       </aside>
@@ -173,6 +334,15 @@
           </div>
 
           <div class="toolbar-controls">
+            <div class="view-toggle" role="group" aria-label="Layout View">
+              <button type="button" class="view-btn active" data-view="list" title="List View" aria-label="List View">
+                <span class="material-symbols-outlined">view_agenda</span>
+              </button>
+              <button type="button" class="view-btn" data-view="grid" title="Grid View" aria-label="Grid View">
+                <span class="material-symbols-outlined">grid_view</span>
+              </button>
+            </div>
+
             <label class="priced-toggle">
               <input id="priced-only-checkbox" type="checkbox" />
               <span>Priced Items Only</span>
@@ -204,8 +374,8 @@
             </svg>
           </div>
           <div class="wa-banner-text">
-            <strong>Need help picking compatible parts or building a full PC?</strong>
-            <span>Use <b>Customize</b> on any item for quantity &amp; delivery options, or add multiple items to your <b>Quote List</b>!</span>
+            <strong>Need help comparing Used vs Brand New parts or planning a custom build?</strong>
+            <span>Use <b>Customize</b> on any part for quantity &amp; delivery options, or bundle mixed Used &amp; Brand New items into your <b>Quote List</b>!</span>
           </div>
           <span class="material-symbols-outlined wa-banner-arrow">arrow_forward</span>
         </a>
@@ -249,7 +419,7 @@
 
       <div class="drawer-summary-row">
         <span>Estimated Subtotal</span>
-        <strong id="quote-total-val">Rs. 0</strong>
+        <strong id="quote-total-val" class="tabular-nums">Rs. 0</strong>
       </div>
 
       <div class="drawer-actions">
@@ -277,7 +447,7 @@
           <span class="brand-badge">BY AQUA PC SOLUTIONS</span>
         </div>
         <p class="footer-desc">
-          Certified Grade-A PC parts, monitors, VGA cards, processors, motherboards, and accessories in Embilipitiya, Sri Lanka. Every component is bench-tested and backed by our 06-month testing warranty.
+          Certified Grade-A used hardware and factory-sealed brand-new PC peripherals &amp; components in Embilipitiya, Sri Lanka. Every tested part is backed by our 06-month testing warranty.
         </p>
         <div class="footer-hours">
           <div><span>Mon – Fri:</span> <strong>8:00 AM – 7:00 PM</strong></div>
@@ -285,6 +455,17 @@
           <div><span>Phone:</span> <a href="tel:+94788194535">+94 78 819 4535</a></div>
           <div><span>Email:</span> <a href="mailto:thinulhansana.business@gmail.com">thinulhansana.business@gmail.com</a></div>
         </div>
+      </div>
+
+      <div class="footer-col">
+        <h3>Store Divisions</h3>
+        <ul>
+          <li><a href="./index.html">Storefront Hub (All Catalog)</a></li>
+          <li><a href="./used-parts.html">Used Parts Catalog (358 Items)</a></li>
+          <li><a href="./brand-new-parts.html">Brand New Parts Store</a></li>
+          <li><a href="./used-parts.html?category=peripherals">Used &amp; Peripheral Catalog</a></li>
+          <li><a href="./brand-new-parts.html?category=bn-components">Boxed PC Components</a></li>
+        </ul>
       </div>
 
       <div class="footer-col">
@@ -309,4 +490,3 @@
   <script src="app.js"></script>
 </body>
 </html>
-
