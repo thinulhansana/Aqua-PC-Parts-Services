@@ -24,6 +24,8 @@ export const SITE_URL =
 export const AQUA_PC_PARTS_SITE_NAME = "Aqua PC Parts";
 export const AQUA_PC_PARTS_URL =
   process.env.NEXT_PUBLIC_AQUA_PC_PARTS_URL || "https://aquapcparts.pages.dev";
+export const AQUA_3D_PORTAL_URL =
+  process.env.NEXT_PUBLIC_AQUA_3D_PORTAL_URL || "https://aquapc3dportal.pages.dev";
 
 export function getAquaPcPartsUrl(category?: string): string {
   if (!category) return AQUA_PC_PARTS_URL;
@@ -40,6 +42,7 @@ export const SITE_HOURS = {
 export const NAV_LINKS = [
   { label: "Home", href: "/" },
   { label: "Shop", href: AQUA_PC_PARTS_URL },
+  { label: "3D Builder", href: AQUA_3D_PORTAL_URL },
   { label: "Services", href: "/services" },
   { label: "Pricing", href: "/pricing" },
   { label: "About", href: "/about" },
@@ -50,6 +53,9 @@ export const FOOTER_LINKS = {
   products: {
     title: "Aqua PC Parts",
     links: [
+      { label: "3D PC Builder Studio", href: AQUA_3D_PORTAL_URL },
+      { label: "Used Parts (358+)", href: `${AQUA_PC_PARTS_URL}/used-parts` },
+      { label: "Brand New Parts", href: `${AQUA_PC_PARTS_URL}/brand-new-parts` },
       { label: "Processors", href: getAquaPcPartsUrl("processors") },
       { label: "VGA Cards", href: getAquaPcPartsUrl("vga-cards") },
       { label: "Motherboards", href: getAquaPcPartsUrl("motherboards") },
@@ -92,5 +98,4 @@ export const TRUST_BADGES = [
 export const TECH_SPECS_LINE =
   "ESD-Safe Precision Lab · Grade-A Tested Parts · Embilipitiya, Sri Lanka";
 
-export const LOGO_SRC =
-  "https://lh3.googleusercontent.com/aida-public/AB6AXuDI1Q1HyOWyGrK0DT8kYcERFh_Hye61GnzbjWwrnP3o15FVmnOX4RObJLTaA8ujLStO5TrkkV4CANJMF0n9vt1k3oR5dpQGlsurCidaDYmwJQiYTsvo9ese5mPbMBnqXUHwc33EGLWDcdzSXddmj2cUR3U5GCT9FEWpnP91rjtQxRZ3mqJ5vPs0K9tJdPxMD47p5t2wI8dEqVpMp50BhGpXXYB5MumtzF7ZAZ-VN0nN";
+export const LOGO_SRC = "/logo.jpg";

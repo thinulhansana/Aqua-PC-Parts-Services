@@ -167,18 +167,59 @@
     return catalog.whatsappDirectBase + "?text=" + encodeURIComponent(message);
   }
 
-  // Quote persistence helpers
+  function findCatalogItemById(itemId) {
+    const allSecs = [...USED_SECTIONS, ...BRAND_NEW_SECTIONS];
+    for (const sec of allSecs) {
+      for (const cat of sec.categories || []) {
+        for (const item of cat.items || []) {
+          if (item.id === itemId) {
+            return {
+              item,
+              categoryName: cat.name,
+              sectionLabel: sec.label,
+              isBrandNew: isNewConditionItem(item, sec),
+            };
+          }
+        }
+      }
+    }
+    return null;
+  }
+
+  // Quote persistence helpers (bidirectional sync with Nanotek storefront cart)
   function loadPersistedQuote() {
     try {
       const raw = localStorage.getItem(QUOTE_STORAGE_KEY);
-      if (!raw) return;
-      const parsed = JSON.parse(raw);
-      if (parsed && typeof parsed === "object") {
-        if (parsed.quoteList && typeof parsed.quoteList === "object") {
-          state.quoteList = parsed.quoteList;
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (parsed && typeof parsed === "object") {
+          if (parsed.quoteList && typeof parsed.quoteList === "object") {
+            state.quoteList = parsed.quoteList;
+          }
+          if (typeof parsed.quoteFulfillment === "string") {
+            state.quoteFulfillment = parsed.quoteFulfillment;
+          }
         }
-        if (typeof parsed.quoteFulfillment === "string") {
-          state.quoteFulfillment = parsed.quoteFulfillment;
+      }
+      if (Object.keys(state.quoteList).length === 0) {
+        const shopRaw = localStorage.getItem("aqua-shop-cart-v1");
+        if (shopRaw) {
+          const arr = JSON.parse(shopRaw);
+          if (Array.isArray(arr) && arr.length) {
+            arr.forEach((c) => {
+              if (!c || !c.id) return;
+              const found = findCatalogItemById(c.id);
+              if (found) {
+                state.quoteList[found.item.id] = {
+                  item: found.item,
+                  quantity: Math.max(1, Math.min(50, Number(c.qty) || 1)),
+                  categoryName: found.categoryName,
+                  sectionLabel: found.sectionLabel,
+                  isBrandNew: found.isBrandNew,
+                };
+              }
+            });
+          }
         }
       }
     } catch (_) {}
@@ -193,6 +234,12 @@
           quoteFulfillment: state.quoteFulfillment,
         })
       );
+      const cartArr = Object.values(state.quoteList).map((e) => ({
+        id: e.item.id,
+        name: e.item.name,
+        qty: e.quantity,
+      }));
+      localStorage.setItem("aqua-shop-cart-v1", JSON.stringify(cartArr));
     } catch (_) {}
   }
 
@@ -280,6 +327,7 @@
   if (footerMainLinksEl) {
     [
       { label: "Home — Aqua PC Solutions", path: "" },
+      { label: "Interactive 3D PC Builder", externalUrl: "https://aquapc3dportal.pages.dev/" },
       { label: "Repairs & Lab Services", path: "services" },
       { label: "Service Rates & Pricing", path: "pricing" },
       { label: "About & Founder", path: "about" },
@@ -287,7 +335,7 @@
     ].forEach((entry) => {
       const li = document.createElement("li");
       const a = document.createElement("a");
-      a.href = mainSiteHref(entry.path);
+      a.href = entry.externalUrl || mainSiteHref(entry.path);
       a.textContent = entry.label;
       li.appendChild(a);
       footerMainLinksEl.appendChild(li);

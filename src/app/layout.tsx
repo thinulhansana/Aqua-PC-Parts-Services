@@ -12,6 +12,10 @@ import { SITE_NAME, SITE_TAGLINE, SITE_URL } from "@/lib/constants";
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: `${SITE_NAME} | ${SITE_TAGLINE}`,
+  icons: {
+    icon: "/logo.jpg",
+    apple: "/logo.jpg",
+  },
   description:
     "Certified Grade-A PC components, custom gaming & workstation builds, liquid & thermal cooling solutions, and board-level diagnostics in Embilipitiya, Sri Lanka.",
   keywords: [

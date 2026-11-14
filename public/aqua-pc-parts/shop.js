@@ -3,6 +3,16 @@
   const C = window.AQUA_PARTS_CATALOG || {};
   const PHONE = C.whatsappPhone || "94788194535";
   const CART_KEY = "aqua-shop-cart-v1";
+  const QUOTE_KEY = "aqua-parts-quote-v1";
+  const PERIPHERAL_SECS = new Set([
+    "peripherals",
+    "bn-mice",
+    "bn-combos",
+    "bn-keyboards",
+    "bn-webcams",
+    "bn-microphones",
+    "bn-sound-cards",
+  ]);
   const PAGE = 24;
   const $ = (s, r) => (r || document).querySelector(s);
   const $$ = (s, r) => Array.from((r || document).querySelectorAll(s));
@@ -92,9 +102,65 @@
 
   // ───────── Cart & Official Quote Printer ─────────
   let cart = [];
-  try { cart = JSON.parse(localStorage.getItem(CART_KEY) || "[]"); } catch (_) {}
-  const saveCart = () => { try { localStorage.setItem(CART_KEY, JSON.stringify(cart)); } catch (_) {} };
   const prod = (id) => PRODUCTS.find((p) => p.id === id);
+
+  function loadInitialCart() {
+    try {
+      const saved = JSON.parse(localStorage.getItem(CART_KEY) || "[]");
+      if (Array.isArray(saved) && saved.length) {
+        cart = saved;
+        return;
+      }
+      const qSaved = JSON.parse(localStorage.getItem(QUOTE_KEY) || "null");
+      if (qSaved && qSaved.quoteList && typeof qSaved.quoteList === "object") {
+        cart = Object.values(qSaved.quoteList)
+          .filter((e) => e && e.item && e.item.id)
+          .map((e) => ({
+            id: e.item.id,
+            name: e.item.name,
+            qty: Math.max(1, Number(e.quantity) || 1),
+          }));
+        if (cart.length) localStorage.setItem(CART_KEY, JSON.stringify(cart));
+      }
+    } catch (_) {}
+  }
+  loadInitialCart();
+
+  const saveCart = () => {
+    try {
+      localStorage.setItem(CART_KEY, JSON.stringify(cart));
+      let fulfillment = "pickup";
+      try {
+        const existingQ = JSON.parse(localStorage.getItem(QUOTE_KEY) || "null");
+        if (existingQ && typeof existingQ.quoteFulfillment === "string") {
+          fulfillment = existingQ.quoteFulfillment;
+        }
+      } catch (_) {}
+      const quoteList = {};
+      cart.forEach((c) => {
+        const p = prod(c.id);
+        if (!p) return;
+        quoteList[p.id] = {
+          item: {
+            id: p.id,
+            name: p.name,
+            price: p.price,
+            warranty: p.warranty,
+            inStock: p.inStock,
+            condition: p.cond,
+          },
+          quantity: c.qty,
+          categoryName: p.sub || p.secLabel,
+          sectionLabel: p.secLabel,
+          isBrandNew: p.cond === "new",
+        };
+      });
+      localStorage.setItem(
+        QUOTE_KEY,
+        JSON.stringify({ quoteList, quoteFulfillment: fulfillment })
+      );
+    } catch (_) {}
+  };
 
   function toast(msg) {
     const t = $("#toast");
@@ -290,7 +356,13 @@ th{background:#1c1c1c;color:#ff9400}
     const words = q.split(/\s+/).filter(Boolean);
     filtered = PRODUCTS.filter((p) => {
       if (F.div !== "all" && p.cond !== F.div) return false;
-      if (F.cat && p.sec !== F.cat) return false;
+      if (F.cat) {
+        if (F.cat === "peripherals") {
+          if (!PERIPHERAL_SECS.has(p.sec)) return false;
+        } else if (p.sec !== F.cat) {
+          return false;
+        }
+      }
       if (F.sub && p.sub !== F.sub) return false;
       if (F.stock && !p.inStock) return false;
       if (F.priced && p.price == null) return false;
@@ -342,6 +414,8 @@ th{background:#1c1c1c;color:#ff9400}
     const activeCatObj = CATS.find((c) => c.id === F.cat);
     $("#active-cat-title").textContent = activeCatObj
       ? activeCatObj.label
+      : F.cat === "peripherals"
+      ? "Peripherals, Mice, Keyboards & Audio"
       : F.div === "new"
       ? "Brand New Parts & Accessories"
       : F.div === "used"
@@ -357,7 +431,14 @@ th{background:#1c1c1c;color:#ff9400}
 
     const chips = [];
     if (F.cat) {
-      chips.push(["cat", activeCatObj ? activeCatObj.label : F.cat]);
+      chips.push([
+        "cat",
+        activeCatObj
+          ? activeCatObj.label
+          : F.cat === "peripherals"
+          ? "Peripherals, Mice, Keyboards & Audio"
+          : F.cat,
+      ]);
     }
     if (F.sub) chips.push(["sub", F.sub]);
     if (F.div !== "all") chips.push(["div", F.div === "new" ? "Brand New" : "Used · 06M Warranty"]);
@@ -367,11 +448,28 @@ th{background:#1c1c1c;color:#ff9400}
       .join("");
   }
 
+  function syncUrlState() {
+    try {
+      const url = new URL(window.location.href);
+      if (F.cat) url.searchParams.set("category", F.cat);
+      else url.searchParams.delete("category");
+      url.searchParams.delete("cat");
+      if (F.div && F.div !== "all") url.searchParams.set("condition", F.div);
+      else url.searchParams.delete("condition");
+      url.searchParams.delete("div");
+      if (F.q) url.searchParams.set("q", F.q);
+      else url.searchParams.delete("q");
+      url.searchParams.delete("search");
+      window.history.replaceState({}, "", url.toString());
+    } catch (_) {}
+  }
+
   function setFilters(patch, scroll) {
     if (patch.cat !== undefined && patch.cat !== F.cat && patch.sub === undefined) {
       patch.sub = "";
     }
     Object.assign(F, patch, { shown: PAGE });
+    syncUrlState();
     apply();
     if (scroll) $("#shop").scrollIntoView({ behavior: "smooth", block: "start" });
   }
@@ -773,6 +871,45 @@ th{background:#1c1c1c;color:#ff9400}
     apply();
   }
 
+  function readUrlParams() {
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const cat = params.get("category") || params.get("cat") || "";
+      const div = params.get("condition") || params.get("div") || "";
+      const q = params.get("q") || params.get("search") || "";
+      const openCart = params.get("quote") === "open" || params.get("cart") === "open";
+
+      if (div === "used" || div === "new" || div === "all") {
+        F.div = div;
+        $$(".ty-catPage-baseFilters li").forEach((li) => {
+          const b = li.querySelector("[data-quick]");
+          li.classList.toggle("active", Boolean(b && b.dataset.quick === div));
+        });
+      }
+      if (cat) {
+        F.cat = cat;
+        const sel = $("#search-cat");
+        if (sel && Array.from(sel.options).some((o) => o.value === cat)) {
+          sel.value = cat;
+        }
+      }
+      if (q) {
+        F.q = q;
+        const inp = $("#search-input");
+        if (inp) inp.value = q;
+      }
+      if (openCart) {
+        setTimeout(() => drawer(true), 120);
+      }
+      if (cat || div || q) {
+        setTimeout(() => {
+          const s = $("#shop");
+          if (s) s.scrollIntoView({ behavior: "smooth", block: "start" });
+        }, 180);
+      }
+    } catch (_) {}
+  }
+
   build();
   renderStatic();
   bind();
@@ -780,6 +917,7 @@ th{background:#1c1c1c;color:#ff9400}
   suggest();
   initRose();
   renderCart();
+  readUrlParams();
   apply();
   $("#yr").textContent = new Date().getFullYear();
   window.addEventListener("aqua:catalog-updated", refresh);

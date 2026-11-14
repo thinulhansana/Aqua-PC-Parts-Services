@@ -134,7 +134,11 @@ export default function Header() {
                     <a
                       href={link.href}
                       className="relative inline-flex items-center gap-1 px-2.5 xl:px-3 py-2 text-body-md transition-all duration-200 rounded-lg group text-on-surface-variant hover:text-primary hover:bg-surface-container-high/50"
-                      title="Visit Aqua PC Parts Storefront"
+                      title={
+                        link.label === "3D Builder"
+                          ? "Visit Interactive 3D PC Builder Studio"
+                          : "Visit Aqua PC Parts Storefront"
+                      }
                     >
                       <span>{link.label}</span>
                       <span className="material-symbols-outlined text-[14px] text-primary/75 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform">
@@ -360,7 +364,13 @@ export default function Header() {
                           className="flex items-center justify-between px-4 py-3 text-body-lg rounded-lg transition-colors text-on-surface-variant hover:text-primary hover:bg-surface-container-high/50"
                           onClick={() => setMobileOpen(false)}
                         >
-                          <span>{link.label} (Aqua PC Parts)</span>
+                          <span>
+                            {link.label === "3D Builder"
+                              ? "3D Builder (3D Studio)"
+                              : link.label === "Shop"
+                              ? "Shop (Aqua PC Parts)"
+                              : link.label}
+                          </span>
                           <span className="material-symbols-outlined text-[18px] text-primary">
                             open_in_new
                           </span>
