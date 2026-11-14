@@ -23,7 +23,7 @@ export const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL || "https://aquapcsolutions.workers.dev";
 export const AQUA_PC_PARTS_SITE_NAME = "Aqua PC Parts";
 export const AQUA_PC_PARTS_URL =
-  process.env.NEXT_PUBLIC_AQUA_PC_PARTS_URL || "/aqua-pc-parts/index.html";
+  process.env.NEXT_PUBLIC_AQUA_PC_PARTS_URL || "https://aquapcparts.pages.dev";
 
 export function getAquaPcPartsUrl(category?: string): string {
   if (!category) return AQUA_PC_PARTS_URL;
