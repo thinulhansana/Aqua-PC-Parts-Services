@@ -1,22 +1,22 @@
 :root,
 [data-theme="dark"] {
-  --bg: #0c0d10;
-  --bg-elevated: #12141a;
-  --bg-card: #171a21;
-  --bg-card-hover: #1d212b;
-  --bg-input: #0f1116;
-  --border: rgba(255, 255, 255, 0.085);
-  --border-strong: rgba(56, 189, 248, 0.42);
+  --bg: #0b0f19;
+  --bg-elevated: #0f172a;
+  --bg-card: #131a2a;
+  --bg-card-hover: #182238;
+  --bg-input: #0e1422;
+  --border: rgba(255, 255, 255, 0.09);
+  --border-strong: rgba(255, 102, 0, 0.45);
   --border-emerald: rgba(16, 185, 129, 0.44);
-  --text: #f6f5f1;
-  --text-muted: #9da4b0;
-  --text-dim: #68707e;
+  --text: #f8fafc;
+  --text-muted: #94a3b8;
+  --text-dim: #64748b;
   --cyan: #38bdf8;
   --cyan-soft: rgba(56, 189, 248, 0.12);
   --teal: #10b981;
   --teal-soft: rgba(16, 185, 129, 0.12);
-  --amber: #f59e0b;
-  --amber-soft: rgba(245, 158, 11, 0.13);
+  --amber: #ff6600;
+  --amber-soft: rgba(255, 102, 0, 0.14);
   --wa: #22c55e;
   --wa-hover: #16a34a;
   --shadow: 0 20px 50px rgba(0, 0, 0, 0.48);
@@ -24,27 +24,27 @@
 }
 
 [data-theme="light"] {
-  --bg: #f6f5f0;
+  --bg: #f4f5f7;
   --bg-elevated: #ffffff;
   --bg-card: #ffffff;
-  --bg-card-hover: #faf9f5;
-  --bg-input: #efeee8;
-  --border: rgba(20, 22, 25, 0.1);
-  --border-strong: rgba(2, 132, 199, 0.42);
+  --bg-card-hover: #fafbfe;
+  --bg-input: #eff2f7;
+  --border: rgba(15, 23, 42, 0.1);
+  --border-strong: rgba(247, 83, 20, 0.42);
   --border-emerald: rgba(5, 150, 105, 0.42);
-  --text: #141619;
-  --text-muted: #525866;
-  --text-dim: #767d8c;
+  --text: #0f172a;
+  --text-muted: #475569;
+  --text-dim: #64748b;
   --cyan: #0284c7;
   --cyan-soft: rgba(2, 132, 199, 0.1);
   --teal: #059669;
   --teal-soft: rgba(5, 150, 105, 0.1);
-  --amber: #d97706;
-  --amber-soft: rgba(217, 119, 6, 0.1);
+  --amber: #f75314;
+  --amber-soft: rgba(247, 83, 20, 0.12);
   --wa: #16a34a;
   --wa-hover: #15803d;
-  --shadow: 0 16px 38px rgba(20, 22, 25, 0.08);
-  --shadow-card: 0 6px 20px rgba(20, 22, 25, 0.05);
+  --shadow: 0 16px 38px rgba(15, 23, 42, 0.08);
+  --shadow-card: 0 6px 20px rgba(15, 23, 42, 0.05);
 }
 
 *,
@@ -181,11 +181,11 @@ select {
 .top-utility-bar {
   position: relative;
   z-index: 45;
-  background: color-mix(in srgb, var(--bg-elevated) 94%, transparent);
-  border-bottom: 1px solid var(--border);
+  background: #040a24;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   font-family: "JetBrains Mono", monospace;
   font-size: 0.71rem;
-  color: var(--text-muted);
+  color: #cbd5e1;
 }
 
 .utility-inner {
@@ -214,7 +214,7 @@ select {
 
 .utility-item .material-symbols-outlined {
   font-size: 14px;
-  color: var(--cyan);
+  color: #ffc000;
 }
 
 .utility-item.emerald .material-symbols-outlined {
@@ -222,7 +222,7 @@ select {
 }
 
 .utility-link:hover {
-  color: var(--cyan);
+  color: #ffc000;
 }
 
 /* ── Sticky Architectural Header ───────────────────────────────────────────── */
@@ -232,14 +232,70 @@ select {
   z-index: 44;
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  background: color-mix(in srgb, var(--bg-elevated) 86%, transparent);
-  border-bottom: 1px solid var(--border);
+  background: linear-gradient(180deg, #0b1952 0%, #071138 100%);
+  color: #ffffff;
+  border-bottom: 2px solid #ff6600;
   transition: box-shadow 0.3s ease, background 0.3s ease;
 }
 
 .site-header.is-scrolled {
-  box-shadow: 0 12px 34px rgba(0, 0, 0, 0.28);
-  background: color-mix(in srgb, var(--bg-elevated) 95%, transparent);
+  box-shadow: 0 12px 34px rgba(2, 6, 23, 0.42);
+  background: #071138;
+}
+
+.site-header .brand-name {
+  color: #ffffff;
+}
+
+.site-header .brand-sub {
+  color: #93c5fd;
+}
+
+.site-header .page-nav {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.14);
+}
+
+.site-header .page-nav-link {
+  color: #dbeafe;
+}
+
+.site-header .page-nav-link:hover {
+  background: rgba(255, 255, 255, 0.14);
+  color: #ffffff;
+}
+
+.site-header .page-nav-link.active {
+  background: #ff6600;
+  color: #ffffff;
+  border-color: #ff6600;
+}
+
+.site-header .btn-quote-cart {
+  background: linear-gradient(135deg, #ff6600 0%, #e04d00 100%);
+  border-color: transparent;
+  color: #ffffff;
+}
+
+.site-header .btn-icon,
+.site-header .btn-main-site {
+  background: rgba(255, 255, 255, 0.09);
+  border-color: rgba(255, 255, 255, 0.16);
+  color: #ffffff;
+}
+
+.site-header .header-search-wrap input {
+  background: #ffffff;
+  color: #0f172a;
+  border-color: transparent;
+}
+
+.site-header .header-search-wrap input::placeholder {
+  color: #64748b;
+}
+
+.site-header .header-search-wrap .search-icon {
+  color: #475569;
 }
 
 .header-inner {

@@ -1,20 +1,30 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Aqua PC Parts | Computer Hardware, GPUs, CPUs &amp; Gaming Gear – Embilipitiya, Sri Lanka</title>
+  <title>Aqua PC Parts | Computer Hardware, GPUs, CPUs, Gaming Gear &amp; PC Builder – Sri Lanka</title>
   <link rel="icon" type="image/jpeg" href="assets/logo.jpg" />
   <link rel="apple-touch-icon" href="assets/logo.jpg" />
   <meta
     name="description"
-    content="Buy bench-tested used PC components and factory-sealed brand new computer hardware in Sri Lanka at Aqua PC Parts. Graphics cards, processors, motherboards, RAM, storage &amp; monitors with warranty."
+    content="Sri Lanka's Newegg-inspired PC hardware superstore. Shop 358+ bench-tested Grade-A used PC parts &amp; factory-sealed brand new components, GPUs, CPUs, motherboards, RAM, NVMe SSDs &amp; monitors with instant LKR quotes."
   />
-  <meta name="theme-color" content="#1c1c1c" />
+  <meta name="theme-color" content="#071138" />
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem("aqua-parts-theme");
+        if (t === "light" || t === "dark") {
+          document.documentElement.setAttribute("data-theme", t);
+        }
+      } catch (_) {}
+    })();
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
-    href="https://fonts.googleapis.com/css2?family=PT+Sans:ital,wght@0,400;0,700;1,400&family=Syne:wght@700;800&display=swap"
+    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Syne:wght@700;800&display=swap"
     rel="stylesheet"
   />
   <link
@@ -23,336 +33,830 @@
   />
   <link rel="stylesheet" href="shop.css" />
 </head>
-<body class="preload">
+<body>
 
-  <!-- Mobile Off-Canvas Category Drawer -->
-  <div class="ty-offCanvasNav" id="offcanvas-nav" aria-hidden="true">
-    <button type="button" class="ty-catNav-trigger-close" id="offcanvas-close" aria-label="Close categories">
-      <span class="material-symbols-outlined">close</span>
-    </button>
-    <h2>Categories</h2>
-    <div class="ty-cat mobile-cat-list">
-      <ul class="ty-cat-list" id="mobile-cats"></ul>
+  <!-- Mobile / All-Departments Off-Canvas Drawer -->
+  <div class="ne-offcanvas" id="offcanvas-nav" aria-hidden="true">
+    <div class="ne-offcanvas-head">
+      <div class="ne-offcanvas-brand">
+        <img src="assets/logo.jpg" alt="Aqua PC Parts" />
+        <div>
+          <strong>ALL DEPARTMENTS</strong>
+          <small>Aqua PC Parts Superstore</small>
+        </div>
+      </div>
+      <button type="button" class="ne-offcanvas-close" id="offcanvas-close" aria-label="Close departments drawer">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    </div>
+    <div class="ne-offcanvas-quicklinks">
+      <a href="#deals"><span>⚡ Today's Best Deals</span></a>
+      <a href="#pc-combo-builder"><span>🛠️ PC Combo Builder</span></a>
+      <a href="./used-parts.html"><span>✅ Certified Used Catalog</span></a>
+      <a href="./brand-new-parts.html"><span>📦 Brand New Store</span></a>
+      <a href="https://aquapc3dportal.pages.dev/"><span>🧊 3D PC Builder Studio</span></a>
+      <a href="./contact.html"><span>📍 Showroom &amp; Contact</span></a>
+    </div>
+    <ul class="ne-offcanvas-cats" id="mobile-cats"></ul>
+  </div>
+  <div class="ne-offcanvas-overlay" id="offcanvas-overlay"></div>
+
+  <!-- Newegg Top Promo & Utility Strip -->
+  <div class="ne-topbar">
+    <div class="ne-container ne-topbar-inner">
+      <div class="ne-topbar-left">
+        <span class="ne-live-pill">
+          <span class="ne-pulse-dot" aria-hidden="true"></span>
+          <span>SHELL SHOCKER DAILY DEALS</span>
+        </span>
+        <span class="ne-topbar-sep" aria-hidden="true">|</span>
+        <span class="ne-topbar-note">06-Month Written Testing Warranty</span>
+        <span class="ne-topbar-sep hide-md" aria-hidden="true">·</span>
+        <span class="ne-topbar-note hide-md">24h FurMark &amp; Stress Verified</span>
+        <span class="ne-topbar-sep hide-lg" aria-hidden="true">·</span>
+        <span class="ne-topbar-note hide-lg">Island-Wide ESD-Safe Courier</span>
+      </div>
+      <nav class="ne-topbar-right" aria-label="Store Utility Links">
+        <a href="./used-parts.html">Certified Used (<span id="top-used-count">358</span>)</a>
+        <a href="./brand-new-parts.html">Brand New (<span id="top-new-count">34</span>)</a>
+        <a href="https://aquapc3dportal.pages.dev/">3D PC Studio</a>
+        <a href="https://aquapcsolutions.yyth.workers.dev/" class="hide-md">Main Workshop Site</a>
+        <a href="./contact.html">Showroom &amp; Map</a>
+        <a href="./admin.html" class="hide-sm">Store Admin</a>
+        <a href="tel:+94788194535" class="ne-topbar-tel">
+          <span class="material-symbols-outlined">call</span>
+          <span>+94 78 819 4535</span>
+        </a>
+      </nav>
     </div>
   </div>
-  <div class="ty-overlay-trigger" id="offcanvas-overlay"></div>
 
-  <!-- Nanotek-Style Sticky Header -->
-  <header id="headroom">
-    <!-- Mobile Top Contact Row -->
-    <div class="ty-header-contact">
-      <a href="tel:+94788194535" class="ty-header-contact-number">
-        <h2><span>Call us - </span>+94 78 819 4535</h2>
-      </a>
-      <a href="./used-parts.html" class="ty-header-contact-login"><h2>Used Parts</h2></a>
-      <a href="./brand-new-parts.html" class="ty-header-contact-login"><h2>Brand New</h2></a>
-      <a href="./contact.html" class="ty-header-contact-login"><h2>Contact Us</h2></a>
-    </div>
-
-    <div class="ty-header-general">
-      <!-- Right Quote / Cart + Orange Search Block -->
-      <div class="ty-quoteBlockWrap">
-        <div class="ty-quoteBlock" id="cart-open" role="button" tabindex="0" aria-label="Open My Cart and Quote">
-          <div class="ty-quoteValueWrap">
-            <div class="ty-quoteIconHolder">
-              <i class="ty-quoteIcon">
-                <span class="material-symbols-outlined">shopping_cart</span>
-              </i>
-            </div>
-            <div class="ty-quoteValueHolder">
-              <h1 class="ty-quoteValue" id="cart-total-top">0 LKR</h1>
-              <span class="ty-quoteActionTitle">My Cart (<b id="cart-count">0</b>)</span>
-            </div>
-          </div>
-        </div>
-        <button type="button" class="ty-search-btn" id="search-modal-open" aria-label="Search Products">
-          <span class="material-symbols-outlined">search</span>
+  <!-- Newegg Signature Navy Sticky Header -->
+  <header id="headroom" class="ne-header">
+    <div class="ne-container ne-header-main">
+      <!-- Left Cluster: Hamburger + Brand Crest + Delivery Pill -->
+      <div class="ne-header-left">
+        <button type="button" class="ne-hamburger" id="menu-toggle" aria-label="Open departments and menu">
+          <span class="material-symbols-outlined">menu</span>
         </button>
+
+        <a href="./index.html" class="ne-brand" aria-label="Aqua PC Parts Home">
+          <div class="ne-brand-logo">
+            <img src="assets/logo.jpg" alt="Aqua PC Parts" />
+          </div>
+          <div class="ne-brand-wordmark">
+            <strong>AQUA <em>PC PARTS</em></strong>
+            <span>SRI LANKA HARDWARE SUPERSTORE</span>
+          </div>
+        </a>
+
+        <a href="./contact.html" class="ne-deliver-pill" title="Workshop location &amp; island-wide delivery">
+          <span class="material-symbols-outlined">location_on</span>
+          <div>
+            <small>Deliver to</small>
+            <strong>Embilipitiya &amp; Island-Wide LK</strong>
+          </div>
+        </a>
       </div>
 
-      <!-- Right Info Links & Hotline -->
-      <div class="ty-special-nav-wrap ty-number">
-        <div class="ty-account-wrap">
-          <a href="./used-parts.html">Used Catalog</a>
-          <a href="./brand-new-parts.html">Brand New</a>
-          <a href="https://aquapc3dportal.pages.dev/">3D Builder</a>
-          <a href="./contact.html">Contact Us</a>
-          <a href="./admin.html">Admin</a>
+      <!-- Center: Newegg Pill Search Bar -->
+      <form class="ne-search-pill" id="search-form" autocomplete="off" role="search">
+        <div class="ne-search-dept-wrap">
+          <select id="search-cat" aria-label="Filter Department">
+            <option value="">All Depts</option>
+          </select>
+          <span class="material-symbols-outlined ne-select-caret" aria-hidden="true">expand_more</span>
         </div>
-        <div class="ty-number-link-wrap">
-          <a href="tel:+94788194535" class="ty-number-link">
-            <span>+94 78 819 4535</span>
-          </a>
-        </div>
-      </div>
-
-      <!-- Left Navigation & Logo -->
-      <nav id="ty-nav" aria-label="Main Navigation">
-        <div class="ty-logoWrap">
-          <a class="ty-logoImgWrap" href="./index.html">
-            <img src="assets/logo.jpg" alt="Aqua Syne PC Parts &amp; Services" id="header-logo" />
-            <span class="ty-logoTextWrap">
-              <strong>AQUA <em>Syne</em></strong>
-              <small>PC PARTS &amp; SERVICES</small>
-            </span>
-          </a>
-          <button type="button" class="ty-navTrigger" id="menu-toggle" aria-label="Toggle navigation menu">
-            <span class="material-symbols-outlined">menu</span>
-            <span>menu</span>
+        <div class="ne-search-input-wrap">
+          <input
+            id="search-input"
+            type="search"
+            placeholder="Search RTX 3060, Core i5 12th, Ryzen 5, B550, DDR4, NVMe SSD…"
+            aria-label="Search PC parts"
+          />
+          <button type="button" class="ne-search-clear" id="search-clear" aria-label="Clear search" hidden>
+            <span class="material-symbols-outlined">close</span>
           </button>
         </div>
+        <button type="submit" class="ne-search-submit" aria-label="Search Aqua PC Parts">
+          <span class="material-symbols-outlined">search</span>
+        </button>
+        <div class="ne-suggest" id="suggest" hidden></div>
+      </form>
 
-        <ul class="ty-navList" id="nav-links">
-          <li><a href="./index.html" class="active"><span>Home</span></a></li>
-          <li class="ty-removeNavItem"><a href="javascript:void(0)" class="ty-catNav-trigger" id="nav-cat-trigger"><span>Categories</span></a></li>
-          <li><a href="#shop" data-div="used"><span>Used Parts</span></a></li>
-          <li><a href="#shop" data-div="new"><span>Brand New</span></a></li>
-          <li><a href="https://aquapc3dportal.pages.dev/"><span>3D PC Builder</span></a></li>
-          <li><a href="https://aquapcsolutions.yyth.workers.dev/"><span>Main Site</span></a></li>
-          <li><a href="./contact.html"><span>Contact Us</span></a></li>
-          <li><a href="./admin.html"><span>Admin</span></a></li>
+      <!-- Right Action Cluster -->
+      <div class="ne-header-actions">
+        <button
+          type="button"
+          class="ne-action-btn ne-theme-btn"
+          id="ne-theme-toggle"
+          title="Switch Light / Dark Newegg Theme"
+          aria-label="Toggle Light or Dark Mode"
+        >
+          <span class="material-symbols-outlined" id="ne-theme-icon">light_mode</span>
+          <span class="ne-action-label" id="ne-theme-label">Light</span>
+        </button>
+
+        <a href="#pc-combo-builder" class="ne-action-btn hide-md" id="header-builder-btn" title="Open Quick PC Combo Builder">
+          <span class="material-symbols-outlined">construction</span>
+          <span class="ne-action-label">PC Builder</span>
+        </a>
+
+        <button
+          type="button"
+          class="ne-action-btn"
+          id="compare-open-btn"
+          title="Compare up to 4 hardware parts"
+          aria-label="Open Hardware Comparison"
+        >
+          <span class="material-symbols-outlined">compare_arrows</span>
+          <span class="ne-action-label">Compare (<b id="compare-count-top">0/4</b>)</span>
+        </button>
+
+        <button
+          type="button"
+          class="ne-action-btn ne-mobile-search-btn"
+          id="search-modal-open"
+          aria-label="Open Fullscreen Search"
+          title="Quick Search"
+        >
+          <span class="material-symbols-outlined">search</span>
+        </button>
+
+        <button
+          type="button"
+          class="ne-cart-btn"
+          id="cart-open"
+          aria-label="Open My Cart and Official Quote"
+        >
+          <span class="ne-cart-icon-wrap">
+            <span class="material-symbols-outlined">shopping_cart</span>
+            <b class="ne-cart-badge" id="cart-count">0</b>
+          </span>
+          <span class="ne-cart-text">
+            <small>My Cart &amp; Quote</small>
+            <strong id="cart-total-top">0 LKR</strong>
+          </span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Newegg Sub-Navigation Strip -->
+    <div class="ne-subnav">
+      <div class="ne-container ne-subnav-inner">
+        <button type="button" class="ne-all-depts-btn" id="nav-cat-trigger">
+          <span class="material-symbols-outlined">apps</span>
+          <span>All Departments</span>
+        </button>
+        <ul class="ne-subnav-links" id="nav-links">
+          <li><a href="#deals" class="is-highlight">⚡ Today's Best Deals</a></li>
+          <li><a href="#shell-shocker">🔥 Shell Shocker</a></li>
+          <li><a href="#pc-combo-builder">🛠️ PC Combo Builder</a></li>
+          <li><a href="#shop" data-div="used">✅ Certified Used (<span id="subnav-used-count">358</span>)</a></li>
+          <li><a href="#shop" data-div="new">📦 Brand New (<span id="subnav-new-count">34</span>)</a></li>
+          <li><a href="#shop" data-cat="vga-cards">🎮 Graphics Cards</a></li>
+          <li><a href="#shop" data-cat="processors">🧠 Processors</a></li>
+          <li><a href="#shop" data-cat="motherboards">🔧 Motherboards</a></li>
+          <li><a href="#shop" data-cat="storage">💾 SSD &amp; Storage</a></li>
+          <li><a href="#shop" data-cat="ram">⚡ Memory (RAM)</a></li>
+          <li><a href="#shop" data-cat="monitors">🖥️ Monitors</a></li>
+          <li><a href="https://aquapc3dportal.pages.dev/" class="is-external">🧊 3D Builder Studio ↗</a></li>
+          <li><a href="./contact.html">📍 Contact Us</a></li>
         </ul>
-      </nav>
+      </div>
     </div>
   </header>
 
-  <!-- Hero Ambient Gaming Background -->
-  <div class="ty-gameBG" aria-hidden="true">
-    <img src="assets/parts/gamer-bg.webp" alt="" />
-  </div>
+  <!-- Main Superstore Content -->
+  <main class="ne-main">
 
-  <!-- Main Two-Column Storefront Content -->
-  <div class="ty-pageContentWrap">
-    <!-- Left Vertical Category Pill Rail -->
-    <aside class="ty-cat" aria-label="Hardware Categories">
-      <ul class="ty-cat-list" id="side-cats"></ul>
-    </aside>
+    <!-- 1. Newegg Above-the-Fold Hero Bento Grid -->
+    <section class="ne-hero-section" aria-label="Featured Hardware &amp; Shell Shocker">
+      <div class="ne-container ne-hero-bento">
 
-    <!-- Right Content Showcase & Product Catalog -->
-    <main class="ty-pageContent">
-      <!-- Top Full-Bleed Slider -->
-      <section class="ty-flex-slider" id="slider" aria-label="Featured Hardware Showcase">
-        <div class="flex-viewport">
-          <ul class="slides" id="slides-track">
-            <li style="background-image:url('assets/parts/slide-1.webp')">
-              <div class="slide-overlay">
-                <span class="slide-badge">EMBILIPITIYA HARDWARE WORKSHOP</span>
-                <h1>BENCH-TESTED USED &amp;<br />BRAND NEW PC HARDWARE</h1>
-                <p>360+ GPUs, CPUs, Motherboards, RAM, Storage &amp; Peripherals — backed by 06-month testing warranty.</p>
-                <div class="slide-btns">
-                  <a href="#shop" data-div="used" class="nt-btn nt-btn-orange">Browse Used Hardware</a>
-                  <a href="#shop" data-div="new" class="nt-btn nt-btn-ghost">Shop Brand New</a>
-                </div>
+        <!-- Left Column: Department Mega-Menu Rail -->
+        <aside class="ne-dept-rail" aria-label="Hardware Departments">
+          <div class="ne-rail-head">
+            <span class="material-symbols-outlined">category</span>
+            <span>HARDWARE DEPARTMENTS</span>
+          </div>
+          <ul class="ne-dept-list" id="side-cats"></ul>
+        </aside>
+
+        <!-- Center Column: Promotional Carousel + Newegg Trust Strip -->
+        <div class="ne-bento-center">
+          <div class="ne-hero-slider" id="slider">
+            <div class="ne-slider-viewport">
+              <ul class="ne-slides-track" id="slides-track">
+                <li class="ne-slide" style="background-image:url('assets/parts/slide-1.webp')">
+                  <div class="ne-slide-overlay">
+                    <span class="ne-promo-tag">SHELL SHOCKER EVENT · EMBILIPITIYA</span>
+                    <h1>SRI LANKA'S BENCH-TESTED &amp; BRAND NEW PC SUPERSTORE</h1>
+                    <p>390+ Graphics Cards, Intel &amp; AMD CPUs, Motherboards, DDR4/DDR5 RAM, NVMe SSDs &amp; Gaming Gear — backed by 06-month written warranty.</p>
+                    <div class="ne-slide-ctas">
+                      <a href="#shop" data-div="used" class="ne-btn ne-btn-orange">Shop Certified Used (358+)</a>
+                      <a href="#shop" data-div="new" class="ne-btn ne-btn-navy">Shop Brand New</a>
+                    </div>
+                  </div>
+                </li>
+                <li class="ne-slide" style="background-image:url('assets/parts/slide-2.webp')">
+                  <div class="ne-slide-overlay">
+                    <span class="ne-promo-tag">GEFORCE GTX · RTX &amp; RADEON RX</span>
+                    <h2>24H STRESS-TESTED GRAPHICS CARDS IN STOCK</h2>
+                    <p>Every used GPU passes FurMark thermal &amp; artifact verification in our workshop before shipping anywhere in Sri Lanka.</p>
+                    <div class="ne-slide-ctas">
+                      <a href="#shop" data-cat="vga-cards" class="ne-btn ne-btn-orange">Explore All 65 GPUs</a>
+                      <a href="#pc-combo-builder" class="ne-btn ne-btn-ghost">Pair in PC Builder</a>
+                    </div>
+                  </div>
+                </li>
+                <li class="ne-slide" style="background-image:url('assets/parts/slide-3.webp')">
+                  <div class="ne-slide-overlay">
+                    <span class="ne-promo-tag">COMBO UP &amp; SAVE LKR</span>
+                    <h2>CPU + MOTHERBOARD + RAM BUILDER COMBOS</h2>
+                    <p>4th–14th Gen Intel Core &amp; Ryzen 3000–7000 processors paired with tested H61–Z790 &amp; A320–X670E boards.</p>
+                    <div class="ne-slide-ctas">
+                      <a href="#pc-combo-builder" class="ne-btn ne-btn-orange">Open Combo Builder</a>
+                      <a href="#shop" data-cat="processors" class="ne-btn ne-btn-ghost">Browse CPUs</a>
+                    </div>
+                  </div>
+                </li>
+                <li class="ne-slide" style="background-image:url('assets/parts/slide-4.webp')">
+                  <div class="ne-slide-overlay">
+                    <span class="ne-promo-tag">INSTANT LKR QUOTATION</span>
+                    <h2>PRINTABLE QUOTES &amp; WHATSAPP CHECKOUT</h2>
+                    <p>Compare up to 4 components side-by-side, build your cart, print an official LKR PDF quotation, or confirm via WhatsApp.</p>
+                    <div class="ne-slide-ctas">
+                      <a href="https://wa.me/94788194535" target="_blank" rel="noopener" class="ne-btn ne-btn-orange">WhatsApp +94 78 819 4535</a>
+                      <a href="https://aquapc3dportal.pages.dev/" class="ne-btn ne-btn-ghost">Launch 3D Studio ↗</a>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <button type="button" class="ne-slider-arrow prev" id="sl-prev" aria-label="Previous slide">
+              <span class="material-symbols-outlined">chevron_left</span>
+            </button>
+            <button type="button" class="ne-slider-arrow next" id="sl-next" aria-label="Next slide">
+              <span class="material-symbols-outlined">chevron_right</span>
+            </button>
+            <ol class="ne-slider-dots" id="dots"></ol>
+          </div>
+
+          <!-- 4-Item Trust Bar Below Carousel -->
+          <div class="ne-trust-strip">
+            <div class="ne-trust-item">
+              <span class="material-symbols-outlined">verified_user</span>
+              <div>
+                <strong>06-Month Written Warranty</strong>
+                <small>All Grade-A tested components</small>
               </div>
-            </li>
-            <li style="background-image:url('assets/parts/slide-2.webp')">
-              <div class="slide-overlay">
-                <span class="slide-badge">GEFORCE GTX · RTX &amp; RADEON RX</span>
-                <h2>GRAPHICS CARDS<br />READY TO SHIP</h2>
-                <p>24-hour FurMark &amp; 3D stress verified GPUs from GTX 750 Ti up to RTX 4000 &amp; RX Series.</p>
-                <div class="slide-btns">
-                  <a href="#shop" data-cat="vga-cards" class="nt-btn nt-btn-orange">View Graphics Cards</a>
-                </div>
+            </div>
+            <div class="ne-trust-item">
+              <span class="material-symbols-outlined">science</span>
+              <div>
+                <strong>24h Bench Stress-Tested</strong>
+                <small>FurMark &amp; OCCT Lab Verified</small>
               </div>
-            </li>
-            <li style="background-image:url('assets/parts/slide-3.webp')">
-              <div class="slide-overlay">
-                <span class="slide-badge">INTEL CORE &amp; AMD RYZEN</span>
-                <h2>PROCESSORS &amp;<br />MOTHERBOARD COMBOS</h2>
-                <p>4th–14th Gen Intel Core &amp; Ryzen 3000–7000 CPUs with matching H61 to Z790 / B550 / X670E boards.</p>
-                <div class="slide-btns">
-                  <a href="#shop" data-cat="processors" class="nt-btn nt-btn-orange">Explore CPUs</a>
-                  <a href="#shop" data-cat="motherboards" class="nt-btn nt-btn-ghost">Motherboards</a>
-                </div>
+            </div>
+            <div class="ne-trust-item">
+              <span class="material-symbols-outlined">local_shipping</span>
+              <div>
+                <strong>Island-Wide Safe Courier</strong>
+                <small>ESD-safe anti-static packaging</small>
               </div>
-            </li>
-            <li style="background-image:url('assets/parts/slide-4.webp')">
-              <div class="slide-overlay">
-                <span class="slide-badge">INSTANT LKR QUOTATION &amp; WHATSAPP</span>
-                <h2>BUILD YOUR QUOTE<br />IN SECONDS</h2>
-                <p>Add components to My Cart, download or print an official LKR quotation, or confirm stock on WhatsApp.</p>
-                <div class="slide-btns">
-                  <a href="https://wa.me/94788194535" target="_blank" rel="noopener" class="nt-btn nt-btn-orange">WhatsApp +94 78 819 4535</a>
-                </div>
+            </div>
+            <div class="ne-trust-item">
+              <span class="material-symbols-outlined">receipt_long</span>
+              <div>
+                <strong>Instant Printable LKR Quote</strong>
+                <small>PDF Quotation &amp; WhatsApp order</small>
               </div>
-            </li>
-          </ul>
+            </div>
+          </div>
         </div>
-        <button type="button" class="flex-prev" id="sl-prev" aria-label="Previous Slide">
-          <span class="material-symbols-outlined">chevron_left</span>
-        </button>
-        <button type="button" class="flex-next" id="sl-next" aria-label="Next Slide">
-          <span class="material-symbols-outlined">chevron_right</span>
-        </button>
-        <ol class="flex-control-nav" id="dots"></ol>
-      </section>
 
-      <!-- Home Feature Tabs (Special Offers | Featured | Brand New | New Arrivals) -->
-      <section class="ty-homeTabs" id="deals">
-        <div class="ty-homeTabs-selectWrap">
-          <ul>
-            <li class="active" id="tab-special">
-              <div class="ty-homeTabs-selectItem" data-tab="special" role="button" tabindex="0">
-                <i class="ty-homeTab-selectImgHolder">
-                  <svg viewBox="0 0 100 100"><path d="M66.659,50.176c-2.659,0-3.956,4.33-3.956,11.846c-0.088,7.714,1.209,11.934,3.956,11.934s3.758-4.417,3.758-11.846C70.418,55.143,69.604,50.176,66.659,50.176z M0,0v100h100V0H0z M21.495,37.978c0-9.736,4.33-18.549,12.132-18.549c8.901,0,11.736,9.824,11.736,18.088c0,12.659-5.78,18.549-11.846,18.549C25.165,56.066,21.495,46.967,21.495,37.978z M30.769,80.571l32.132-61.143h6.242L37.099,80.571H30.769z M66.659,80.374c-8.352,0-12.022-9.165-12.022-18.066c0-9.648,4.308-18.461,12.11-18.461c8.901,0,11.758,9.824,11.758,18C78.506,74.505,72.725,80.374,66.659,80.374z M37.297,37.802c0-6.989-0.835-12.044-3.78-12.044c-2.659,0-3.934,4.418-3.934,11.934c-0.088,7.714,1.099,11.934,3.934,11.934C36.374,49.626,37.297,45.231,37.297,37.802z"></path></svg>
-                </i>
-                <div class="ty-homeTab-selectText"><h3>Special Offers</h3></div>
+        <!-- Right Column: Shell Shocker Spotlight + PC Builder Promo -->
+        <aside class="ne-bento-right">
+          <div class="ne-shocker-card" id="shell-shocker">
+            <div class="ne-shocker-head">
+              <div class="ne-shocker-brand">
+                <span class="ne-shocker-bolt">⚡</span>
+                <div>
+                  <strong>SHELL SHOCKER</strong>
+                  <small>DAILY HARDWARE SPOTLIGHT</small>
+                </div>
               </div>
+              <div class="ne-shocker-timer-wrap">
+                <span class="ne-timer-label">ENDS IN</span>
+                <time class="ne-shocker-timer" id="shocker-timer">06:42:18</time>
+              </div>
+            </div>
+            <div class="ne-shocker-body" id="shocker-body">
+              <!-- Populated dynamically by shop.js -->
+            </div>
+            <div class="ne-shocker-foot">
+              <button type="button" class="ne-shocker-next" id="shocker-next">
+                <span>Next Deal</span>
+                <span class="material-symbols-outlined">chevron_right</span>
+              </button>
+              <a href="#deals" class="ne-shocker-all">View All Deals</a>
+            </div>
+          </div>
+
+          <div class="ne-builder-promo">
+            <div class="ne-builder-promo-top">
+              <span class="ne-promo-pill">COMBO UP &amp; SAVE</span>
+              <h3>Custom PC &amp; 3D Studio</h3>
+              <p>Pick compatible parts with live wattage &amp; LKR bundle pricing, or inspect rigs in 3D.</p>
+            </div>
+            <div class="ne-builder-promo-btns">
+              <a href="#pc-combo-builder" class="ne-btn ne-btn-orange ne-btn-sm">Quick PC Builder</a>
+              <a href="https://aquapc3dportal.pages.dev/" class="ne-btn ne-btn-outline ne-btn-sm">3D Studio ↗</a>
+            </div>
+          </div>
+        </aside>
+
+      </div>
+    </section>
+
+    <!-- 2. Today's Best Deals & Shell Shockers Tabbed Section -->
+    <section class="ne-deals-section" id="deals" aria-label="Today's Best Deals">
+      <div class="ne-container">
+        <div class="ne-section-head">
+          <div class="ne-section-title-group">
+            <span class="ne-section-kicker">NEWEGG-STYLE DAILY HIGHLIGHTS</span>
+            <h2>Today's Best Deals &amp; Shell Shockers</h2>
+          </div>
+
+          <ul class="ne-deal-tabs" role="tablist">
+            <li class="active" id="tab-special">
+              <button type="button" class="ty-homeTabs-selectItem ne-deal-tab" data-tab="special" role="tab" aria-selected="true">
+                <span>🔥 Shell Shocker Deals</span>
+              </button>
             </li>
             <li id="tab-featured">
-              <div class="ty-homeTabs-selectItem" data-tab="featured" role="button" tabindex="0">
-                <i class="ty-homeTab-selectImgHolder">
-                  <svg viewBox="0 0 100 100"><path d="M0,0v100h100V0H0z M71.934,81.56L50,70.022L28.066,81.56l4.198-24.418L14.506,39.824l24.527-3.56L50,14.044l10.967,22.22l24.528,3.56L67.736,57.143L71.934,81.56z"></path></svg>
-                </i>
-                <div class="ty-homeTab-selectText"><h3>Featured</h3></div>
-              </div>
+              <button type="button" class="ty-homeTabs-selectItem ne-deal-tab" data-tab="featured" role="tab" aria-selected="false">
+                <span>⭐ Featured Best Sellers</span>
+              </button>
+            </li>
+            <li id="tab-gpucpu">
+              <button type="button" class="ty-homeTabs-selectItem ne-deal-tab" data-tab="gpucpu" role="tab" aria-selected="false">
+                <span>🎮 Top GPUs &amp; CPUs</span>
+              </button>
+            </li>
+            <li id="tab-brandnew">
+              <button type="button" class="ty-homeTabs-selectItem ne-deal-tab" data-tab="brandnew" role="tab" aria-selected="false">
+                <span>📦 Brand New Sealed Gear</span>
+              </button>
             </li>
           </ul>
         </div>
 
-        <div class="ty-homeTab-displayWrap">
-          <div class="ty-homeTab-display-contentWrap active" id="panel-special">
-            <ul class="ty-homeTab-grid" id="row-special"></ul>
+        <div class="ne-deals-panels">
+          <div class="ne-deal-panel active" id="panel-special">
+            <ul class="ne-deals-grid" id="row-special"></ul>
           </div>
-          <div class="ty-homeTab-display-contentWrap" id="panel-featured">
-            <ul class="ty-homeTab-grid" id="row-featured"></ul>
+          <div class="ne-deal-panel" id="panel-featured">
+            <ul class="ne-deals-grid" id="row-featured"></ul>
+          </div>
+          <div class="ne-deal-panel" id="panel-gpucpu">
+            <ul class="ne-deals-grid" id="row-gpucpu"></ul>
+          </div>
+          <div class="ne-deal-panel" id="panel-brandnew">
+            <ul class="ne-deals-grid" id="row-brandnew"></ul>
           </div>
         </div>
-      </section>
+      </div>
+    </section>
 
-      <!-- Full Interactive Product Catalog (Nanotek Category Header + Filters + Product Cards) -->
-      <section class="ty-catalog-section" id="shop">
-        <div class="ty-catPageTitle-cat">
-          <div class="title-row">
-            <h1 id="active-cat-title">All PC Parts</h1>
-            <span class="res-count" id="result-count">Loading…</span>
+    <!-- 3. Shop by Category Visual Grid -->
+    <section class="ne-cat-showcase" aria-label="Shop by Category">
+      <div class="ne-container">
+        <div class="ne-section-head">
+          <div class="ne-section-title-group">
+            <span class="ne-section-kicker">BROWSE DEPARTMENTS</span>
+            <h2>Shop by Hardware Category</h2>
+          </div>
+          <a href="#shop" class="ne-link-more">View Full Catalog →</a>
+        </div>
+        <div class="ne-cat-tiles" id="ne-cat-tiles"></div>
+      </div>
+    </section>
+
+    <!-- 4. Interactive Combo Up / Quick PC Builder Section -->
+    <section class="ne-combo-section" id="pc-combo-builder" aria-label="Quick PC Combo Builder">
+      <div class="ne-container">
+        <div class="ne-combo-card">
+          <div class="ne-combo-head">
+            <div>
+              <span class="ne-section-kicker">CUSTOM RIG CONFIGURATOR</span>
+              <h2>Combo Up — Quick PC Builder &amp; Bundle Quote</h2>
+              <p>Select components from live Aqua PC Parts stock to estimate wattage, bundle savings, and add the full build to your Cart or WhatsApp order.</p>
+            </div>
+            <div class="ne-combo-presets">
+              <button type="button" class="ne-btn ne-btn-outline ne-btn-sm" id="combo-preset-gaming">⚡ Auto-Fill Gaming Rig</button>
+              <button type="button" class="ne-btn ne-btn-outline ne-btn-sm" id="combo-preset-budget">💼 Auto-Fill Office / Value</button>
+              <button type="button" class="ne-btn ne-btn-ghost ne-btn-sm" id="combo-preset-clear">Clear Slots</button>
+            </div>
           </div>
 
-          <ul class="ty-catPage-baseFilters">
-            <li class="active"><button type="button" data-quick="all">All Items</button></li>
-            <li><button type="button" data-quick="used">Used · 06M Warranty</button></li>
-            <li><button type="button" data-quick="new">Brand New</button></li>
-            <li><button type="button" data-quick="instock">In Stock Only</button></li>
-            <li><button type="button" data-quick="priced">Priced Only</button></li>
-          </ul>
-        </div>
+          <div class="ne-combo-layout">
+            <div class="ne-combo-slots">
+              <label class="ne-combo-slot">
+                <span class="ne-slot-label"><span class="material-symbols-outlined">memory</span> Processor (CPU)</span>
+                <select id="combo-cpu" aria-label="Select Processor"></select>
+              </label>
+              <label class="ne-combo-slot">
+                <span class="ne-slot-label"><span class="material-symbols-outlined">developer_board</span> Motherboard</span>
+                <select id="combo-mb" aria-label="Select Motherboard"></select>
+              </label>
+              <label class="ne-combo-slot">
+                <span class="ne-slot-label"><span class="material-symbols-outlined">videogame_asset</span> Graphics Card (GPU)</span>
+                <select id="combo-gpu" aria-label="Select Graphics Card"></select>
+              </label>
+              <label class="ne-combo-slot">
+                <span class="ne-slot-label"><span class="material-symbols-outlined">sd_card</span> Memory (RAM)</span>
+                <select id="combo-ram" aria-label="Select Memory"></select>
+              </label>
+              <label class="ne-combo-slot">
+                <span class="ne-slot-label"><span class="material-symbols-outlined">hard_drive</span> Storage (SSD / HDD)</span>
+                <select id="combo-storage" aria-label="Select Storage"></select>
+              </label>
+              <label class="ne-combo-slot">
+                <span class="ne-slot-label"><span class="material-symbols-outlined">bolt</span> Power Supply (PSU)</span>
+                <select id="combo-psu" aria-label="Select Power Supply"></select>
+              </label>
+              <label class="ne-combo-slot">
+                <span class="ne-slot-label"><span class="material-symbols-outlined">monitor</span> Monitor (Optional)</span>
+                <select id="combo-monitor" aria-label="Select Monitor"></select>
+              </label>
+            </div>
 
-        <!-- Inline Search, Category, Price Range & Sort Toolbar -->
-        <div class="ty-catPage-productWrap">
-          <div class="ty-inline-controls">
-            <form class="ty-search-bar" id="search-form" autocomplete="off">
-              <select id="search-cat" aria-label="Filter Department">
-                <option value="">All Categories</option>
-              </select>
-              <input
-                id="search-input"
-                type="search"
-                placeholder="Search GPUs (RTX 3060, GTX 1660), CPUs (i5 12th, Ryzen 5), Boards, RAM…"
-                aria-label="Search PC parts"
-              />
-              <button type="submit" aria-label="Search">
-                <span class="material-symbols-outlined">search</span>
-              </button>
-              <div class="suggest" id="suggest" hidden></div>
-            </form>
-
-            <div class="ty-price-sort">
-              <div class="price-box">
-                <input id="pmin" type="number" min="0" placeholder="Min LKR" aria-label="Min Price" />
-                <span>–</span>
-                <input id="pmax" type="number" min="0" placeholder="Max LKR" aria-label="Max Price" />
+            <aside class="ne-combo-summary">
+              <div class="ne-combo-sum-badge">LIVE BUNDLE SUMMARY</div>
+              <div class="ne-combo-metrics">
+                <div class="ne-metric-row">
+                  <span>Selected Parts</span>
+                  <strong id="combo-selected-count">0 / 7</strong>
+                </div>
+                <div class="ne-metric-row">
+                  <span>Estimated System Load</span>
+                  <strong id="combo-wattage">0 W</strong>
+                </div>
+                <div class="ne-metric-row is-green">
+                  <span>Combo Assembly Discount</span>
+                  <strong id="combo-savings">0 LKR</strong>
+                </div>
               </div>
-              <select id="sort" aria-label="Sort products">
-                <option value="default">Sort: Featured</option>
-                <option value="low">Price: Low to High</option>
-                <option value="high">Price: High to Low</option>
-                <option value="az">Name: A – Z</option>
-              </select>
-              <button type="button" class="nt-reset-btn" id="f-reset" title="Reset Filters">
-                <span class="material-symbols-outlined">restart_alt</span> Reset
-              </button>
+              <div class="ne-combo-total-box">
+                <span>Estimated Bundle Total</span>
+                <strong id="combo-total">0 LKR</strong>
+                <small>Includes 24h Workshop Assembly &amp; Stress Test option</small>
+              </div>
+              <div class="ne-combo-actions">
+                <button type="button" class="ne-btn ne-btn-orange ne-btn-block" id="combo-add-all">
+                  <span class="material-symbols-outlined">add_shopping_cart</span>
+                  <span>Add All Selected to Cart</span>
+                </button>
+                <a href="https://wa.me/94788194535" target="_blank" rel="noopener" class="ne-btn ne-btn-wa ne-btn-block" id="combo-wa-btn">
+                  <span class="material-symbols-outlined">chat</span>
+                  <span>Order Bundle on WhatsApp</span>
+                </a>
+              </div>
+            </aside>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. Newegg Left-Faceted Full Product Catalog -->
+    <section class="ne-catalog-section" id="shop" aria-label="Hardware Catalog">
+      <div class="ne-container ne-catalog-layout">
+
+        <!-- Left Faceted Filter Sidebar -->
+        <aside class="ne-filter-sidebar" aria-label="Catalog Filters">
+          <div class="ne-filter-header">
+            <h3>
+              <span class="material-symbols-outlined">tune</span>
+              <span>Filter Results</span>
+            </h3>
+            <button type="button" class="ne-reset-link" id="f-reset">Reset All</button>
+          </div>
+
+          <!-- Availability & Pricing Toggles -->
+          <div class="ne-facet-group">
+            <h4>Availability &amp; Pricing</h4>
+            <label class="ne-check-row">
+              <input type="checkbox" id="f-stock-toggle" />
+              <span>In Stock Only</span>
+            </label>
+            <label class="ne-check-row">
+              <input type="checkbox" id="f-priced-toggle" />
+              <span>Priced Items Only</span>
+            </label>
+          </div>
+
+          <!-- Condition Filter -->
+          <div class="ne-facet-group">
+            <h4>Condition</h4>
+            <div class="ne-facet-pills">
+              <button type="button" class="ne-facet-pill active" data-quick="all">All Hardware</button>
+              <button type="button" class="ne-facet-pill" data-quick="used">Certified Used · 06M</button>
+              <button type="button" class="ne-facet-pill" data-quick="new">Brand New Sealed</button>
+            </div>
+          </div>
+
+          <!-- Price Range & Quick Brackets -->
+          <div class="ne-facet-group">
+            <h4>Price Range (LKR)</h4>
+            <div class="ne-price-inputs">
+              <input id="pmin" type="number" min="0" placeholder="Min LKR" aria-label="Minimum price LKR" />
+              <span>–</span>
+              <input id="pmax" type="number" min="0" placeholder="Max LKR" aria-label="Maximum price LKR" />
+            </div>
+            <div class="ne-bracket-list">
+              <button type="button" class="ne-bracket-btn" data-price-bracket="0-10000">Under 10,000 LKR</button>
+              <button type="button" class="ne-bracket-btn" data-price-bracket="10000-25000">10,000 – 25,000 LKR</button>
+              <button type="button" class="ne-bracket-btn" data-price-bracket="25000-60000">25,000 – 60,000 LKR</button>
+              <button type="button" class="ne-bracket-btn" data-price-bracket="60000-9999999">60,000+ LKR</button>
+            </div>
+          </div>
+
+          <!-- Departments Facet List -->
+          <div class="ne-facet-group">
+            <h4>Department</h4>
+            <ul class="ne-facet-depts" id="facet-depts"></ul>
+          </div>
+        </aside>
+
+        <!-- Right Catalog Results Area -->
+        <div class="ne-catalog-main">
+          <div class="ne-catalog-head">
+            <div class="ne-catalog-crumbs">
+              <a href="./index.html">Home</a>
+              <span>/</span>
+              <span id="catalog-crumb">All PC Parts</span>
+            </div>
+            <div class="ne-catalog-title-row">
+              <h1 id="active-cat-title">All PC Parts</h1>
+              <span class="ne-result-count" id="result-count">Loading…</span>
+            </div>
+          </div>
+
+          <!-- Newegg Toolbar -->
+          <div class="ne-toolbar">
+            <ul class="ne-quick-tabs ty-catPage-baseFilters">
+              <li class="active"><button type="button" data-quick="all">All Items</button></li>
+              <li><button type="button" data-quick="used">Used · 06M Warranty</button></li>
+              <li><button type="button" data-quick="new">Brand New</button></li>
+              <li><button type="button" data-quick="instock">In Stock</button></li>
+              <li><button type="button" data-quick="priced">Priced Only</button></li>
+            </ul>
+
+            <div class="ne-toolbar-right">
+              <label class="ne-sort-wrap">
+                <span>Sort By:</span>
+                <select id="sort" aria-label="Sort products">
+                  <option value="default">Featured</option>
+                  <option value="low">Price: Lowest First</option>
+                  <option value="high">Price: Highest First</option>
+                  <option value="rating">Best Rating</option>
+                  <option value="az">Name: A – Z</option>
+                </select>
+              </label>
+
+              <div class="ne-view-switch" role="group" aria-label="Product layout mode">
+                <button type="button" class="ne-view-btn active" id="view-grid" title="Grid View" aria-label="Grid View">
+                  <span class="material-symbols-outlined">grid_view</span>
+                </button>
+                <button type="button" class="ne-view-btn" id="view-list" title="List View" aria-label="List View">
+                  <span class="material-symbols-outlined">view_list</span>
+                </button>
+              </div>
             </div>
           </div>
 
           <!-- Active Filter Chips & Subcategory Pills -->
-          <div class="chips" id="chips"></div>
-          <div class="subcats" id="f-subcats" hidden></div>
+          <div class="ne-chips" id="chips"></div>
+          <div class="ne-subcats" id="f-subcats" hidden></div>
 
-          <!-- Product Card Grid -->
-          <ul class="ty-catPage-productList" id="grid"></ul>
+          <!-- Product Grid / List -->
+          <ul class="ne-product-grid ty-catPage-productList" id="grid"></ul>
 
-          <div class="empty" id="empty" hidden>
+          <!-- Empty State -->
+          <div class="ne-empty" id="empty" hidden>
             <span class="material-symbols-outlined">search_off</span>
             <h3>No matching hardware found</h3>
-            <p>Try resetting filters or ask Rose AI / WhatsApp (+94 78 819 4535) for stock confirmation.</p>
+            <p>Try clearing filters or ask Rose AI / WhatsApp (+94 78 819 4535) for instant stock confirmation.</p>
+            <button type="button" class="ne-btn ne-btn-orange" id="empty-reset-btn">Reset All Filters</button>
           </div>
 
-          <div class="ty-more-wrap" id="load-more-wrap">
-            <button type="button" id="load-more">View More Results</button>
+          <!-- Load More Pagination -->
+          <div class="ne-more-wrap" id="load-more-wrap">
+            <button type="button" class="ne-btn ne-btn-navy" id="load-more">View More Hardware Results</button>
           </div>
         </div>
-      </section>
 
-      <!-- Workshop Assurance & Direct WhatsApp Contact Band -->
-      <section class="ty-contact-band" id="contact">
-        <div class="cb-grid">
-          <div class="cb-card">
-            <span class="material-symbols-outlined">verified_user</span>
-            <div>
-              <strong>06-Month Written Testing Warranty</strong>
-              <small>All used GPUs, CPUs &amp; motherboards are 24h stress-tested in Embilipitiya.</small>
-            </div>
-          </div>
-          <div class="cb-card">
-            <span class="material-symbols-outlined">local_shipping</span>
-            <div>
-              <strong>Island-Wide ESD-Safe Courier</strong>
-              <small>Anti-static foam packaging delivered fast anywhere in Sri Lanka.</small>
-            </div>
-          </div>
-          <div class="cb-card">
-            <span class="material-symbols-outlined">support_agent</span>
-            <div>
-              <strong>Embilipitiya Workshop Hotline</strong>
-              <small>Call or WhatsApp <a href="tel:+94788194535">+94 78 819 4535</a> (Mon–Sat)</small>
-            </div>
-          </div>
-          <div class="cb-card">
-            <span class="material-symbols-outlined">hub</span>
-            <div>
-              <strong>Contact &amp; Social Channels</strong>
-              <small><a href="./contact.html">Full Contact &amp; Map</a> · <a href="https://www.facebook.com/aquapcsolutions" target="_blank" rel="noopener">Facebook</a> · <a href="https://www.instagram.com/aquapcsolutions/" target="_blank" rel="noopener">Instagram</a></small>
-            </div>
-          </div>
-        </div>
-      </section>
-    </main>
-  </div>
-
-  <!-- Nanotek-Style Footer -->
-  <footer>
-    <div class="ty-section right">
-      <div class="ty-copyright">
-        Aqua PC Parts · Aqua Syne &copy; <span id="yr"></span> · Embilipitiya, Sri Lanka
       </div>
-      <div class="ty-footer-links">
-        <a href="./used-parts.html">Used Catalog</a>
-        <a href="./brand-new-parts.html">Brand New</a>
-        <a href="https://aquapc3dportal.pages.dev/">3D PC Builder</a>
-        <a href="./contact.html">Contact Us</a>
-        <a href="./admin.html">Store Admin</a>
-        <a href="https://aquapcsolutions.yyth.workers.dev/">Main Site</a>
-        <a href="https://www.facebook.com/aquapcsolutions" target="_blank" rel="noopener">Facebook</a>
-        <a href="https://www.instagram.com/aquapcsolutions/" target="_blank" rel="noopener">Instagram</a>
-        <a href="https://wa.me/94788194535" target="_blank" rel="noopener">WhatsApp</a>
+    </section>
+
+    <!-- 6. Workshop Assurance & Contact Band -->
+    <section class="ne-assurance-band" id="contact" aria-label="Aqua PC Parts Guarantees">
+      <div class="ne-container ne-assurance-grid">
+        <div class="ne-assurance-card">
+          <span class="material-symbols-outlined">verified_user</span>
+          <div>
+            <strong>06-Month Written Testing Warranty</strong>
+            <small>All used GPUs, CPUs &amp; motherboards are 24h stress-tested in Embilipitiya.</small>
+          </div>
+        </div>
+        <div class="ne-assurance-card">
+          <span class="material-symbols-outlined">local_shipping</span>
+          <div>
+            <strong>Island-Wide ESD-Safe Courier</strong>
+            <small>Anti-static foam packaging delivered fast anywhere in Sri Lanka.</small>
+          </div>
+        </div>
+        <div class="ne-assurance-card">
+          <span class="material-symbols-outlined">support_agent</span>
+          <div>
+            <strong>Embilipitiya Workshop Hotline</strong>
+            <small>Call or WhatsApp <a href="tel:+94788194535">+94 78 819 4535</a> (Mon–Sat)</small>
+          </div>
+        </div>
+        <div class="ne-assurance-card">
+          <span class="material-symbols-outlined">hub</span>
+          <div>
+            <strong>Showroom, 3D Studio &amp; Socials</strong>
+            <small><a href="./contact.html">Contact &amp; Map</a> · <a href="https://www.facebook.com/aquapcsolutions" target="_blank" rel="noopener">Facebook</a> · <a href="https://www.instagram.com/aquapcsolutions/" target="_blank" rel="noopener">Instagram</a></small>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Newegg-Style Multi-Column Footer -->
+  <footer class="ne-footer">
+    <div class="ne-container ne-footer-grid">
+      <div class="ne-footer-brand">
+        <div class="ne-footer-logo">
+          <img src="assets/logo.jpg" alt="Aqua PC Parts" />
+          <div>
+            <strong>AQUA PC PARTS</strong>
+            <small>Aqua PC Solutions · Sri Lanka</small>
+          </div>
+        </div>
+        <p>Bench-tested Grade-A used components and factory-sealed brand new hardware in Embilipitiya, Sri Lanka — with transparent LKR pricing and island-wide delivery.</p>
+        <div class="ne-footer-contact-line">
+          <span>Hotline / WhatsApp: <a href="tel:+94788194535">+94 78 819 4535</a></span>
+          <span>Mon–Fri 8:00 AM–7:00 PM · Sat 10:00 AM–5:00 PM</span>
+        </div>
+      </div>
+
+      <div class="ne-footer-col">
+        <h4>Store Divisions</h4>
+        <ul>
+          <li><a href="./used-parts.html">Certified Used Parts (358+)</a></li>
+          <li><a href="./brand-new-parts.html">Brand New Store (34+)</a></li>
+          <li><a href="#deals">Today's Shell Shockers</a></li>
+          <li><a href="#pc-combo-builder">Quick PC Combo Builder</a></li>
+          <li><a href="https://aquapc3dportal.pages.dev/">3D PC Builder Studio ↗</a></li>
+        </ul>
+      </div>
+
+      <div class="ne-footer-col">
+        <h4>Popular Departments</h4>
+        <ul>
+          <li><a href="#shop" data-cat="vga-cards">Graphics Cards (GPUs)</a></li>
+          <li><a href="#shop" data-cat="processors">Intel &amp; AMD Processors</a></li>
+          <li><a href="#shop" data-cat="motherboards">Motherboards</a></li>
+          <li><a href="#shop" data-cat="storage">NVMe SSDs &amp; Storage</a></li>
+          <li><a href="#shop" data-cat="monitors">LCD &amp; IPS Monitors</a></li>
+        </ul>
+      </div>
+
+      <div class="ne-footer-col">
+        <h4>Customer Service &amp; Links</h4>
+        <ul>
+          <li><a href="./contact.html">Workshop Contact &amp; Map</a></li>
+          <li><a href="https://aquapcsolutions.yyth.workers.dev/">Aqua PC Solutions Main Site</a></li>
+          <li><a href="./admin.html">Store Price Admin Panel</a></li>
+          <li><a href="https://wa.me/94788194535" target="_blank" rel="noopener">Order on WhatsApp</a></li>
+          <li><a href="https://www.facebook.com/aquapcsolutions" target="_blank" rel="noopener">Facebook</a> · <a href="https://www.instagram.com/aquapcsolutions/" target="_blank" rel="noopener">Instagram</a></li>
+        </ul>
       </div>
     </div>
-    <div class="ty-section left">
-      <div class="ty-credit">Prices in LKR · Bench-Tested Hardware &amp; Accessories</div>
+
+    <div class="ne-footer-bottom">
+      <div class="ne-container ne-footer-bottom-inner">
+        <span>&copy; <span id="yr"></span> Aqua PC Parts · Aqua PC Solutions · Embilipitiya, Sri Lanka</span>
+        <span>All prices in LKR · Bench-Tested Hardware &amp; Sealed Accessories</span>
+      </div>
     </div>
   </footer>
 
-  <!-- Fullscreen Search Modal (Triggered by Header Search Square) -->
+  <!-- Product Quick-View & Live WhatsApp Customizer Modal -->
+  <div class="ne-modal" id="quick-view-modal" hidden role="dialog" aria-modal="true" aria-labelledby="qv-title">
+    <div class="ne-modal-backdrop" id="qv-backdrop"></div>
+    <div class="ne-modal-card ne-qv-card">
+      <button type="button" class="ne-modal-close" id="qv-close" aria-label="Close product quick view">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+      <div class="ne-qv-grid">
+        <div class="ne-qv-media">
+          <div class="ne-qv-badges" id="qv-badges"></div>
+          <div class="ne-qv-img-box">
+            <img id="qv-img" src="assets/parts/gpu-prime.webp" alt="" />
+          </div>
+          <div class="ne-qv-warranty-box">
+            <span class="material-symbols-outlined">verified_user</span>
+            <span id="qv-warranty">06 Months Testing Warranty</span>
+          </div>
+        </div>
+        <div class="ne-qv-info">
+          <span class="ne-qv-cat" id="qv-cat">Department</span>
+          <h2 id="qv-title">Product Title</h2>
+          <div class="ne-qv-rating" id="qv-rating"></div>
+
+          <div class="ne-qv-price-block">
+            <div class="ne-qv-price-row">
+              <strong id="qv-price">0 LKR</strong>
+              <span class="ne-qv-orig" id="qv-orig-price"></span>
+              <span class="ne-qv-save" id="qv-save"></span>
+            </div>
+            <div class="ne-qv-stock" id="qv-stock">In Stock · Ships from Embilipitiya</div>
+          </div>
+
+          <ul class="ne-qv-specs" id="qv-specs"></ul>
+
+          <div class="ne-qv-qty-bar">
+            <div class="ne-qty-stepper">
+              <button type="button" id="qv-qty-dec" aria-label="Decrease quantity">−</button>
+              <span id="qv-qty-val">1</span>
+              <button type="button" id="qv-qty-inc" aria-label="Increase quantity">+</button>
+            </div>
+            <button type="button" class="ne-btn ne-btn-orange ne-qv-add" id="qv-add-cart">
+              <span class="material-symbols-outlined">add_shopping_cart</span>
+              <span>Add to Cart</span>
+            </button>
+          </div>
+
+          <div class="ne-qv-customizer">
+            <h4>WhatsApp Order &amp; Stock Inquiry Customizer</h4>
+            <div class="ne-qv-pills" id="qv-intent-pills">
+              <button type="button" class="ne-pill active" data-qv-intent="order">Order Now</button>
+              <button type="button" class="ne-pill" data-qv-intent="availability">Check Availability</button>
+              <button type="button" class="ne-pill" data-qv-intent="compatibility">Compatibility Help</button>
+              <button type="button" class="ne-pill" data-qv-intent="install">With Lab Install</button>
+            </div>
+            <div class="ne-qv-pills" id="qv-fulfill-pills">
+              <button type="button" class="ne-pill active" data-qv-fulfill="pickup">Store Pickup</button>
+              <button type="button" class="ne-pill" data-qv-fulfill="delivery">Island-Wide Courier</button>
+              <button type="button" class="ne-pill" data-qv-fulfill="workshop-install">Workshop Fitting (+1,500 LKR)</button>
+            </div>
+            <input id="qv-note" type="text" class="ne-qv-note" placeholder="Optional note (e.g., send FurMark test video, CPU socket check)…" />
+            <pre class="ne-qv-preview" id="qv-wa-preview"></pre>
+            <a id="qv-wa-send" href="https://wa.me/94788194535" target="_blank" rel="noopener" class="ne-btn ne-btn-wa ne-btn-block">
+              <span class="material-symbols-outlined">chat</span>
+              <span>Send Custom Inquiry on WhatsApp</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sticky Bottom Hardware Compare Tray -->
+  <div class="ne-compare-bar" id="compare-bar" hidden>
+    <div class="ne-container ne-compare-inner">
+      <div class="ne-compare-left">
+        <strong>Compare Hardware (<span id="compare-bar-count">0</span>/4)</strong>
+        <div class="ne-compare-thumbs" id="compare-tray-items"></div>
+      </div>
+      <div class="ne-compare-right">
+        <button type="button" class="ne-btn ne-btn-ghost ne-btn-sm" id="compare-clear-btn">Clear</button>
+        <button type="button" class="ne-btn ne-btn-orange ne-btn-sm" id="compare-now-btn">Compare Side-by-Side</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Side-by-Side Comparison Modal -->
+  <div class="ne-modal" id="compare-modal" hidden role="dialog" aria-modal="true" aria-labelledby="compare-modal-title">
+    <div class="ne-modal-backdrop" id="compare-modal-backdrop"></div>
+    <div class="ne-modal-card ne-compare-card">
+      <div class="ne-compare-modal-head">
+        <h2 id="compare-modal-title">Hardware Side-by-Side Comparison</h2>
+        <button type="button" class="ne-modal-close" id="compare-modal-close" aria-label="Close comparison">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+      <div class="ne-compare-table-wrap" id="compare-table-wrap"></div>
+    </div>
+  </div>
+
+  <!-- Fullscreen Quick Search Modal -->
   <div class="nt-search-modal" id="search-modal" hidden aria-modal="true" role="dialog">
     <button type="button" class="nt-modal-close" id="search-modal-close" aria-label="Close Search">
       <span class="material-symbols-outlined">close</span>
@@ -367,7 +871,7 @@
     </div>
   </div>
 
-  <!-- Cart / Quotation Slide-Over Drawer -->
+  <!-- Cart & Official Quotation Slide-Over Drawer -->
   <div class="overlay" id="overlay" hidden></div>
   <aside class="drawer" id="drawer" aria-label="Shopping Cart and Quotation" hidden>
     <div class="drawer-head">
