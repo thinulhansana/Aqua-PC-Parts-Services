@@ -14,8 +14,15 @@ import {
   SITE_EMAIL,
   SITE_EMAIL_HREF,
   SITE_WHATSAPP_URL,
+  SITE_FACEBOOK_URL,
+  SITE_FACEBOOK_HANDLE,
+  SITE_INSTAGRAM_URL,
+  SITE_INSTAGRAM_HANDLE,
   SITE_MAPS_URL,
   SITE_HOURS,
+  AQUA_PC_PARTS_URL,
+  AQUA_PC_PARTS_CONTACT_URL,
+  AQUA_3D_PORTAL_URL,
 } from "@/lib/constants";
 import {
   RevealSection,
@@ -1077,11 +1084,207 @@ export default function ContactPage() {
                     Chat Now
                   </span>
                 </a>
+
+                <a
+                  href={SITE_FACEBOOK_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-space-md rounded-lg bg-surface-container hover:bg-surface-container-high transition-all flex items-center justify-between group border border-outline-variant/15 hover:border-[#1877F2]/40"
+                >
+                  <div className="flex items-center gap-space-md">
+                    <div className="w-10 h-10 rounded-lg bg-[#1877F2]/15 flex items-center justify-center text-[#1877F2] group-hover:scale-105 transition-transform border border-[#1877F2]/25">
+                      <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 shrink-0" aria-hidden="true">
+                        <path d="M22.675 0H1.325C.593 0 0 .593 0 1.325v21.351C0 23.407.593 24 1.325 24H12.82v-9.294H9.692v-3.622h3.128V8.413c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.622h-3.12V24h6.116c.73 0 1.323-.593 1.323-1.325V1.325C24 .593 23.407 0 22.675 0z" />
+                      </svg>
+                    </div>
+                    <div>
+                      <span className="font-syne text-title-md text-on-surface block group-hover:text-[#1877F2] transition-colors">
+                        Official Facebook Page
+                      </span>
+                      <span className="font-mono text-label-tech text-outline">
+                        {SITE_FACEBOOK_HANDLE} · Stock Drops &amp; Updates
+                      </span>
+                    </div>
+                  </div>
+                  <span className="px-space-md py-space-xs rounded-lg bg-surface-container-high group-hover:bg-[#1877F2] text-on-surface group-hover:text-white font-syne text-body-sm transition-all border border-outline-variant/30 group-hover:border-transparent">
+                    Follow
+                  </span>
+                </a>
+
+                <a
+                  href={SITE_INSTAGRAM_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-space-md rounded-lg bg-surface-container hover:bg-surface-container-high transition-all flex items-center justify-between group border border-outline-variant/15 hover:border-[#E1306C]/40"
+                >
+                  <div className="flex items-center gap-space-md">
+                    <div className="w-10 h-10 rounded-lg bg-[#E1306C]/15 flex items-center justify-center text-[#E1306C] group-hover:scale-105 transition-transform border border-[#E1306C]/25">
+                      <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 shrink-0" aria-hidden="true">
+                        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z" />
+                      </svg>
+                    </div>
+                    <div>
+                      <span className="font-syne text-title-md text-on-surface block group-hover:text-[#E1306C] transition-colors">
+                        Official Instagram Profile
+                      </span>
+                      <span className="font-mono text-label-tech text-outline">
+                        {SITE_INSTAGRAM_HANDLE} · Custom Rig Reels &amp; DMs
+                      </span>
+                    </div>
+                  </div>
+                  <span className="px-space-md py-space-xs rounded-lg bg-surface-container-high group-hover:bg-[#E1306C] text-on-surface group-hover:text-white font-syne text-body-sm transition-all border border-outline-variant/30 group-hover:border-transparent">
+                    Follow
+                  </span>
+                </a>
               </div>
             </div>
           </div>
         </div>
       </section>
+
+      {/* ── Connected 3-Site Chain & Global Ecosystem Hub ── */}
+      <RevealSection className="max-w-[1440px] mx-auto px-gutter-lg pb-space-2xl w-full">
+        <div className="bg-surface-container-low rounded-xl p-space-lg sm:p-space-xl shadow-xl relative overflow-hidden border border-outline-variant/20">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-space-md mb-space-lg">
+            <div className="flex flex-col gap-space-xs max-w-2xl">
+              <div className="flex items-center gap-space-xs">
+                <span className="material-symbols-outlined text-primary text-[22px]">
+                  hub
+                </span>
+                <span className="font-mono text-label-tech text-primary uppercase tracking-widest">
+                  SYNCHRONIZED 3-SITE CHAIN // ONE ECOSYSTEM
+                </span>
+              </div>
+              <h2 className="font-syne text-headline-md text-on-surface">
+                Our Connected Hardware &amp; 3D Builder Network
+              </h2>
+              <p className="text-body-md text-on-surface-variant">
+                Whether you need bench-tested PC components in LKR, an interactive 3D build studio, or board-level diagnostics, our 3 integrated sites and social channels work together seamlessly.
+              </p>
+            </div>
+            <div className="flex items-center gap-2">
+              <a
+                href={SITE_FACEBOOK_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-container hover:bg-surface-bright text-[#1877F2] font-mono text-label-tech border border-outline-variant/20 transition-colors"
+              >
+                <span>Facebook</span>
+                <span className="material-symbols-outlined text-[14px]">open_in_new</span>
+              </a>
+              <a
+                href={SITE_INSTAGRAM_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-container hover:bg-surface-bright text-[#E1306C] font-mono text-label-tech border border-outline-variant/20 transition-colors"
+              >
+                <span>Instagram</span>
+                <span className="material-symbols-outlined text-[14px]">open_in_new</span>
+              </a>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-gutter">
+            <a
+              href={AQUA_PC_PARTS_URL}
+              className="p-space-md rounded-xl bg-surface-container hover:bg-surface-container-high border border-outline-variant/15 hover:border-primary/40 transition-all flex flex-col justify-between group"
+            >
+              <div className="flex flex-col gap-2">
+                <div className="flex items-center justify-between">
+                  <span className="w-9 h-9 rounded-lg bg-primary/15 flex items-center justify-center text-primary group-hover:scale-105 transition-transform">
+                    <span className="material-symbols-outlined text-[20px]">storefront</span>
+                  </span>
+                  <span className="font-mono text-[10px] text-primary uppercase">SITE 01</span>
+                </div>
+                <h3 className="font-syne text-title-md text-on-surface group-hover:text-primary transition-colors">
+                  Aqua PC Parts Store
+                </h3>
+                <p className="text-body-sm text-on-surface-variant">
+                  390+ tested used &amp; brand new GPUs, CPUs, motherboards, RAM, and SSDs with instant quotes.
+                </p>
+              </div>
+              <span className="pt-3 font-mono text-label-tech text-primary flex items-center gap-1 group-hover:translate-x-1 transition-transform">
+                <span>Browse Catalog</span>
+                <span className="material-symbols-outlined text-[14px]">arrow_forward</span>
+              </span>
+            </a>
+
+            <a
+              href={AQUA_PC_PARTS_CONTACT_URL}
+              className="p-space-md rounded-xl bg-surface-container hover:bg-surface-container-high border border-outline-variant/15 hover:border-secondary/40 transition-all flex flex-col justify-between group"
+            >
+              <div className="flex flex-col gap-2">
+                <div className="flex items-center justify-between">
+                  <span className="w-9 h-9 rounded-lg bg-secondary/15 flex items-center justify-center text-secondary group-hover:scale-105 transition-transform">
+                    <span className="material-symbols-outlined text-[20px]">support_agent</span>
+                  </span>
+                  <span className="font-mono text-[10px] text-secondary uppercase">PARTS DESK</span>
+                </div>
+                <h3 className="font-syne text-title-md text-on-surface group-hover:text-secondary transition-colors">
+                  Parts Contact &amp; Showroom
+                </h3>
+                <p className="text-body-sm text-on-surface-variant">
+                  Dedicated parts inquiry form, stock availability checks, and Embilipitiya showroom directions.
+                </p>
+              </div>
+              <span className="pt-3 font-mono text-label-tech text-secondary flex items-center gap-1 group-hover:translate-x-1 transition-transform">
+                <span>Open Parts Desk</span>
+                <span className="material-symbols-outlined text-[14px]">arrow_forward</span>
+              </span>
+            </a>
+
+            <a
+              href={AQUA_3D_PORTAL_URL}
+              className="p-space-md rounded-xl bg-surface-container hover:bg-surface-container-high border border-outline-variant/15 hover:border-tertiary/40 transition-all flex flex-col justify-between group"
+            >
+              <div className="flex flex-col gap-2">
+                <div className="flex items-center justify-between">
+                  <span className="w-9 h-9 rounded-lg bg-tertiary/15 flex items-center justify-center text-tertiary group-hover:scale-105 transition-transform">
+                    <span className="material-symbols-outlined text-[20px]">view_in_ar</span>
+                  </span>
+                  <span className="font-mono text-[10px] text-tertiary uppercase">SITE 02</span>
+                </div>
+                <h3 className="font-syne text-title-md text-on-surface group-hover:text-tertiary transition-colors">
+                  3D PC Builder Studio
+                </h3>
+                <p className="text-body-sm text-on-surface-variant">
+                  Interactive real-time 3D rig configurator, photorealistic showroom lighting, and video gallery.
+                </p>
+              </div>
+              <span className="pt-3 font-mono text-label-tech text-tertiary flex items-center gap-1 group-hover:translate-x-1 transition-transform">
+                <span>Launch 3D Bay</span>
+                <span className="material-symbols-outlined text-[14px]">arrow_forward</span>
+              </span>
+            </a>
+
+            <a
+              href={SITE_FACEBOOK_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="p-space-md rounded-xl bg-surface-container hover:bg-surface-container-high border border-outline-variant/15 hover:border-[#1877F2]/40 transition-all flex flex-col justify-between group"
+            >
+              <div className="flex flex-col gap-2">
+                <div className="flex items-center justify-between">
+                  <span className="w-9 h-9 rounded-lg bg-[#1877F2]/15 flex items-center justify-center text-[#1877F2] group-hover:scale-105 transition-transform">
+                    <span className="material-symbols-outlined text-[20px]">groups</span>
+                  </span>
+                  <span className="font-mono text-[10px] text-[#1877F2] uppercase">COMMUNITY</span>
+                </div>
+                <h3 className="font-syne text-title-md text-on-surface group-hover:text-[#1877F2] transition-colors">
+                  Social Channels
+                </h3>
+                <p className="text-body-sm text-on-surface-variant">
+                  Follow {SITE_FACEBOOK_HANDLE} on Facebook &amp; Instagram for daily stock drops and build reels.
+                </p>
+              </div>
+              <span className="pt-3 font-mono text-label-tech text-[#1877F2] flex items-center gap-1 group-hover:translate-x-1 transition-transform">
+                <span>Follow Community</span>
+                <span className="material-symbols-outlined text-[14px]">open_in_new</span>
+              </span>
+            </a>
+          </div>
+        </div>
+      </RevealSection>
 
       {/* ── Sri Lanka Courier & Safe Drop-Off Guide ── */}
       <RevealSection className="max-w-[1440px] mx-auto px-gutter-lg pb-space-2xl w-full">

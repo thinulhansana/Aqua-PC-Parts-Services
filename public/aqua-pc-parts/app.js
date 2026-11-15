@@ -222,7 +222,7 @@
           }
         }
       }
-    } catch (_) {}
+    } catch (_) { }
   }
 
   function savePersistedQuote() {
@@ -240,7 +240,7 @@
         qty: e.quantity,
       }));
       localStorage.setItem("aqua-shop-cart-v1", JSON.stringify(cartArr));
-    } catch (_) {}
+    } catch (_) { }
   }
 
   // DOM Elements
@@ -331,7 +331,10 @@
       { label: "Repairs & Lab Services", path: "services" },
       { label: "Service Rates & Pricing", path: "pricing" },
       { label: "About & Founder", path: "about" },
-      { label: "Contact & Book Repair", path: "contact" },
+      { label: "Main Site Repair Desk", path: "contact" },
+      { label: "Parts Store Contact & Showroom", externalUrl: "./contact.html" },
+      { label: "Facebook (@aquapcsolutions)", externalUrl: "https://www.facebook.com/aquapcsolutions" },
+      { label: "Instagram (@aquapcsolutions)", externalUrl: "https://www.instagram.com/aquapcsolutions/" },
     ].forEach((entry) => {
       const li = document.createElement("li");
       const a = document.createElement("a");
@@ -350,13 +353,13 @@
     }
     try {
       localStorage.setItem(THEME_STORAGE_KEY, theme);
-    } catch (_) {}
+    } catch (_) { }
   }
 
   try {
     const savedTheme = localStorage.getItem(THEME_STORAGE_KEY);
     if (savedTheme === "light" || savedTheme === "dark") applyTheme(savedTheme);
-  } catch (_) {}
+  } catch (_) { }
 
   if (themeToggleBtn) {
     themeToggleBtn.addEventListener("click", () => {
@@ -376,7 +379,7 @@
     });
     try {
       localStorage.setItem(VIEW_STORAGE_KEY, state.viewMode);
-    } catch (_) {}
+    } catch (_) { }
   }
 
   try {
@@ -384,7 +387,7 @@
     if (savedView === "grid" || savedView === "list") {
       state.viewMode = savedView;
     }
-  } catch (_) {}
+  } catch (_) { }
 
   document.querySelectorAll(".view-btn").forEach((btn) => {
     btn.addEventListener("click", () => {
@@ -402,8 +405,8 @@
         PAGE_MODE === "used" || state.condition === "used"
           ? "USED"
           : PAGE_MODE === "new" || state.condition === "new"
-          ? "NEW"
-          : "ALL";
+            ? "NEW"
+            : "ALL";
     }
   }
 
@@ -474,8 +477,8 @@
       PAGE_MODE === "used" || state.condition === "used"
         ? "All Used Parts"
         : PAGE_MODE === "new" || state.condition === "new"
-        ? "All Brand New Parts"
-        : "All Parts";
+          ? "All Brand New Parts"
+          : "All Parts";
 
     const allBtn = document.createElement("button");
     allBtn.type = "button";
@@ -591,8 +594,8 @@
       item.specs && item.specs.toLowerCase().includes("sealed")
         ? "Brand New · Sealed"
         : isBrandNew
-        ? "Brand New"
-        : "Used · Grade A";
+          ? "Brand New"
+          : "Used · Grade A";
     const warrantyText =
       item.warranty || (isBrandNew ? "Store Warranty" : "06 Mo. Warranty");
 
@@ -858,8 +861,8 @@
       PAGE_MODE === "used" || state.condition === "used"
         ? { label: "All Used Parts", icon: "verified" }
         : PAGE_MODE === "new" || state.condition === "new"
-        ? { label: "All Brand New Parts", icon: "new_releases" }
-        : { label: "All Parts (Used & Brand New)", icon: "apps" };
+          ? { label: "All Brand New Parts", icon: "new_releases" }
+          : { label: "All Parts (Used & Brand New)", icon: "apps" };
 
     const activeMeta =
       state.activeSection === "all"
@@ -1017,11 +1020,10 @@
               <div class="drawer-item-cat">${condTag} · ${entry.sectionLabel} › ${entry.categoryName}</div>
             </div>
             <div class="price-badge ${typeof entry.item.price === "number" ? "" : "inquiry"}">
-              ${
-                typeof entry.item.price === "number"
-                  ? formatPriceLKR(entry.item.price * entry.quantity)
-                  : "Inquiry"
-              }
+              ${typeof entry.item.price === "number"
+              ? formatPriceLKR(entry.item.price * entry.quantity)
+              : "Inquiry"
+            }
             </div>
           `;
 
@@ -1094,13 +1096,11 @@
         });
         lines.push("");
         lines.push(
-          `• Estimated Subtotal: ${formatPriceLKR(totalLkr)}${
-            hasUnpriced ? " (+ Inquiry items)" : ""
+          `• Estimated Subtotal: ${formatPriceLKR(totalLkr)}${hasUnpriced ? " (+ Inquiry items)" : ""
           }`
         );
         lines.push(
-          `• Preferred Option: ${
-            FULFILLMENT_LABELS[state.quoteFulfillment] || FULFILLMENT_LABELS.pickup
+          `• Preferred Option: ${FULFILLMENT_LABELS[state.quoteFulfillment] || FULFILLMENT_LABELS.pickup
           }`
         );
         lines.push("", "Please confirm stock availability and total. Thank you!");
@@ -1181,7 +1181,7 @@
     }
   });
 
-    // Initial Boot
+  // Initial Boot
   loadPersistedQuote();
   applyViewMode(state.viewMode);
   syncConditionButtonsUI();

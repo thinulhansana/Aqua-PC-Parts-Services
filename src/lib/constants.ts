@@ -20,10 +20,19 @@ export const SITE_WHATSAPP_URL = "https://wa.me/message/CYZRQDEHLIRZF1";
 export const SITE_MAPS_URL =
   "https://www.google.com/maps/search/?api=1&query=Embilipitiya,+Sri+Lanka";
 export const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL || "https://aquapcsolutions.workers.dev";
+  process.env.NEXT_PUBLIC_SITE_URL || "https://aquapcsolutions.yyth.workers.dev";
+export const SITE_FACEBOOK_URL =
+  process.env.NEXT_PUBLIC_SITE_FACEBOOK_URL ||
+  "https://www.facebook.com/aquapcsolutions";
+export const SITE_FACEBOOK_HANDLE = "@aquapcsolutions";
+export const SITE_INSTAGRAM_URL =
+  process.env.NEXT_PUBLIC_SITE_INSTAGRAM_URL ||
+  "https://www.instagram.com/aquapcsolutions/";
+export const SITE_INSTAGRAM_HANDLE = "@aquapcsolutions";
 export const AQUA_PC_PARTS_SITE_NAME = "Aqua PC Parts";
 export const AQUA_PC_PARTS_URL =
   process.env.NEXT_PUBLIC_AQUA_PC_PARTS_URL || "https://aquapcparts.pages.dev";
+export const AQUA_PC_PARTS_CONTACT_URL = `${AQUA_PC_PARTS_URL}/contact.html`;
 export const AQUA_3D_PORTAL_URL =
   process.env.NEXT_PUBLIC_AQUA_3D_PORTAL_URL || "https://aquapc3dportal.pages.dev";
 
@@ -63,6 +72,7 @@ export const FOOTER_LINKS = {
       { label: "Monitors", href: getAquaPcPartsUrl("monitors") },
       { label: "RAM & Power Supplies", href: getAquaPcPartsUrl("ram") },
       { label: "Peripherals & Audio", href: getAquaPcPartsUrl("peripherals") },
+      { label: "Parts Store Contact & Map", href: `${AQUA_PC_PARTS_URL}/contact.html` },
     ],
   },
   services: {
@@ -84,6 +94,8 @@ export const FOOTER_LINKS = {
       { label: "Client Portal", href: "/account" },
       { label: "Sign In", href: "/login" },
       { label: "WhatsApp Support", href: SITE_WHATSAPP_URL },
+      { label: "Facebook Page", href: SITE_FACEBOOK_URL },
+      { label: "Instagram Profile", href: SITE_INSTAGRAM_URL },
     ],
   },
 } as const;

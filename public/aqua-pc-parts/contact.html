@@ -1,0 +1,1099 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact Us &amp; Hardware Showroom | Aqua PC Parts — Embilipitiya, Sri Lanka</title>
+  <link rel="icon" type="image/jpeg" href="assets/logo.jpg" />
+  <link rel="apple-touch-icon" href="assets/logo.jpg" />
+  <meta
+    name="description"
+    content="Contact Aqua PC Parts in Embilipitiya, Sri Lanka. Check part stock, request live FurMark & bench test videos, follow our Facebook page & Instagram profile, or send your multi-item quote directly on WhatsApp."
+  />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Syne:wght@700;800&display=swap"
+    rel="stylesheet"
+  />
+  <link
+    rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+  />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    /* Scoped Contact Page Enhancements */
+    .contact-hero {
+      padding: 3.5rem 0 2.2rem;
+    }
+    .social-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.25rem;
+      margin-bottom: 2.5rem;
+    }
+    .social-card {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 1.5rem;
+      border-radius: 18px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      text-decoration: none;
+      color: inherit;
+      transition: all 0.28s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .social-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.22);
+    }
+    .social-card.fb:hover {
+      border-color: rgba(24, 119, 242, 0.5);
+    }
+    .social-card.ig:hover {
+      border-color: rgba(225, 48, 108, 0.5);
+    }
+    .social-card.wa:hover {
+      border-color: rgba(37, 211, 102, 0.5);
+    }
+    .social-card.phone:hover {
+      border-color: rgba(0, 242, 254, 0.5);
+    }
+    .social-card.email:hover {
+      border-color: rgba(79, 219, 200, 0.5);
+    }
+    .social-top {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .social-icon-box {
+      width: 46px;
+      height: 46px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+    }
+    .social-icon-box.fb {
+      background: rgba(24, 119, 242, 0.15);
+      color: #1877f2;
+      border: 1px solid rgba(24, 119, 242, 0.3);
+    }
+    .social-icon-box.ig {
+      background: rgba(225, 48, 108, 0.15);
+      color: #e1306c;
+      border: 1px solid rgba(225, 48, 108, 0.3);
+    }
+    .social-icon-box.wa {
+      background: rgba(37, 211, 102, 0.15);
+      color: #25d366;
+      border: 1px solid rgba(37, 211, 102, 0.3);
+    }
+    .social-icon-box.phone {
+      background: rgba(0, 242, 254, 0.15);
+      color: var(--cyan);
+      border: 1px solid rgba(0, 242, 254, 0.3);
+    }
+    .social-icon-box.email {
+      background: rgba(79, 219, 200, 0.15);
+      color: var(--teal);
+      border: 1px solid rgba(79, 219, 200, 0.3);
+    }
+    .social-card h3 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin: 0 0 0.2rem;
+      font-family: var(--font-display);
+    }
+    .social-card p {
+      margin: 0;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      line-height: 1.45;
+    }
+    .social-action {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.82rem;
+      font-family: var(--font-mono);
+      font-weight: 600;
+      padding-top: 0.6rem;
+      border-top: 1px solid var(--border);
+      color: var(--cyan);
+    }
+    .social-card.fb .social-action { color: #1877f2; }
+    .social-card.ig .social-action { color: #e1306c; }
+    .social-card.wa .social-action { color: #25d366; }
+    .social-card.email .social-action { color: var(--teal); }
+
+    /* Dual Column Layout */
+    .contact-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+      gap: 2rem;
+      margin-bottom: 3.5rem;
+    }
+    @media (max-width: 960px) {
+      .contact-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+    .contact-form-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 2rem;
+      position: relative;
+    }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      margin-bottom: 1.1rem;
+    }
+    .form-group label {
+      font-family: var(--font-mono);
+      font-size: 0.76rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+    }
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+    @media (max-width: 640px) {
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+    }
+    .form-input, .form-select, .form-textarea {
+      width: 100%;
+      padding: 0.75rem 0.95rem;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--text);
+      font-family: inherit;
+      font-size: 0.92rem;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+      outline: none;
+    }
+    .form-input:focus, .form-select:focus, .form-textarea:focus {
+      border-color: var(--cyan);
+      box-shadow: 0 0 0 3px rgba(0, 242, 254, 0.15);
+    }
+    .cart-import-strip {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      padding: 0.75rem 1rem;
+      background: rgba(0, 242, 254, 0.06);
+      border: 1px dashed rgba(0, 242, 254, 0.3);
+      border-radius: 10px;
+      margin-bottom: 1.1rem;
+    }
+    .cart-import-btn {
+      background: var(--cyan);
+      color: #060e1a;
+      border: none;
+      padding: 0.4rem 0.85rem;
+      border-radius: 8px;
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      transition: all 0.2s ease;
+    }
+    .cart-import-btn:hover {
+      background: #38bdf8;
+      transform: translateY(-1px);
+    }
+    .btn-submit-inquiry {
+      width: 100%;
+      padding: 0.95rem 1.4rem;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--cyan), var(--teal));
+      color: #05101c;
+      font-family: var(--font-display);
+      font-size: 1rem;
+      font-weight: 800;
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      transition: all 0.24s ease;
+      box-shadow: 0 8px 24px rgba(0, 242, 254, 0.25);
+    }
+    .btn-submit-inquiry:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 32px rgba(0, 242, 254, 0.4);
+    }
+    .btn-submit-inquiry:disabled {
+      opacity: 0.65;
+      cursor: not-allowed;
+    }
+
+    /* Ticket Confirmation Modal / Box */
+    .ticket-box {
+      padding: 1.5rem;
+      border-radius: 14px;
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid rgba(16, 185, 129, 0.35);
+      margin-top: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+    }
+    .ticket-badge {
+      font-family: var(--font-mono);
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: #10b981;
+      letter-spacing: 0.08em;
+    }
+
+    /* Right Column Showroom Cards */
+    .showroom-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+    .map-frame {
+      width: 100%;
+      height: 250px;
+      border-radius: 14px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      background: var(--bg-surface);
+    }
+    .map-frame iframe {
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+    .hours-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+    }
+    .hours-table td {
+      padding: 0.45rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .hours-table td:last-child {
+      text-align: right;
+      font-family: var(--font-mono);
+      color: var(--text);
+    }
+    .desk-pills {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.65rem;
+    }
+    .desk-pill {
+      padding: 0.7rem 0.9rem;
+      border-radius: 10px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      font-size: 0.82rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+      text-decoration: none;
+      color: inherit;
+      transition: all 0.2s ease;
+    }
+    .desk-pill:hover {
+      border-color: var(--cyan);
+      transform: translateY(-2px);
+    }
+    .desk-pill strong {
+      font-family: var(--font-display);
+      font-size: 0.88rem;
+      color: var(--text);
+    }
+    .desk-pill span {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--cyan);
+    }
+
+    /* Ecosystem Strip */
+    .ecosystem-chain-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-strong);
+      border-radius: 20px;
+      padding: 2rem;
+      margin-bottom: 3rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.25rem;
+    }
+    .chain-col {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      padding: 1rem;
+      border-radius: 12px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      text-decoration: none;
+      color: inherit;
+      transition: all 0.25s ease;
+    }
+    .chain-col:hover {
+      border-color: var(--cyan);
+      transform: translateY(-2px);
+    }
+    .chain-badge {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--cyan);
+    }
+    .chain-title {
+      font-family: var(--font-display);
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .chain-desc {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      line-height: 1.4;
+      margin: 0;
+    }
+  </style>
+</head>
+<body data-page="contact">
+  <!-- Ambient Studio Background -->
+  <div class="ambient-bg" aria-hidden="true">
+    <div class="ambient-orb orb-cyan"></div>
+    <div class="ambient-orb orb-teal"></div>
+    <div class="ambient-orb orb-amber"></div>
+    <div class="ambient-noise"></div>
+  </div>
+
+  <!-- Top Utility Trust Bar -->
+  <div class="top-utility-bar">
+    <div class="utility-inner">
+      <div class="utility-group">
+        <span class="utility-item">
+          <span class="live-beacon" aria-hidden="true"></span>
+          <span>Embilipitiya Hardware Showroom &amp; Lab · Mon–Sat</span>
+        </span>
+        <span class="utility-item emerald">
+          <span class="material-symbols-outlined">verified_user</span>
+          <span>06-Month Written Warranty · FurMark &amp; Bench Tested</span>
+        </span>
+      </div>
+      <div class="utility-group">
+        <a href="https://www.facebook.com/aquapcsolutions" target="_blank" rel="noopener noreferrer" class="utility-item utility-link" title="Official Facebook Page">
+          <span>Facebook: @aquapcsolutions</span>
+        </a>
+        <a href="https://www.instagram.com/aquapcsolutions/" target="_blank" rel="noopener noreferrer" class="utility-item utility-link" title="Official Instagram Profile">
+          <span>Instagram</span>
+        </a>
+        <a href="tel:+94788194535" class="utility-item utility-link">
+          <span class="material-symbols-outlined">call</span>
+          <span>+94 78 819 4535</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Top Storefront Header -->
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="./index.html" class="brand-cluster">
+        <div class="brand-logo" aria-hidden="true">
+          <img src="assets/logo.jpg" alt="Aqua PC Parts Logo" class="site-logo-img" />
+        </div>
+        <div class="brand-text">
+          <div class="brand-title-row">
+            <span class="brand-name">Aqua PC Parts</span>
+            <span class="brand-badge">CONTACT &amp; SHOWROOM</span>
+          </div>
+          <span class="brand-sub">DIRECT INTAKE · QUOTE DESK · SOCIAL HUB</span>
+        </div>
+      </a>
+
+      <!-- Page Navigation Tabs -->
+      <nav class="page-nav" aria-label="Primary Storefront Divisions">
+        <a href="./index.html" class="page-nav-link">
+          <span class="material-symbols-outlined">storefront</span>
+          <span>Storefront</span>
+        </a>
+        <a href="./used-parts.html" class="page-nav-link">
+          <span class="material-symbols-outlined">verified</span>
+          <span>Used Parts</span>
+          <span class="nav-pill-count">358</span>
+        </a>
+        <a href="./brand-new-parts.html" class="page-nav-link new-tab">
+          <span class="material-symbols-outlined">inventory_2</span>
+          <span>Brand New</span>
+          <span class="nav-pill-count">34</span>
+        </a>
+        <a href="https://aquapc3dportal.pages.dev/" class="page-nav-link">
+          <span class="material-symbols-outlined">view_in_ar</span>
+          <span>3D Builder</span>
+        </a>
+        <a href="./contact.html" class="page-nav-link active" aria-current="page">
+          <span class="material-symbols-outlined">support_agent</span>
+          <span>Contact Us</span>
+        </a>
+      </nav>
+
+      <!-- Header Actions -->
+      <div class="header-actions">
+        <button
+          id="theme-toggle-btn"
+          type="button"
+          class="btn-icon"
+          title="Toggle Dark / Light Theme"
+          aria-label="Toggle color theme"
+        >
+          <span id="theme-toggle-icon" class="material-symbols-outlined">light_mode</span>
+        </button>
+
+        <a
+          id="main-site-link"
+          href="https://aquapcsolutions.yyth.workers.dev/"
+          class="btn-main-site"
+        >
+          <span class="material-symbols-outlined">build_circle</span>
+          <span class="hide-mobile">Main Site</span>
+        </a>
+
+        <a
+          id="header-whatsapp-btn"
+          href="https://wa.me/94788194535"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="btn-whatsapp-header"
+        >
+          <svg viewBox="0 0 24 24" fill="currentColor" class="wa-svg" aria-hidden="true">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+          </svg>
+          <span class="hide-mobile">WhatsApp</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Editorial Hero Section -->
+  <section class="hero-section compact-hero contact-hero">
+    <div class="container">
+      <div class="breadcrumb-trail">
+        <a href="./index.html">Storefront</a>
+        <span>/</span>
+        <span class="current-crumb">Contact &amp; Showroom</span>
+      </div>
+      <h1 class="hero-title">
+        <span>Contact <em class="serif-italic">Aqua PC Parts</em> &amp; Social Hub</span>
+      </h1>
+      <p class="hero-desc">
+        Check real-time stock on 390+ tested used and factory-sealed brand new PC parts, request custom FurMark/SMART test videos, follow our official Facebook and Instagram profiles, or speak directly with our Embilipitiya hardware workshop.
+      </p>
+
+      <div class="hero-stats-strip">
+        <div class="stat-pill">
+          <span class="material-symbols-outlined">inventory_2</span>
+          <span><strong>392+</strong> Cataloged SKUs</span>
+        </div>
+        <div class="stat-pill emerald">
+          <span class="material-symbols-outlined">verified_user</span>
+          <span><strong>06-Month</strong> Testing Warranty</span>
+        </div>
+        <div class="stat-pill">
+          <span class="material-symbols-outlined">bolt</span>
+          <span><strong>&lt; 15 Min</strong> WhatsApp Response</span>
+        </div>
+        <div class="stat-pill">
+          <span class="material-symbols-outlined">local_shipping</span>
+          <span><strong>Island-Wide</strong> Safe Courier</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Container -->
+  <main class="container">
+    <!-- Official Social Channels & Direct Contact Grid -->
+    <section aria-label="Official Social Channels and Direct Contacts">
+      <div class="sidebar-label" style="margin-bottom: 0.8rem">
+        <span>DIRECT CONTACT &amp; SOCIAL CHANNELS</span>
+        <span>VERIFIED PROFILES</span>
+      </div>
+
+      <div class="social-grid">
+        <!-- Facebook Page Card -->
+        <a href="https://www.facebook.com/aquapcsolutions" target="_blank" rel="noopener noreferrer" class="social-card fb">
+          <div class="social-top">
+            <div class="social-icon-box fb">
+              <svg viewBox="0 0 24 24" fill="currentColor" style="width: 24px; height: 24px" aria-hidden="true">
+                <path d="M22.675 0H1.325C.593 0 0 .593 0 1.325v21.351C0 23.407.593 24 1.325 24H12.82v-9.294H9.692v-3.622h3.128V8.413c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.622h-3.12V24h6.116c.73 0 1.323-.593 1.323-1.325V1.325C24 .593 23.407 0 22.675 0z" />
+              </svg>
+            </div>
+            <div>
+              <h3>Official Facebook Page</h3>
+              <p>@aquapcsolutions · Daily Stock Drops, Price Updates &amp; Rig Albums</p>
+            </div>
+          </div>
+          <span class="social-action">
+            <span>Follow Facebook Page</span>
+            <span class="material-symbols-outlined" style="font-size: 16px">open_in_new</span>
+          </span>
+        </a>
+
+        <!-- Instagram Profile Card -->
+        <a href="https://www.instagram.com/aquapcsolutions/" target="_blank" rel="noopener noreferrer" class="social-card ig">
+          <div class="social-top">
+            <div class="social-icon-box ig">
+              <svg viewBox="0 0 24 24" fill="currentColor" style="width: 24px; height: 24px" aria-hidden="true">
+                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z" />
+              </svg>
+            </div>
+            <div>
+              <h3>Official Instagram Profile</h3>
+              <p>@aquapcsolutions · 3D Custom Rig Reels, Bench Videos &amp; DMs</p>
+            </div>
+          </div>
+          <span class="social-action">
+            <span>Follow on Instagram</span>
+            <span class="material-symbols-outlined" style="font-size: 16px">open_in_new</span>
+          </span>
+        </a>
+
+        <!-- WhatsApp Instant Desk -->
+        <a href="https://wa.me/94788194535" target="_blank" rel="noopener noreferrer" class="social-card wa">
+          <div class="social-top">
+            <div class="social-icon-box wa">
+              <svg viewBox="0 0 24 24" fill="currentColor" style="width: 24px; height: 24px" aria-hidden="true">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+              </svg>
+            </div>
+            <div>
+              <h3>WhatsApp Instant Desk</h3>
+              <p>+94 78 819 4535 · Stock Confirmation &amp; Live Test Videos</p>
+            </div>
+          </div>
+          <span class="social-action">
+            <span>Chat on WhatsApp</span>
+            <span class="material-symbols-outlined" style="font-size: 16px">chat</span>
+          </span>
+        </a>
+
+        <!-- Workshop Direct Hotline -->
+        <a href="tel:+94788194535" class="social-card phone">
+          <div class="social-top">
+            <div class="social-icon-box phone">
+              <span class="material-symbols-outlined" style="font-size: 24px">call</span>
+            </div>
+            <div>
+              <h3>Direct Workshop Call</h3>
+              <p>+94 78 819 4535 · Talk to Lead Engineer Thinul Hansana</p>
+            </div>
+          </div>
+          <span class="social-action">
+            <span>Call Now</span>
+            <span class="material-symbols-outlined" style="font-size: 16px">call</span>
+          </span>
+        </a>
+
+        <!-- Business & Quotes Email -->
+        <a href="mailto:thinulhansana.business@gmail.com" class="social-card email">
+          <div class="social-top">
+            <div class="social-icon-box email">
+              <span class="material-symbols-outlined" style="font-size: 24px">mail</span>
+            </div>
+            <div>
+              <h3>Business &amp; Wholesale Email</h3>
+              <p>thinulhansana.business@gmail.com · Invoices &amp; Inquiries</p>
+            </div>
+          </div>
+          <span class="social-action">
+            <span>Send Email</span>
+            <span class="material-symbols-outlined" style="font-size: 16px">mail</span>
+          </span>
+        </a>
+      </div>
+    </section>
+
+    <!-- Synchronized 3-Site Ecosystem Chain -->
+    <section aria-label="Connected 3-Site Chain">
+      <div class="sidebar-label" style="margin-bottom: 0.8rem">
+        <span>AQUA PC NETWORK</span>
+        <span>SYNCHRONIZED CHAIN</span>
+      </div>
+
+      <div class="ecosystem-chain-card">
+        <a href="./index.html" class="chain-col">
+          <span class="chain-badge">STOREFRONT HUB</span>
+          <span class="chain-title">Aqua PC Parts Store</span>
+          <p class="chain-desc">Nanotek-style hardware catalog with live search, filtering, and instant quotations.</p>
+        </a>
+
+        <a href="./used-parts.html" class="chain-col">
+          <span class="chain-badge">GRADE-A TESTED</span>
+          <span class="chain-title">Used Parts (358+)</span>
+          <p class="chain-desc">24h stress-tested GPUs, CPUs, motherboards, RAM, and SSDs with 06-month warranty.</p>
+        </a>
+
+        <a href="./brand-new-parts.html" class="chain-col">
+          <span class="chain-badge">FACTORY-SEALED</span>
+          <span class="chain-title">Brand New Store (34)</span>
+          <p class="chain-desc">Sealed gaming mice, mechanical keyboards, webcams, studio mics, and boxed gear.</p>
+        </a>
+
+        <a href="https://aquapc3dportal.pages.dev/" class="chain-col">
+          <span class="chain-badge">REAL-TIME 3D</span>
+          <span class="chain-title">3D PC Builder Studio</span>
+          <p class="chain-desc">Design and assemble custom dream gaming rigs in real-time WebGL with FPS benchmarks.</p>
+        </a>
+
+        <a href="https://aquapcsolutions.yyth.workers.dev/services" class="chain-col">
+          <span class="chain-badge">LAB &amp; WORKSHOP</span>
+          <span class="chain-title">Precision Repairs &amp; Lab</span>
+          <p class="chain-desc">Board-level micro-soldering, liquid cooling loops, and thermal servicing in Embilipitiya.</p>
+        </a>
+      </div>
+    </section>
+
+    <!-- Interactive Inquiry Form & Showroom Layout -->
+    <section class="contact-layout" aria-label="Inquiry Form and Workshop Showroom">
+      <!-- Left Column: Inquiry Form -->
+      <div class="contact-form-card">
+        <div class="sidebar-label" style="margin-bottom: 0.5rem">
+          <span>PARTS INQUIRY &amp; QUOTE DESK</span>
+          <span>ONLINE SUBMISSION</span>
+        </div>
+        <h2 style="font-family: var(--font-display); font-size: 1.4rem; font-weight: 800; margin: 0 0 0.4rem">
+          Check Stock, Request Test Video, or Get Quote
+        </h2>
+        <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 1.25rem">
+          Submit your hardware request below. We check physical bench stock in our Embilipitiya showroom and respond in minutes.
+        </p>
+
+        <!-- Cart Auto-Import Strip -->
+        <div class="cart-import-strip" id="cart-import-strip">
+          <div style="display: flex; align-items: center; gap: 0.5rem">
+            <span class="material-symbols-outlined" style="color: var(--cyan)">shopping_bag</span>
+            <span style="font-size: 0.84rem; color: var(--text)" id="cart-import-label">
+              Have items in your Quote List / Cart?
+            </span>
+          </div>
+          <button type="button" class="cart-import-btn" id="btn-import-cart">
+            <span class="material-symbols-outlined" style="font-size: 15px">download</span>
+            <span>Import Cart Items</span>
+          </button>
+        </div>
+
+        <form id="parts-contact-form" autocomplete="off">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="contact-name">Your Full Name *</label>
+              <input type="text" id="contact-name" class="form-input" placeholder="e.g. Kasun Perera" required />
+            </div>
+            <div class="form-group">
+              <label for="contact-phone">Phone / WhatsApp Number *</label>
+              <input type="tel" id="contact-phone" class="form-input" placeholder="e.g. +94 78 819 4535" required />
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="contact-email">Email Address (Optional)</label>
+              <input type="email" id="contact-email" class="form-input" placeholder="name@gmail.com" />
+            </div>
+            <div class="form-group">
+              <label for="contact-type">Inquiry Type *</label>
+              <select id="contact-type" class="form-select" required>
+                <option value="Stock Confirmation">Check Part Stock &amp; LKR Price</option>
+                <option value="Live Test Video">Request FurMark / Display Test Video</option>
+                <option value="Compatibility Check">Check PC Compatibility with my Rig</option>
+                <option value="Custom Build Quote">Custom Gaming / Workstation PC Quote</option>
+                <option value="Brand New Peripherals">Brand New Sealed Peripherals Order</option>
+                <option value="Bulk Dealer Order">Bulk / Dealer Hardware Order</option>
+                <option value="Warranty RMA">06-Month Testing Warranty / RMA</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="contact-fulfillment">Preferred Fulfillment Option</label>
+            <select id="contact-fulfillment" class="form-select">
+              <option value="Store Pickup (Embilipitiya Showroom)">Store Pickup — Embilipitiya Hardware Showroom</option>
+              <option value="Island-Wide Safe Courier Delivery">Island-Wide Safe Courier Delivery (Anti-Static Packaged)</option>
+              <option value="Workshop Installation & Bench Fitting">Workshop Assembly &amp; Fitting in Embilipitiya</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="contact-parts">Requested Parts, Specs, or Build Budget *</label>
+            <textarea
+              id="contact-parts"
+              class="form-textarea"
+              rows="3"
+              placeholder="e.g. RTX 3060 12GB, Ryzen 5 5600, B550 Motherboard, or 24-inch IPS 75Hz Monitor..."
+              required
+            ></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="contact-message">Additional Notes or Questions</label>
+            <textarea
+              id="contact-message"
+              class="form-textarea"
+              rows="2"
+              placeholder="Any specific brand, motherboard revision, power supply requirement, or delivery timeline..."
+            ></textarea>
+          </div>
+
+          <button type="submit" class="btn-submit-inquiry" id="btn-submit-form">
+            <span class="material-symbols-outlined">send</span>
+            <span>Submit Inquiry &amp; Generate Ticket</span>
+          </button>
+        </form>
+
+        <div id="ticket-result" class="ticket-box" style="display: none">
+          <div style="display: flex; align-items: center; justify-content: space-between">
+            <span class="ticket-badge" id="ticket-number">AQP-00000</span>
+            <span class="material-symbols-outlined" style="color: #10b981; font-size: 28px">check_circle</span>
+          </div>
+          <p style="margin: 0; font-size: 0.88rem; color: var(--text)">
+            Your parts request has been logged! For fastest confirmation, click below to send this ticket directly to our workshop on WhatsApp.
+          </p>
+          <a id="ticket-wa-link" href="https://wa.me/94788194535" target="_blank" rel="noopener noreferrer" class="btn-whatsapp-header" style="justify-content: center; padding: 0.8rem; font-size: 0.95rem">
+            <span class="material-symbols-outlined">chat</span>
+            <span>Send Ticket Directly on WhatsApp</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Right Column: Showroom, Map & Desks -->
+      <div class="showroom-card">
+        <div>
+          <div class="sidebar-label" style="margin-bottom: 0.4rem">
+            <span>EMBILIPITIYA WORKSHOP SHOWROOM</span>
+            <span>ESD-SAFE LAB</span>
+          </div>
+          <h2 style="font-family: var(--font-display); font-size: 1.35rem; font-weight: 800; margin: 0 0 0.2rem">
+            Aqua PC Solutions &amp; Parts Desk
+          </h2>
+          <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0">
+            Founded by <strong>S.L.K Thinul Hansana</strong> · EST. 11.06.2026 · Embilipitiya, Sabaragamuwa, Sri Lanka
+          </p>
+        </div>
+
+        <!-- Embedded Map -->
+        <div>
+          <div class="map-frame">
+            <iframe
+              title="Aqua PC Parts Workshop Map"
+              src="https://maps.google.com/maps?q=Embilipitiya,+Sri+Lanka&t=&z=14&ie=UTF8&iwloc=&output=embed"
+              loading="lazy"
+              allowfullscreen
+            ></iframe>
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.5rem">
+            <span style="font-family: var(--font-mono); font-size: 0.78rem; color: var(--text-muted)">
+              Embilipitiya, Sri Lanka (Postal: 70200)
+            </span>
+            <a href="https://www.google.com/maps/search/?api=1&query=Embilipitiya,+Sri+Lanka" target="_blank" rel="noopener noreferrer" style="font-family: var(--font-mono); font-size: 0.78rem; color: var(--cyan); text-decoration: none">
+              Open in Google Maps &rarr;
+            </a>
+          </div>
+        </div>
+
+        <!-- Operating Hours Table -->
+        <div>
+          <span style="font-family: var(--font-mono); font-size: 0.76rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--cyan); display: block; margin-bottom: 0.5rem">
+            WORKSHOP HOURS
+          </span>
+          <table class="hours-table">
+            <tbody>
+              <tr>
+                <td>Monday – Friday</td>
+                <td>8:00 AM – 7:00 PM</td>
+              </tr>
+              <tr>
+                <td>Saturday</td>
+                <td>10:00 AM – 5:00 PM</td>
+              </tr>
+              <tr>
+                <td>Sunday &amp; Poya</td>
+                <td style="color: var(--text-muted)">Workshop Closed (WhatsApp Active)</td>
+              </tr>
+              <tr>
+                <td style="color: var(--teal); font-weight: 700">WhatsApp Stock Intake</td>
+                <td style="color: var(--teal); font-weight: 700">24/7 Digital Intake</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Specialist WhatsApp Desk Shortcuts -->
+        <div>
+          <span style="font-family: var(--font-mono); font-size: 0.76rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--cyan); display: block; margin-bottom: 0.6rem">
+            SPECIALIST HARDWARE DESKS (1-CLICK CHAT)
+          </span>
+          <div class="desk-pills">
+            <a href="https://wa.me/94788194535?text=Hi%20Aqua%20PC%2C%20I%20want%20to%20inquire%20about%20a%20Used%20GPU%20or%20Processor" target="_blank" rel="noopener" class="desk-pill">
+              <strong>GPU &amp; CPU Bench</strong>
+              <span>Ask for FurMark Video &rarr;</span>
+            </a>
+            <a href="https://wa.me/94788194535?text=Hi%20Aqua%20PC%2C%20I%20want%20to%20inquire%20about%20Brand%20New%20Peripherals%20or%20Keyboards" target="_blank" rel="noopener" class="desk-pill">
+              <strong>Brand New Peripherals</strong>
+              <span>Mice, Keyboards, Mics &rarr;</span>
+            </a>
+            <a href="https://wa.me/94788194535?text=Hi%20Aqua%20PC%2C%20I%20want%20to%20consult%20about%20a%203D%20Custom%20Gaming%20Build" target="_blank" rel="noopener" class="desk-pill">
+              <strong>Custom 3D Builds</strong>
+              <span>Custom Rigs in LKR &rarr;</span>
+            </a>
+            <a href="https://wa.me/94788194535?text=Hi%20Aqua%20PC%2C%20I%20need%20motherboard%20or%20hardware%20diagnostic%20repair" target="_blank" rel="noopener" class="desk-pill">
+              <strong>Board Diagnostic Lab</strong>
+              <span>No-POST &amp; Repair &rarr;</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div class="footer-brand">
+        <div class="brand-title-row">
+          <img src="assets/logo.jpg" alt="Aqua PC Parts Logo" class="footer-logo-img" />
+          <span class="brand-name">Aqua PC Parts</span>
+          <span class="brand-badge">EMBILIPITIYA WORKSHOP</span>
+        </div>
+        <p class="footer-desc">
+          Official computer hardware store and direct intake showroom of Aqua PC Solutions. 390+ tested used and factory-sealed brand new PC parts with island-wide delivery.
+        </p>
+        <div class="footer-hours">
+          <div><span>Facebook:</span> <a href="https://www.facebook.com/aquapcsolutions" target="_blank" rel="noopener">@aquapcsolutions</a></div>
+          <div><span>Instagram:</span> <a href="https://www.instagram.com/aquapcsolutions/" target="_blank" rel="noopener">@aquapcsolutions</a></div>
+          <div><span>Phone:</span> <a href="tel:+94788194535">+94 78 819 4535</a></div>
+          <div><span>Email:</span> <a href="mailto:thinulhansana.business@gmail.com">thinulhansana.business@gmail.com</a></div>
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <h3>Store Divisions</h3>
+        <ul>
+          <li><a href="./index.html">Storefront Home</a></li>
+          <li><a href="./used-parts.html">Used Parts Catalog (358)</a></li>
+          <li><a href="./brand-new-parts.html">Brand New Parts Store (34)</a></li>
+          <li><a href="https://aquapc3dportal.pages.dev/">Interactive 3D PC Builder</a></li>
+          <li><a href="./contact.html">Contact Us &amp; Showroom</a></li>
+          <li><a href="./admin.html">Store Admin Panel</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h3>Direct Channels</h3>
+        <ul>
+          <li><a href="https://wa.me/94788194535" target="_blank" rel="noopener">WhatsApp Support Desk</a></li>
+          <li><a href="https://www.facebook.com/aquapcsolutions" target="_blank" rel="noopener">Facebook Page</a></li>
+          <li><a href="https://www.instagram.com/aquapcsolutions/" target="_blank" rel="noopener">Instagram Profile</a></li>
+          <li><a href="tel:+94788194535">Direct Hotline (+94 78 819 4535)</a></li>
+          <li><a href="mailto:thinulhansana.business@gmail.com">thinulhansana.business@gmail.com</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h3>Aqua PC Solutions Main Site</h3>
+        <ul>
+          <li><a href="https://aquapcsolutions.yyth.workers.dev/">Main Storefront Home</a></li>
+          <li><a href="https://aquapcsolutions.yyth.workers.dev/services">Repairs &amp; Lab Services</a></li>
+          <li><a href="https://aquapcsolutions.yyth.workers.dev/pricing">Pricing &amp; Diagnostic Rates</a></li>
+          <li><a href="https://aquapcsolutions.yyth.workers.dev/about">About Founder Thinul Hansana</a></li>
+          <li><a href="https://aquapcsolutions.yyth.workers.dev/contact">Main Site Intake &amp; Ticket Tracer</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="container footer-bottom-inner">
+        <span>&copy; <span id="footer-year"></span> Aqua PC Parts · Aqua PC Solutions. All rights reserved.</span>
+        <span>Embilipitiya, Sri Lanka · Follow us on Facebook &amp; Instagram @aquapcsolutions</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="catalog.js"></script>
+  <script>
+    (function () {
+      "use strict";
+
+      // Year
+      const yrEl = document.getElementById("footer-year");
+      if (yrEl) yrEl.textContent = String(new Date().getFullYear());
+
+      // Theme toggle
+      const THEME_KEY = "aqua-parts-theme";
+      const themeBtn = document.getElementById("theme-toggle-btn");
+      const themeIcon = document.getElementById("theme-toggle-icon");
+
+      function applyTheme(t) {
+        document.documentElement.setAttribute("data-theme", t);
+        if (themeIcon) themeIcon.textContent = t === "dark" ? "light_mode" : "dark_mode";
+        try { localStorage.setItem(THEME_KEY, t); } catch (_) {}
+      }
+
+      try {
+        const saved = localStorage.getItem(THEME_KEY);
+        if (saved) applyTheme(saved);
+      } catch (_) {}
+
+      if (themeBtn) {
+        themeBtn.addEventListener("click", function () {
+          const cur = document.documentElement.getAttribute("data-theme") || "dark";
+          applyTheme(cur === "dark" ? "light" : "dark");
+        });
+      }
+
+      // Check Quote / Cart items in localStorage for 1-click import
+      function checkCartItems() {
+        const importStrip = document.getElementById("cart-import-strip");
+        const importLabel = document.getElementById("cart-import-label");
+        const btnImport = document.getElementById("btn-import-cart");
+        if (!importStrip || !btnImport) return;
+
+        let cartCount = 0;
+        let itemsSummary = [];
+
+        try {
+          const shopCart = JSON.parse(localStorage.getItem("aqua-shop-cart-v1") || "[]");
+          if (Array.isArray(shopCart) && shopCart.length) {
+            cartCount += shopCart.length;
+            shopCart.forEach(function (c) {
+              if (c && c.name) itemsSummary.push(c.name + " (×" + (c.qty || 1) + ")");
+            });
+          }
+          const quoteStored = JSON.parse(localStorage.getItem("aqua-parts-quote-v1") || "null");
+          if (quoteStored && quoteStored.quoteList && typeof quoteStored.quoteList === "object") {
+            const qEntries = Object.values(quoteStored.quoteList);
+            if (qEntries.length && itemsSummary.length === 0) {
+              cartCount += qEntries.length;
+              qEntries.forEach(function (e) {
+                if (e && e.item && e.item.name) {
+                  itemsSummary.push(e.item.name + " (×" + (e.quantity || 1) + ")");
+                }
+              });
+            }
+          }
+        } catch (_) {}
+
+        if (cartCount > 0 && itemsSummary.length > 0) {
+          importLabel.textContent = "You have " + cartCount + " item(s) in your Cart / Quote List ready to import!";
+          btnImport.onclick = function () {
+            const partsInput = document.getElementById("contact-parts");
+            if (partsInput) {
+              partsInput.value = "Selected Hardware:\n" + itemsSummary.join("\n");
+              partsInput.focus();
+              btnImport.textContent = "✓ Imported!";
+              btnImport.style.background = "#10b981";
+              setTimeout(function () {
+                btnImport.textContent = "Import Cart Items";
+                btnImport.style.background = "";
+              }, 2500);
+            }
+          };
+        } else {
+          importStrip.style.display = "none";
+        }
+      }
+
+      checkCartItems();
+
+      // Form Submission & Ticket Generation
+      const form = document.getElementById("parts-contact-form");
+      const submitBtn = document.getElementById("btn-submit-form");
+      const ticketBox = document.getElementById("ticket-result");
+      const ticketNumber = document.getElementById("ticket-number");
+      const ticketWaLink = document.getElementById("ticket-wa-link");
+
+      if (form) {
+        form.addEventListener("submit", async function (e) {
+          e.preventDefault();
+          submitBtn.disabled = true;
+          submitBtn.textContent = "Submitting Inquiry...";
+
+          const ticketId = "AQP-" + Math.floor(10000 + Math.random() * 90000);
+          const name = document.getElementById("contact-name").value.trim();
+          const phone = document.getElementById("contact-phone").value.trim();
+          const email = document.getElementById("contact-email").value.trim() || "Not provided";
+          const type = document.getElementById("contact-type").value;
+          const fulfillment = document.getElementById("contact-fulfillment").value;
+          const parts = document.getElementById("contact-parts").value.trim();
+          const notes = document.getElementById("contact-message").value.trim() || "None";
+
+          // Formspree submission
+          try {
+            await fetch("https://formspree.io/f/mljjkokj", {
+              method: "POST",
+              headers: { Accept: "application/json", "Content-Type": "application/json" },
+              body: JSON.stringify({
+                "Ticket ID": ticketId,
+                "Client Name": name,
+                "Phone / WhatsApp": phone,
+                "Email": email,
+                "Inquiry Type": type,
+                "Fulfillment Preference": fulfillment,
+                "Requested Hardware": parts,
+                "Additional Notes": notes,
+                _subject: "[Aqua PC Parts] " + ticketId + " - " + name + " (" + type + ")",
+              }),
+            });
+          } catch (_) {}
+
+          // WhatsApp URL
+          const waMessage =
+            "Hello Aqua PC Parts! I just submitted Inquiry Ticket *" + ticketId + "*:\n\n" +
+            "• Name: " + name + "\n" +
+            "• Phone: " + phone + "\n" +
+            "• Inquiry: " + type + "\n" +
+            "• Fulfillment: " + fulfillment + "\n" +
+            "• Requested Parts: " + parts + "\n" +
+            (notes !== "None" ? "• Notes: " + notes + "\n" : "") +
+            "\nPlease confirm stock availability and pricing. Thank you!";
+
+          const waUrl = "https://wa.me/94788194535?text=" + encodeURIComponent(waMessage);
+
+          if (ticketNumber) ticketNumber.textContent = ticketId;
+          if (ticketWaLink) ticketWaLink.href = waUrl;
+          if (ticketBox) ticketBox.style.display = "flex";
+
+          submitBtn.disabled = false;
+          submitBtn.textContent = "✓ Inquiry Submitted!";
+          submitBtn.style.background = "#10b981";
+
+          ticketBox.scrollIntoView({ behavior: "smooth", block: "nearest" });
+        });
+      }
+    })();
+  </script>
+</body>
+</html>

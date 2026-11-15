@@ -6,6 +6,8 @@ import { motion } from "framer-motion";
 import {
   AQUA_PC_PARTS_SITE_NAME,
   AQUA_PC_PARTS_URL,
+  AQUA_PC_PARTS_CONTACT_URL,
+  AQUA_3D_PORTAL_URL,
 } from "@/lib/constants";
 import { CircuitFlowBackdrop, fadeUpVariants } from "@/components/ui/MotionPrimitives";
 
@@ -77,6 +79,33 @@ export default function ShopPage() {
           >
             <span>Back to Home</span>
           </Link>
+        </div>
+
+        <div className="flex flex-wrap items-center justify-center gap-2 pt-space-xs border-t border-outline-variant/15 w-full">
+          <a
+            href={`${AQUA_PC_PARTS_URL}/used-parts.html`}
+            className="px-3 py-1.5 rounded-lg bg-surface-container-high/70 hover:bg-surface-bright text-on-surface-variant hover:text-primary font-mono text-label-tech border border-outline-variant/25 transition-colors"
+          >
+            Used Parts (358+)
+          </a>
+          <a
+            href={`${AQUA_PC_PARTS_URL}/brand-new-parts.html`}
+            className="px-3 py-1.5 rounded-lg bg-surface-container-high/70 hover:bg-surface-bright text-on-surface-variant hover:text-secondary font-mono text-label-tech border border-outline-variant/25 transition-colors"
+          >
+            Brand New Parts
+          </a>
+          <a
+            href={AQUA_PC_PARTS_CONTACT_URL}
+            className="px-3 py-1.5 rounded-lg bg-surface-container-high/70 hover:bg-surface-bright text-on-surface-variant hover:text-primary font-mono text-label-tech border border-outline-variant/25 transition-colors"
+          >
+            Parts Contact Us
+          </a>
+          <a
+            href={AQUA_3D_PORTAL_URL}
+            className="px-3 py-1.5 rounded-lg bg-surface-container-high/70 hover:bg-surface-bright text-on-surface-variant hover:text-tertiary font-mono text-label-tech border border-outline-variant/25 transition-colors"
+          >
+            3D PC Builder
+          </a>
         </div>
       </motion.div>
     </div>
