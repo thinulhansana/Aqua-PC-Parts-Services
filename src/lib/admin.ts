@@ -6,6 +6,7 @@ import { SITE_EMAIL } from "@/lib/constants";
  */
 export const DEFAULT_ADMIN_EMAILS = [
   "thinulhansana@gmail.com",
+  "thinulhansana0411@gmail.com",
   SITE_EMAIL.toLowerCase(),
 ] as const;
 

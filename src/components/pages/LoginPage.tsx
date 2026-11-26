@@ -54,6 +54,25 @@ export default function LoginPage({ googleEnabled }: LoginPageProps) {
   const initialMode: AuthMode =
     modeParam === "register" ? "register" : "signin";
 
+  React.useEffect(() => {
+    if (
+      initialError &&
+      typeof window !== "undefined" &&
+      window.opener &&
+      !window.opener.closed
+    ) {
+      try {
+        window.opener.postMessage(
+          { type: "OAUTH_AUTH_ERROR", error: initialError },
+          "*"
+        );
+        window.close();
+      } catch {
+        // Fall through to inline error display
+      }
+    }
+  }, [initialError]);
+
   return (
     <div className="relative flex flex-col w-full min-h-[calc(100vh-5rem)] overflow-hidden bg-surface-container-lowest">
       <CircuitFlowBackdrop className="absolute inset-0 w-full h-full opacity-45" />

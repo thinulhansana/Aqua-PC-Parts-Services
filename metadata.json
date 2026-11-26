@@ -1,0 +1,10 @@
+{
+  "name": "Aqua PC Solutions",
+  "description": "Certified Grade-A PC components, interactive 3D PC Rig Studio, AI Hardware Lab with Search & Maps grounding and photo-to-video animation, and Firebase-backed client portal in Sri Lanka.",
+  "requestFramePermissions": [
+    "geolocation"
+  ],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

@@ -135,7 +135,7 @@ export default function Footer() {
               </span>
             </Link>
             <p className="text-body-md text-on-surface-variant max-w-sm mb-5">
-              Certified Grade-A PC parts, custom gaming builds, thermal &amp; liquid cooling, and board-level repair diagnostics in{" "}
+              Certified Grade-A PC parts, custom gaming builds, board-level repairs, and custom website development for businesses and personal needs in{" "}
               <span className="text-on-surface font-medium">{SITE_LOCATION}</span>.
             </p>
 

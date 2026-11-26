@@ -129,6 +129,39 @@ const SERVICES = [
     },
     action: "Request Quote",
   },
+  {
+    id: "srv-06",
+    code: "SRV-06 // WEB STUDIO",
+    title: "Website Development for Businesses & Personal Needs",
+    desc: "Custom-designed, mobile-first websites for Sri Lankan businesses, e-commerce storefronts, booking portals, personal portfolios, resumes, and event microsites — engineered for speed, SEO, and full code ownership.",
+    price: "From Rs. 15,000",
+    tat: "5–14 Days",
+    span: "lg:col-span-12",
+    color: "text-primary",
+    bgColor: "bg-primary-container/20",
+    icon: "language",
+    specs: [
+      {
+        title: "Business & Company Websites",
+        desc: "Google SEO, Maps integration, custom email & WhatsApp lead capture (From Rs. 35,000)",
+      },
+      {
+        title: "E-Commerce & Online Catalogs",
+        desc: "Product filtering, LKR cart, admin price editing & instant checkout (From Rs. 75,000)",
+      },
+      {
+        title: "Personal Portfolios & Resumes",
+        desc: "Creative showcases, developer profiles, and digital CV websites (From Rs. 15,000)",
+      },
+      {
+        title: "Event Sites & Custom Web Apps",
+        desc: "Wedding RSVP microsites, client portals, and cloud-backed web applications",
+      },
+    ],
+    footer: "Includes SSL setup, mobile optimization & interactive LKR cost estimator.",
+    action: "Explore Web Studio & Estimator",
+    href: "/web-development",
+  },
 ];
 
 const LAB_INSTRUMENTS = [
@@ -506,7 +539,7 @@ export default function ServicesPage() {
                     {srv.footer || "Transparent bench workflow & warranty coverage."}
                   </span>
                   <Link
-                    href="/contact"
+                    href={"href" in srv && srv.href ? srv.href : "/contact"}
                     className={`inline-flex items-center gap-space-xs ${srv.color} font-syne text-title-md hover:underline group/link`}
                   >
                     <span>{srv.action}</span>

@@ -839,15 +839,95 @@
       } else {
         state.openCustomizers.add(item.id);
       }
-      renderCatalog();
+      renderCatalog({ immediate: true });
     });
 
     card.appendChild(customizerPanel);
     return card;
   }
 
-  function renderCatalog() {
+  // Intersection Observer for sub-catalog section headers & product cards
+  const prefersReducedMotion =
+    typeof window !== "undefined" &&
+    window.matchMedia &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  let catalogRevealObserver = null;
+
+  function revealCatalogNode(el, delayMs) {
+    if (!el || el.classList.contains("is-visible")) return;
+    if (delayMs > 0) {
+      el.style.setProperty("--io-delay", `${delayMs}ms`);
+    } else {
+      el.style.removeProperty("--io-delay");
+    }
+    el.classList.add("is-visible");
+    if (el.classList.contains("io-reveal-card")) {
+      window.setTimeout(() => {
+        el.classList.add("is-settled");
+      }, 460 + delayMs);
+    }
+  }
+
+  function getCatalogRevealObserver() {
+    if (catalogRevealObserver) return catalogRevealObserver;
+    if (prefersReducedMotion || typeof window.IntersectionObserver !== "function") {
+      return null;
+    }
+    catalogRevealObserver = new IntersectionObserver(
+      (entries, observer) => {
+        const entering = entries.filter((entry) => entry.isIntersecting);
+        if (!entering.length) return;
+
+        entering.sort((a, b) => {
+          const dy = a.boundingClientRect.top - b.boundingClientRect.top;
+          if (Math.abs(dy) > 20) return dy;
+          return a.boundingClientRect.left - b.boundingClientRect.left;
+        });
+
+        let cardIndex = 0;
+        entering.forEach((entry) => {
+          const el = entry.target;
+          const isHead = el.classList.contains("io-reveal-head");
+          const delayMs = isHead ? 0 : Math.min(cardIndex++, 6) * 32;
+          revealCatalogNode(el, delayMs);
+          observer.unobserve(el);
+        });
+      },
+      {
+        rootMargin: "0px 0px -16px 0px",
+        threshold: 0.01,
+      }
+    );
+    return catalogRevealObserver;
+  }
+
+  function observeCatalogNodes(container, immediate) {
+    if (!container) return;
+    const heads = container.querySelectorAll(".category-block-header");
+    const cards = container.querySelectorAll(".item-card");
+    const obs = immediate ? null : getCatalogRevealObserver();
+
+    heads.forEach((el) => {
+      el.classList.add("io-reveal-head");
+      if (!obs) revealCatalogNode(el, 0);
+      else obs.observe(el);
+    });
+
+    cards.forEach((el) => {
+      el.classList.add("io-reveal-card");
+      if (!obs) {
+        revealCatalogNode(el, 0);
+        el.classList.add("is-settled");
+      } else {
+        obs.observe(el);
+      }
+    });
+  }
+
+  function renderCatalog(opts) {
     if (!catalogListEl) return;
+    const immediate = Boolean(opts && opts.immediate);
     catalogListEl.innerHTML = "";
 
     const q = state.searchQuery.trim().toLowerCase();
@@ -953,6 +1033,8 @@
       });
       empty.appendChild(resetBtn);
       catalogListEl.appendChild(empty);
+    } else {
+      observeCatalogNodes(catalogListEl, immediate);
     }
   }
 
@@ -1064,7 +1146,7 @@
             delete state.quoteList[entry.item.id];
             savePersistedQuote();
             updateQuoteDrawerUI();
-            renderCatalog();
+            renderCatalog({ immediate: true });
           });
 
           bottom.appendChild(stepper);
@@ -1152,7 +1234,7 @@
       state.quoteList = {};
       savePersistedQuote();
       updateQuoteDrawerUI();
-      renderCatalog();
+      renderCatalog({ immediate: true });
     });
   }
 
@@ -1186,6 +1268,13 @@
   applyViewMode(state.viewMode);
   syncConditionButtonsUI();
   renderSidebar();
+  const pageSectionHeading = document.querySelector(".section-heading-wrap");
+  if (pageSectionHeading) {
+    pageSectionHeading.classList.add("io-reveal-head");
+    const obs = getCatalogRevealObserver();
+    if (!obs) revealCatalogNode(pageSectionHeading, 0);
+    else obs.observe(pageSectionHeading);
+  }
   renderCatalog();
   updateQuoteDrawerUI();
   if (urlParams.get("quote") === "open") openQuoteDrawer();

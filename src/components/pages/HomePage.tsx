@@ -36,6 +36,7 @@ import {
   AQUA_PC_PARTS_URL,
   getAquaPcPartsUrl,
 } from "@/lib/constants";
+import webStudioHeroImg from "@/assets/images/web_dev_hero_studio_1795711940326.jpg";
 
 const WHATSAPP_BASE = WHATSAPP_LINK;
 
@@ -58,6 +59,7 @@ const TICKER_ITEMS = [
   { icon: "storage", text: "High-Speed NVMe SSDs", color: "text-primary" },
   { icon: "monitor", text: "Frameless FHD IPS Displays", color: "text-secondary" },
   { icon: "water_drop", text: "Custom Cooling & Tuning", color: "text-tertiary" },
+  { icon: "language", text: "Business & Personal Websites", color: "text-primary" },
   { icon: "verified_user", text: "06-Month Testing Warranty", color: "text-primary" },
   { icon: "local_shipping", text: "Island-wide Safe Delivery", color: "text-secondary" },
 ];
@@ -337,6 +339,13 @@ const SERVICES_PREVIEW = [
     icon: "water_drop",
     tag: "THERMAL OPTIMIZATION",
     link: "/services#srv-03",
+  },
+  {
+    title: "Web Development Studio",
+    desc: "Fast, mobile-first websites for businesses, online stores, personal portfolios, resumes, and events with transparent LKR packages.",
+    icon: "language",
+    tag: "BUSINESS & PERSONAL WEB",
+    link: "/web-development",
   },
 ];
 
@@ -1185,7 +1194,7 @@ export default function HomePage() {
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-gutter">
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-gutter">
             {SERVICES_PREVIEW.map((srv, i) => (
               <motion.div key={srv.title} variants={fadeUpVariants} custom={i}>
                 <SpotlightCard
@@ -1226,6 +1235,100 @@ export default function HomePage() {
               </motion.div>
             ))}
           </div>
+        </div>
+      </RevealSection>
+
+      {/* ── 4B. Aqua Web Studio — Business & Personal Websites Spotlight ── */}
+      <RevealSection className="w-full py-space-2xl px-gutter-lg bg-surface-container-low border-t border-outline-variant/15">
+        <div className="max-w-[1440px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-gutter-lg items-stretch">
+          <motion.div
+            variants={fadeUpVariants}
+            custom={0}
+            className="lg:col-span-6 flex flex-col justify-between gap-space-md p-space-lg sm:p-space-xl rounded-2xl bg-surface-container border border-outline-variant/20"
+          >
+            <div className="flex flex-col gap-space-sm">
+              <div className="flex flex-wrap items-center gap-2 font-mono text-xs text-primary">
+                <span className="font-semibold">Aqua Web Studio</span>
+                <span aria-hidden="true" className="text-outline">·</span>
+                <span className="text-on-surface-variant">Business &amp; Personal Websites</span>
+              </div>
+              <h2 className="font-syne text-headline-lg text-on-surface [text-wrap:balance]">
+                Custom Websites for Businesses and Personal Brands
+              </h2>
+              <p className="text-body-md text-on-surface-variant leading-relaxed">
+                Alongside our hardware lab, we design and develop modern websites for Sri Lankan companies, online shops, freelancers, portfolios, interactive resumes, and event pages—built fast, mobile-first, and ready for Google Search.
+              </p>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-3">
+                <div className="p-4 rounded-xl bg-surface-container-low border border-outline-variant/15 flex flex-col gap-1.5">
+                  <span className="font-mono text-xs text-primary font-semibold">
+                    01. For Businesses
+                  </span>
+                  <h3 className="font-syne text-title-md text-on-surface font-bold">
+                    Company &amp; E-Commerce Sites
+                  </h3>
+                  <p className="text-body-sm text-on-surface-variant">
+                    Online catalogs, WhatsApp ordering, booking portals, and SEO-ready business sites from Rs. 35,000.
+                  </p>
+                </div>
+                <div className="p-4 rounded-xl bg-surface-container-low border border-outline-variant/15 flex flex-col gap-1.5">
+                  <span className="font-mono text-xs text-secondary font-semibold">
+                    02. For Personal Needs
+                  </span>
+                  <h3 className="font-syne text-title-md text-on-surface font-bold">
+                    Portfolios, Resumes &amp; Events
+                  </h3>
+                  <p className="text-body-sm text-on-surface-variant">
+                    Creator showcases, digital CVs, wedding microsites, and personal blogs starting from Rs. 15,000.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="pt-4 border-t border-outline-variant/15 flex flex-wrap items-center gap-3">
+              <Link
+                href="/web-development"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-primary hover:bg-primary-fixed-dim text-on-primary font-syne text-body-md font-bold transition-colors whitespace-nowrap"
+              >
+                <span>Explore Web Packages</span>
+                <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
+              </Link>
+              <Link
+                href="/web-development#estimator"
+                className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-surface-container-high hover:bg-surface-bright text-on-surface font-syne text-body-md font-semibold border border-outline-variant/30 transition-colors whitespace-nowrap"
+              >
+                <span>Estimate Website Cost</span>
+              </Link>
+            </div>
+          </motion.div>
+
+          <motion.div
+            variants={scaleInVariants}
+            custom={1}
+            className="lg:col-span-6 flex"
+          >
+            <div className="relative w-full min-h-[300px] lg:h-full rounded-2xl overflow-hidden border border-outline-variant/20 bg-surface-container">
+              <Image
+                src={webStudioHeroImg}
+                alt="Aqua PC Solutions Web Development Studio designing business and personal websites"
+                fill
+                referrerPolicy="no-referrer"
+                sizes="(max-width: 1024px) 100vw, 50vw"
+                className="object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/25 to-transparent" />
+              <div className="absolute bottom-5 left-5 right-5 flex flex-wrap items-end justify-between gap-4 text-white">
+                <div>
+                  <span className="block font-mono text-xs text-cyan-300">
+                    Next.js · Mobile-First · SEO &amp; SSL Included
+                  </span>
+                  <span className="block font-syne text-title-lg font-bold mt-0.5">
+                    Personal Sites from Rs. 15,000 · Business from Rs. 35,000
+                  </span>
+                </div>
+              </div>
+            </div>
+          </motion.div>
         </div>
       </RevealSection>
 

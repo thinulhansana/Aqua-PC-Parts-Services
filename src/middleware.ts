@@ -1,7 +1,16 @@
 import NextAuth from "next-auth";
-import { NextRequest, type NextFetchEvent } from "next/server";
+import {
+  NextRequest,
+  NextResponse,
+  type NextFetchEvent,
+} from "next/server";
 import { authConfig } from "@/auth.config";
 import { getRuntimeSecret } from "@/lib/cf-env";
+
+type NextAuthRawMiddleware = (
+  request: NextRequest,
+  event: NextFetchEvent
+) => Promise<Response | undefined>;
 
 const { auth: authMiddleware } = NextAuth(async () => {
   const secret =
@@ -14,12 +23,18 @@ const { auth: authMiddleware } = NextAuth(async () => {
   };
 });
 
-type NextAuthRawMiddleware = (
-  request: NextRequest,
-  event: NextFetchEvent
-) => Promise<Response | undefined>;
-
 export async function middleware(request: NextRequest, event: NextFetchEvent) {
+  const configuredSecret =
+    (await getRuntimeSecret("AUTH_SECRET")) ??
+    (await getRuntimeSecret("NEXTAUTH_SECRET"));
+
+  // When AUTH_SECRET is unset in dev/preview, Node.js routes use a per-process
+  // in-memory signing key. Delegate route protection to the Server Components
+  // (/account, /admin) and API handlers so Edge and Node never mismatch keys.
+  if (!configuredSecret) {
+    return NextResponse.next();
+  }
+
   const runAuth = authMiddleware as unknown as NextAuthRawMiddleware;
 
   if (!request.headers.get("x-forwarded-proto")) {

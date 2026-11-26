@@ -3594,3 +3594,113 @@ button {
     padding: 20px 18px 34px;
   }
 }
+
+/* ── Intersection Observer Scroll Reveal Animations (Compositor-Only) ────── */
+.ne-io-head {
+  position: relative;
+  opacity: 0;
+  transform: translate3d(0, 14px, 0);
+  transition:
+    opacity 0.48s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.48s cubic-bezier(0.16, 1, 0.3, 1);
+  transition-delay: var(--io-delay, 0ms);
+}
+
+.ne-io-head.is-visible {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+
+.ne-section-head.ne-io-head,
+.ne-catalog-head.ne-io-head,
+.ne-combo-head.ne-io-head {
+  padding-bottom: 10px;
+}
+
+.ne-section-head.ne-io-head::after,
+.ne-catalog-head.ne-io-head::after,
+.ne-combo-head.ne-io-head::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 2px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--ne-orange) 0%, var(--ne-cyan) 42%, transparent 88%);
+  opacity: 0;
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition:
+    transform 0.62s cubic-bezier(0.16, 1, 0.3, 1) 0.12s,
+    opacity 0.38s ease 0.12s;
+  pointer-events: none;
+}
+
+.ne-section-head.ne-io-head.is-visible::after,
+.ne-catalog-head.ne-io-head.is-visible::after,
+.ne-combo-head.ne-io-head.is-visible::after {
+  opacity: 0.75;
+  transform: scaleX(1);
+}
+
+.ne-io-card {
+  opacity: 0;
+  transform: translate3d(0, 18px, 0) scale(0.985);
+  transition:
+    opacity 0.44s cubic-bezier(0.16, 1, 0.3, 1) var(--io-delay, 0ms),
+    transform 0.44s cubic-bezier(0.16, 1, 0.3, 1) var(--io-delay, 0ms),
+    border-color 0.18s ease,
+    box-shadow 0.18s ease;
+  will-change: opacity, transform;
+}
+
+.ne-io-card.is-visible {
+  opacity: 1;
+  transform: translate3d(0, 0, 0) scale(1);
+}
+
+.ne-io-card.is-settled {
+  will-change: auto;
+  transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+  transition-delay: 0ms;
+}
+
+.ne-card.oos.ne-io-card.is-visible {
+  opacity: 0.72;
+}
+
+.ne-card.ne-io-card.is-visible:hover {
+  transform: translate3d(0, -2px, 0);
+  transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+  transition-delay: 0ms;
+}
+
+.ne-cat-tile.ne-io-card.is-visible:hover {
+  transform: translate3d(0, -3px, 0);
+  transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+  transition-delay: 0ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ne-io-head,
+  .ne-io-card {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+    will-change: auto !important;
+  }
+
+  .ne-card.oos.ne-io-card {
+    opacity: 0.72 !important;
+  }
+
+  .ne-section-head.ne-io-head::after,
+  .ne-catalog-head.ne-io-head::after,
+  .ne-combo-head.ne-io-head::after {
+    opacity: 0.65 !important;
+    transform: scaleX(1) !important;
+    transition: none !important;
+  }
+}
+

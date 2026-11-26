@@ -72,6 +72,8 @@ const CATEGORY_LABELS: Record<string, string> = {
   "custom-build": "Custom PC Build Consultation",
   "hardware-purchase": "PC Parts Quote & Sourcing",
   workstation: "Business / Studio Workstation Support",
+  "web-business": "Business Website / E-Commerce Development",
+  "web-personal": "Personal Website / Portfolio Development",
 };
 
 const URGENCY_LABELS: Record<
@@ -114,6 +116,15 @@ export default function ContactPage() {
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [ticketId, setTicketId] = useState<string>("");
   const [copied, setCopied] = useState(false);
+
+  // Pre-select service category if linked via ?service=...
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const svc = new URLSearchParams(window.location.search).get("service");
+    if (svc && svc in CATEGORY_LABELS) {
+      setFormData((prev) => ({ ...prev, category: svc }));
+    }
+  }, []);
 
   // Auto-fill empty client fields from active Auth.js session & saved account blueprint
   useEffect(() => {
@@ -724,6 +735,12 @@ export default function ContactPage() {
                             </option>
                             <option value="workstation">
                               Business / Studio Workstation Support
+                            </option>
+                            <option value="web-business">
+                              Business Website / E-Commerce Development
+                            </option>
+                            <option value="web-personal">
+                              Personal Website / Portfolio Development
                             </option>
                           </select>
                           <span className="material-symbols-outlined absolute left-3 top-2.5 text-outline text-[18px]">

@@ -1,0 +1,218 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "Authenticated customer profile and hardware blueprint stored in Firestore.",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "description": "Firebase Authentication UID matching the document ID."
+        },
+        "displayName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80,
+          "description": "Customer full name."
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "maxLength": 254,
+          "description": "Verified customer email address (PII)."
+        },
+        "photoURL": {
+          "type": "string",
+          "maxLength": 500,
+          "description": "Optional profile avatar URL."
+        },
+        "phone": {
+          "type": "string",
+          "maxLength": 40,
+          "description": "Optional Sri Lanka contact or WhatsApp number (PII)."
+        },
+        "rigSpecs": {
+          "type": "string",
+          "maxLength": 400,
+          "description": "Saved PC hardware specification blueprint."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp when profile was created."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp when profile was last updated."
+        }
+      },
+      "required": ["uid", "displayName", "email", "createdAt", "updatedAt"]
+    },
+    "SavedRigBuild": {
+      "title": "SavedRigBuild",
+      "description": "Custom 3D PC Rig Studio build configuration saved by an authenticated user.",
+      "type": "object",
+      "properties": {
+        "ownerId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "description": "UID of the user who owns this build."
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80,
+          "description": "Custom rig build title."
+        },
+        "cpu": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80,
+          "description": "Selected processor model."
+        },
+        "gpu": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80,
+          "description": "Selected graphics card model."
+        },
+        "coolingMode": {
+          "type": "string",
+          "enum": ["liquid", "air", "hybrid"],
+          "description": "Cooling architecture preset."
+        },
+        "caseFinish": {
+          "type": "string",
+          "enum": ["obsidian", "titanium", "frost"],
+          "description": "Chassis surface finish preset."
+        },
+        "rgbColor": {
+          "type": "string",
+          "maxLength": 20,
+          "pattern": "^#[0-9a-fA-F]{6}$",
+          "description": "Hex RGB lighting / coolant accent color."
+        },
+        "explodedLevel": {
+          "type": "number",
+          "description": "Saved exploded-view slider value between 0 and 1."
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 400,
+          "description": "Optional customer build notes."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp when build was saved."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp when build was last updated."
+        }
+      },
+      "required": [
+        "ownerId",
+        "name",
+        "cpu",
+        "gpu",
+        "coolingMode",
+        "caseFinish",
+        "rgbColor",
+        "explodedLevel",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "ChatMessage": {
+      "title": "ChatMessage",
+      "description": "Persisted multi-turn Gemini hardware assistant message owned by a user.",
+      "type": "object",
+      "properties": {
+        "ownerId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "description": "UID of the user who owns this conversation entry."
+        },
+        "role": {
+          "type": "string",
+          "enum": ["user", "model"],
+          "description": "Author role in the multi-turn thread."
+        },
+        "text": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 8000,
+          "description": "Message body text."
+        },
+        "model": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64,
+          "description": "Gemini model identifier used for this turn."
+        },
+        "mode": {
+          "type": "string",
+          "enum": ["standard", "search", "maps"],
+          "description": "Grounding mode used for this message."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp when message was recorded."
+        }
+      },
+      "required": ["ownerId", "role", "text", "model", "mode", "createdAt"]
+    },
+    "AdminEntry": {
+      "title": "AdminEntry",
+      "description": "Server-managed admin RBAC marker document.",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "maxLength": 254
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["uid", "email", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/UserProfile" },
+      "description": "Private customer profile containing PII and saved PC blueprint."
+    },
+    "/users/{userId}/builds/{buildId}": {
+      "schema": { "$ref": "#/entities/SavedRigBuild" },
+      "description": "User-owned 3D PC Rig Studio saved configurations."
+    },
+    "/users/{userId}/chatMessages/{messageId}": {
+      "schema": { "$ref": "#/entities/ChatMessage" },
+      "description": "User-owned Gemini AI Hardware Lab conversation history."
+    },
+    "/admins/{userId}": {
+      "schema": { "$ref": "#/entities/AdminEntry" },
+      "description": "Admin RBAC marker collection (client writes strictly denied)."
+    }
+  }
+}

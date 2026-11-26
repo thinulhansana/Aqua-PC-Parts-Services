@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "opennextjs-cloudflare build",
+    "dev": "next dev -p 3000 -H 0.0.0.0",
+    "build": "next build",
     "build:next": "next build",
     "build:cf": "opennextjs-cloudflare build",
     "start": "next start",
@@ -18,12 +18,19 @@
     "cf-d1-init:remote": "wrangler d1 execute aqua-pc-users --remote --file=migrations/0001_users.sql"
   },
   "dependencies": {
+    "@firebase/eslint-plugin-security-rules": "^0.0.2",
+    "@google/genai": "^3.6.1",
     "@opennextjs/cloudflare": "^1.20.16",
+    "@types/three": "^0.187.0",
+    "firebase": "^13.4.0",
     "framer-motion": "^14.10.1",
+    "lucide-react": "^1.80.0",
     "next": "^15.0.0",
     "next-auth": "^5.0.0-beta.32",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "react-markdown": "^10.1.0",
+    "three": "^0.187.0"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",

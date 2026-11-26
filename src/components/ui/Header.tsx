@@ -9,6 +9,7 @@ import { NAV_LINKS, SITE_NAME, SITE_TAGLINE, SITE_EST, LOGO_SRC } from "@/lib/co
 import Button from "@/components/ui/Button";
 import ThemeToggle from "@/components/theme/ThemeToggle";
 import { useAuthModal } from "@/components/auth/AuthContext";
+import { useFirebaseAuth } from "@/components/firebase/FirebaseContext";
 import { EASE_PREMIUM } from "@/components/ui/MotionPrimitives";
 import { usePathname } from "next/navigation";
 
@@ -29,6 +30,7 @@ export default function Header() {
   const userMenuRef = useRef<HTMLDivElement>(null);
 
   const { data: session, status } = useSession();
+  const { firebaseUser, signOutFirebase } = useFirebaseAuth();
   const { openAuthModal } = useAuthModal();
 
   useEffect(() => {
@@ -67,10 +69,36 @@ export default function Header() {
     };
   }, [userMenuOpen]);
 
-  const user = session?.user;
-  const isAuthenticated = status === "authenticated" && Boolean(user);
+  const nextUser = session?.user;
+  const user = nextUser
+    ? {
+        name: nextUser.name,
+        email: nextUser.email,
+        image: nextUser.image,
+        provider: nextUser.provider || "credentials",
+      }
+    : firebaseUser
+    ? {
+        name: firebaseUser.displayName,
+        email: firebaseUser.email,
+        image: firebaseUser.photoURL,
+        provider: "google",
+      }
+    : null;
+  const isAuthenticated = Boolean(user);
   const firstName =
     (user?.name || user?.email?.split("@")[0] || "Account").split(" ")[0];
+
+  const handleUnifiedSignOut = async () => {
+    setUserMenuOpen(false);
+    setMobileOpen(false);
+    if (firebaseUser) {
+      await signOutFirebase();
+    }
+    if (status === "authenticated") {
+      await signOut({ callbackUrl: "/" });
+    }
+  };
 
   return (
     <header className="fixed top-0 inset-x-0 z-50">
@@ -133,12 +161,8 @@ export default function Header() {
                   {isExternalSite ? (
                     <a
                       href={link.href}
-                      className="relative inline-flex items-center gap-1 px-2.5 xl:px-3 py-2 text-body-md transition-all duration-200 rounded-lg group text-on-surface-variant hover:text-primary hover:bg-surface-container-high/50"
-                      title={
-                        link.label === "3D Builder"
-                          ? "Visit Interactive 3D PC Builder Studio"
-                          : "Visit Aqua PC Parts Storefront"
-                      }
+                      className="relative inline-flex items-center gap-1 px-2.5 xl:px-3 py-2 text-body-md transition-all duration-200 rounded-lg group text-on-surface-variant hover:text-primary hover:bg-surface-container-high/50 whitespace-nowrap shrink-0"
+                      title="Visit Aqua PC Parts Storefront"
                     >
                       <span>{link.label}</span>
                       <span className="material-symbols-outlined text-[14px] text-primary/75 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform">
@@ -149,7 +173,7 @@ export default function Header() {
                   ) : (
                     <Link
                       href={link.href}
-                      className={`relative px-2.5 xl:px-3 py-2 text-body-md transition-all duration-200 rounded-lg group ${
+                      className={`relative px-2.5 xl:px-3 py-2 text-body-md transition-all duration-200 rounded-lg group whitespace-nowrap shrink-0 ${
                         isActive
                           ? "text-primary font-semibold"
                           : "text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high/50"
@@ -283,15 +307,48 @@ export default function Header() {
                         <span>Track Repair Ticket</span>
                       </Link>
 
+                      <Link
+                        href="/studio-3d"
+                        role="menuitem"
+                        onClick={() => setUserMenuOpen(false)}
+                        className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-body-md text-on-surface hover:bg-primary/10 hover:text-primary transition-colors"
+                      >
+                        <span className="material-symbols-outlined text-[18px]">
+                          view_in_ar
+                        </span>
+                        <span>3D PC Rig Studio</span>
+                      </Link>
+
+                      <Link
+                        href="/web-development"
+                        role="menuitem"
+                        onClick={() => setUserMenuOpen(false)}
+                        className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-body-md text-on-surface hover:bg-primary/10 hover:text-primary transition-colors"
+                      >
+                        <span className="material-symbols-outlined text-[18px]">
+                          language
+                        </span>
+                        <span>Web Development Studio</span>
+                      </Link>
+
+                      <Link
+                        href="/ai-lab"
+                        role="menuitem"
+                        onClick={() => setUserMenuOpen(false)}
+                        className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-body-md text-on-surface hover:bg-primary/10 hover:text-primary transition-colors"
+                      >
+                        <span className="material-symbols-outlined text-[18px]">
+                          auto_awesome
+                        </span>
+                        <span>Aqua AI Lab</span>
+                      </Link>
+
                       <div className="my-1.5 h-px bg-outline-variant/25" />
 
                       <button
                         type="button"
                         role="menuitem"
-                        onClick={() => {
-                          setUserMenuOpen(false);
-                          signOut({ callbackUrl: "/" });
-                        }}
+                        onClick={() => void handleUnifiedSignOut()}
                         className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-body-md text-error hover:bg-error-container/25 transition-colors cursor-pointer"
                       >
                         <span className="material-symbols-outlined text-[18px]">
@@ -365,9 +422,7 @@ export default function Header() {
                           onClick={() => setMobileOpen(false)}
                         >
                           <span>
-                            {link.label === "3D Builder"
-                              ? "3D Builder (3D Studio)"
-                              : link.label === "Shop"
+                            {link.label === "Shop"
                               ? "Shop (Aqua PC Parts)"
                               : link.label}
                           </span>
@@ -414,10 +469,7 @@ export default function Header() {
                     </Link>
                     <button
                       type="button"
-                      onClick={() => {
-                        setMobileOpen(false);
-                        signOut({ callbackUrl: "/" });
-                      }}
+                      onClick={() => void handleUnifiedSignOut()}
                       className="px-4 py-2.5 rounded-lg bg-error-container/20 border border-error/30 text-on-error-container font-jakarta font-semibold text-body-sm flex items-center justify-center gap-1.5 cursor-pointer"
                     >
                       <span className="material-symbols-outlined text-[18px]">

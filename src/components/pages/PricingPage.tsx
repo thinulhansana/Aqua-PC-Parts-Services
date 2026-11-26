@@ -401,6 +401,75 @@ export default function PricingPage() {
               </SpotlightCard>
             </motion.div>
           </div>
+
+          {/* ── Web Development Packages Strip (Business & Personal) ── */}
+          <div className="mt-space-md p-space-lg sm:p-space-xl rounded-2xl bg-surface-container border border-outline-variant/20 flex flex-col gap-space-lg">
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-space-md">
+              <div>
+                <span className="font-mono text-xs text-secondary font-semibold">
+                  Aqua Web Studio · Business &amp; Personal Websites
+                </span>
+                <h3 className="font-syne text-headline-md text-on-surface mt-1">
+                  Custom Website Development Packages
+                </h3>
+              </div>
+              <Link
+                href="/web-development#estimator"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary hover:bg-primary-fixed-dim text-on-primary font-syne text-body-sm font-bold transition-colors whitespace-nowrap self-start md:self-auto"
+              >
+                <span>Open Website Cost Estimator</span>
+                <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
+              </Link>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-gutter">
+              {[
+                {
+                  label: "Personal Starter",
+                  price: "From Rs. 15,000",
+                  timeline: "5–7 Days",
+                  desc: "Portfolios, interactive resumes, freelancers & wedding/event microsites with SSL & mobile layout.",
+                },
+                {
+                  label: "Business Growth",
+                  price: "From Rs. 35,000",
+                  timeline: "7–14 Days",
+                  desc: "Multi-page company sites with Google SEO, Maps embed, WhatsApp lead routing & 3-month support.",
+                },
+                {
+                  label: "E-Commerce & Web App",
+                  price: "From Rs. 75,000",
+                  timeline: "2–4 Weeks",
+                  desc: "Online stores, searchable LKR catalogs, admin inventory panels, customer login & custom apps.",
+                },
+              ].map((tier) => (
+                <div
+                  key={tier.label}
+                  className="p-5 rounded-xl bg-surface-container-low border border-outline-variant/15 flex flex-col justify-between gap-3"
+                >
+                  <div className="flex flex-col gap-1.5">
+                    <div className="flex items-center justify-between text-xs font-mono text-on-surface-variant">
+                      <span>{tier.label}</span>
+                      <span className="tabular-nums">{tier.timeline}</span>
+                    </div>
+                    <span className="font-syne text-headline-sm font-bold text-primary tabular-nums">
+                      {tier.price}
+                    </span>
+                    <p className="text-body-sm text-on-surface-variant leading-relaxed">
+                      {tier.desc}
+                    </p>
+                  </div>
+                  <Link
+                    href="/web-development"
+                    className="inline-flex items-center gap-1 font-syne text-body-sm font-semibold text-primary hover:underline pt-2"
+                  >
+                    <span>View full deliverables</span>
+                    <span className="material-symbols-outlined text-[16px]">arrow_forward</span>
+                  </Link>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </RevealSection>
 

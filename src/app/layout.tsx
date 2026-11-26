@@ -5,6 +5,7 @@ import Footer from "@/components/ui/Footer";
 import FloatingActions from "@/components/ui/FloatingActions";
 import LocalBusinessSchema from "@/components/seo/LocalBusinessSchema";
 import { ThemeProvider } from "@/components/theme/ThemeProvider";
+import { FirebaseProvider } from "@/components/firebase/FirebaseContext";
 import { AuthProvider } from "@/components/auth/AuthContext";
 import { isGoogleOAuthConfigured } from "@/auth.config";
 import { SITE_NAME, SITE_TAGLINE, SITE_URL } from "@/lib/constants";
@@ -17,12 +18,18 @@ export const metadata: Metadata = {
     apple: "/logo.jpg",
   },
   description:
-    "Certified Grade-A PC components, custom gaming & workstation builds, liquid & thermal cooling solutions, and board-level diagnostics in Embilipitiya, Sri Lanka.",
+    "Certified Grade-A PC components, interactive 3D PC Rig Studio, Gemini AI Hardware Lab, custom gaming & workstation builds, liquid cooling, and diagnostics in Embilipitiya, Sri Lanka.",
+  openGraph: {
+    title: `${SITE_NAME} | ${SITE_TAGLINE}`,
+    description:
+      "Certified Grade-A PC components, interactive 3D PC Rig Studio, Gemini AI Hardware Lab, custom gaming & workstation builds, liquid cooling, and diagnostics in Embilipitiya, Sri Lanka.",
+  },
   keywords: [
     "Aqua PC Solutions",
     "PC parts Sri Lanka",
     "Embilipitiya PC shop",
     "custom PC builds",
+    "3D PC builder",
     "liquid cooling",
     "PC repair Sri Lanka",
     "micro-soldering diagnostics",
@@ -60,13 +67,15 @@ export default function RootLayout({
       </head>
       <body className="bg-surface text-on-surface font-jakarta min-h-screen flex flex-col selection:bg-primary-container selection:text-on-primary-container">
         <ThemeProvider>
-          <AuthProvider googleEnabled={isGoogleOAuthConfigured()}>
-            <LocalBusinessSchema />
-            <Header />
-            <main className="flex-1 w-full pt-20">{children}</main>
-            <Footer />
-            <FloatingActions />
-          </AuthProvider>
+          <FirebaseProvider>
+            <AuthProvider googleEnabled={isGoogleOAuthConfigured()}>
+              <LocalBusinessSchema />
+              <Header />
+              <main className="flex-1 w-full pt-20">{children}</main>
+              <Footer />
+              <FloatingActions />
+            </AuthProvider>
+          </FirebaseProvider>
         </ThemeProvider>
       </body>
     </html>

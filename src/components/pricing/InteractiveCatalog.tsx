@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import {
   SHOP_SECTIONS,
@@ -42,11 +42,50 @@ const ALL_CATALOG_ITEMS: FlatCatalogItem[] = SHOP_SECTIONS.flatMap((section) =>
 
 const INITIAL_LIMIT = 24;
 
+function useElementInView<T extends HTMLElement>(rootMargin = "0px 0px -36px 0px") {
+  const ref = useRef<T | null>(null);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+
+    const prefersReduced =
+      typeof window !== "undefined" &&
+      window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+
+    if (prefersReduced || typeof window.IntersectionObserver !== "function") {
+      setVisible(true);
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) {
+          setVisible(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin, threshold: 0.06 }
+    );
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [rootMargin]);
+
+  return { ref, visible };
+}
+
 export default function InteractiveCatalog() {
   const [filter, setFilter] = useState<string>("all");
   const [searchTerm, setSearchTerm] = useState("");
   const [installOptions, setInstallOptions] = useState<Record<string, boolean>>({});
   const [visibleLimit, setVisibleLimit] = useState(INITIAL_LIMIT);
+  const [revealedIds, setRevealedIds] = useState<Record<string, number>>({});
+
+  const headerReveal = useElementInView<HTMLDivElement>("0px 0px -24px 0px");
+  const controlsReveal = useElementInView<HTMLDivElement>("0px 0px -24px 0px");
+  const tbodyRef = useRef<HTMLTableSectionElement | null>(null);
 
   const toggleInstall = (id: string) => {
     setInstallOptions((prev) => ({ ...prev, [id]: !prev[id] }));
@@ -80,10 +119,80 @@ export default function InteractiveCatalog() {
   const displayedParts = filteredParts.slice(0, visibleLimit);
   const remainingCount = Math.max(0, filteredParts.length - displayedParts.length);
 
+  // Batch-staggered Intersection Observer for product rows
+  useEffect(() => {
+    const tbody = tbodyRef.current;
+    if (!tbody) return;
+
+    const rows = Array.from(tbody.querySelectorAll<HTMLTableRowElement>("tr[data-part-id]"));
+    if (rows.length === 0) return;
+
+    const prefersReduced =
+      typeof window !== "undefined" &&
+      window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+
+    if (prefersReduced || typeof window.IntersectionObserver !== "function") {
+      setRevealedIds((prev) => {
+        const next = { ...prev };
+        let changed = false;
+        rows.forEach((row) => {
+          const id = row.dataset.partId;
+          if (id && next[id] === undefined) {
+            next[id] = 0;
+            changed = true;
+          }
+        });
+        return changed ? next : prev;
+      });
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries, obs) => {
+        const entering = entries.filter((entry) => entry.isIntersecting);
+        if (!entering.length) return;
+
+        entering.sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+
+        setRevealedIds((prev) => {
+          const next = { ...prev };
+          let changed = false;
+          entering.forEach((entry, idx) => {
+            const id = (entry.target as HTMLElement).dataset.partId;
+            if (id && next[id] === undefined) {
+              next[id] = Math.min(idx, 7) * 35;
+              changed = true;
+            }
+            obs.unobserve(entry.target);
+          });
+          return changed ? next : prev;
+        });
+      },
+      { rootMargin: "0px 0px -16px 0px", threshold: 0.01 }
+    );
+
+    rows.forEach((row) => {
+      const id = row.dataset.partId;
+      if (id && revealedIds[id] === undefined) {
+        observer.observe(row);
+      }
+    });
+
+    return () => observer.disconnect();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filter, searchTerm, visibleLimit]);
+
   return (
     <div className="flex flex-col gap-space-lg w-full">
-      {/* Catalog Controls Header */}
-      <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-space-md">
+      {/* Catalog Controls Header with Intersection Observer Reveal */}
+      <div
+        ref={headerReveal.ref}
+        className={`relative pb-3 flex flex-col lg:flex-row lg:items-end justify-between gap-space-md transition-[opacity,transform] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none motion-reduce:opacity-100 motion-reduce:translate-y-0 ${
+          headerReveal.visible
+            ? "opacity-100 translate-y-0"
+            : "opacity-0 translate-y-4"
+        }`}
+      >
         <div>
           <span className="font-mono text-label-badge text-primary uppercase tracking-widest">
             Live Workshop Inventory ({TOTAL_SHOP_ITEMS} Items)
@@ -103,80 +212,99 @@ export default function InteractiveCatalog() {
           <span className="material-symbols-outlined text-[18px]">storefront</span>
           <span>Open Aqua PC Parts Storefront</span>
         </a>
-      </div>
 
-      {/* Category Pill Bar */}
-      <div className="flex items-center gap-space-xs p-1.5 rounded-xl bg-surface-container-high overflow-x-auto border border-outline-variant/20">
-        <button
-          type="button"
-          onClick={() => handleFilterChange("all")}
-          className={`relative z-10 px-space-md py-space-xs rounded-lg font-syne text-body-sm font-semibold transition-colors whitespace-nowrap ${
-            filter === "all"
-              ? "text-on-primary-container"
-              : "text-on-surface-variant hover:text-on-surface"
+        {/* Animated compositor-only underline sweep */}
+        <span
+          aria-hidden="true"
+          className={`pointer-events-none absolute left-0 bottom-0 h-[2px] w-full rounded-full bg-gradient-to-r from-primary via-secondary to-transparent origin-left transition-[transform,opacity] duration-700 delay-100 ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none motion-reduce:scale-x-100 motion-reduce:opacity-70 ${
+            headerReveal.visible
+              ? "scale-x-100 opacity-75"
+              : "scale-x-0 opacity-0"
           }`}
-        >
-          {filter === "all" && (
-            <motion.span
-              layoutId="catalog-filter-pill"
-              className="absolute inset-0 rounded-lg bg-primary-container shadow-sm -z-10"
-              transition={{ type: "spring", stiffness: 360, damping: 32 }}
-            />
-          )}
-          All Parts ({TOTAL_SHOP_ITEMS})
-        </button>
-
-        {SHOP_SECTIONS.map((sec) => {
-          const active = filter === sec.id;
-          return (
-            <button
-              key={sec.id}
-              onClick={() => handleFilterChange(sec.id)}
-              className={`relative z-10 px-space-md py-space-xs rounded-lg font-syne text-body-sm font-semibold transition-colors whitespace-nowrap ${
-                active
-                  ? "text-on-primary-container"
-                  : "text-on-surface-variant hover:text-on-surface"
-              }`}
-              type="button"
-            >
-              {active && (
-                <motion.span
-                  layoutId="catalog-filter-pill"
-                  className="absolute inset-0 rounded-lg bg-primary-container shadow-sm -z-10"
-                  transition={{ type: "spring", stiffness: 360, damping: 32 }}
-                />
-              )}
-              {sec.label} ({SECTION_ITEM_COUNTS[sec.id] ?? 0})
-            </button>
-          );
-        })}
+        />
       </div>
 
-      {/* Search & Layout Controls Row */}
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-space-md p-space-md rounded-xl bg-surface-container-low shadow-sm border border-outline-variant/15">
-        <div className="relative w-full sm:w-96">
-          <span className="material-symbols-outlined absolute left-space-md top-1/2 -translate-y-1/2 text-outline text-[18px]">
-            search
-          </span>
-          <input
-            className="w-full pl-10 pr-space-md py-space-xs rounded-lg bg-surface text-on-surface placeholder:text-outline text-body-sm focus:outline-none focus:ring-1 focus:ring-primary border border-outline-variant/20"
-            placeholder="Search any CPU, GPU, board, monitor, SSD..."
-            type="text"
-            value={searchTerm}
-            onChange={(e) => handleSearchChange(e.target.value)}
-          />
+      {/* Category Pill Bar & Search Controls */}
+      <div
+        ref={controlsReveal.ref}
+        className={`flex flex-col gap-space-md transition-[opacity,transform] duration-500 delay-75 ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none motion-reduce:opacity-100 motion-reduce:translate-y-0 ${
+          controlsReveal.visible
+            ? "opacity-100 translate-y-0"
+            : "opacity-0 translate-y-3"
+        }`}
+      >
+        <div className="flex items-center gap-space-xs p-1.5 rounded-xl bg-surface-container-high overflow-x-auto border border-outline-variant/20">
+          <button
+            type="button"
+            onClick={() => handleFilterChange("all")}
+            className={`relative z-10 px-space-md py-space-xs rounded-lg font-syne text-body-sm font-semibold transition-colors whitespace-nowrap ${
+              filter === "all"
+                ? "text-on-primary-container"
+                : "text-on-surface-variant hover:text-on-surface"
+            }`}
+          >
+            {filter === "all" && (
+              <motion.span
+                layoutId="catalog-filter-pill"
+                className="absolute inset-0 rounded-lg bg-primary-container shadow-sm -z-10"
+                transition={{ type: "spring", stiffness: 360, damping: 32 }}
+              />
+            )}
+            All Parts ({TOTAL_SHOP_ITEMS})
+          </button>
+
+          {SHOP_SECTIONS.map((sec) => {
+            const active = filter === sec.id;
+            return (
+              <button
+                key={sec.id}
+                onClick={() => handleFilterChange(sec.id)}
+                className={`relative z-10 px-space-md py-space-xs rounded-lg font-syne text-body-sm font-semibold transition-colors whitespace-nowrap ${
+                  active
+                    ? "text-on-primary-container"
+                    : "text-on-surface-variant hover:text-on-surface"
+                }`}
+                type="button"
+              >
+                {active && (
+                  <motion.span
+                    layoutId="catalog-filter-pill"
+                    className="absolute inset-0 rounded-lg bg-primary-container shadow-sm -z-10"
+                    transition={{ type: "spring", stiffness: 360, damping: 32 }}
+                  />
+                )}
+                {sec.label} ({SECTION_ITEM_COUNTS[sec.id] ?? 0})
+              </button>
+            );
+          })}
         </div>
-        <div className="flex flex-wrap items-center gap-space-md w-full sm:w-auto justify-between sm:justify-end">
-          <div className="flex items-center gap-space-xs font-mono text-label-tech text-on-surface-variant">
-            <span className="w-2 h-2 rounded-full bg-secondary shadow-[0_0_8px_currentColor] animate-pulse" />
-            <span>
-              Showing {displayedParts.length} of {filteredParts.length} Matching Items
+
+        {/* Search & Layout Controls Row */}
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-space-md p-space-md rounded-xl bg-surface-container-low shadow-sm border border-outline-variant/15">
+          <div className="relative w-full sm:w-96">
+            <span className="material-symbols-outlined absolute left-space-md top-1/2 -translate-y-1/2 text-outline text-[18px]">
+              search
+            </span>
+            <input
+              className="w-full pl-10 pr-space-md py-space-xs rounded-lg bg-surface text-on-surface placeholder:text-outline text-body-sm focus:outline-none focus:ring-1 focus:ring-primary border border-outline-variant/20"
+              placeholder="Search any CPU, GPU, board, monitor, SSD..."
+              type="text"
+              value={searchTerm}
+              onChange={(e) => handleSearchChange(e.target.value)}
+            />
+          </div>
+          <div className="flex flex-wrap items-center gap-space-md w-full sm:w-auto justify-between sm:justify-end">
+            <div className="flex items-center gap-space-xs font-mono text-label-tech text-on-surface-variant">
+              <span className="w-2 h-2 rounded-full bg-secondary shadow-[0_0_8px_currentColor] animate-pulse" />
+              <span>
+                Showing {displayedParts.length} of {filteredParts.length} Matching Items
+              </span>
+            </div>
+            <span className="hidden md:inline text-outline">|</span>
+            <span className="font-mono text-label-tech text-outline">
+              Add-on Bench Install: From Rs. 1,500
             </span>
           </div>
-          <span className="hidden md:inline text-outline">|</span>
-          <span className="font-mono text-label-tech text-outline">
-            Add-on Bench Install: From Rs. 1,500
-          </span>
         </div>
       </div>
 
@@ -192,7 +320,10 @@ export default function InteractiveCatalog() {
               <th className="py-space-md px-space-lg text-right">Instant Quote</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-outline-variant/10 text-body-md text-on-surface">
+          <tbody
+            ref={tbodyRef}
+            className="divide-y divide-outline-variant/10 text-body-md text-on-surface"
+          >
             {displayedParts.map((part) => {
               const withInstall = !!installOptions[part.id];
               const hasPrice =
@@ -206,10 +337,23 @@ export default function InteractiveCatalog() {
                 ? `Hi Aqua PC Solutions, I'd like to order / check availability for: ${part.name} (${part.categoryName}) — Listed Price: ${priceDisplay} WITH Workshop Install & Stress Check (+Rs. 1,500${totalWithInstall ? `, Total: ${totalWithInstall}` : ""}).`
                 : `Hi Aqua PC Solutions, I'd like to order / check availability for: ${part.name} (${part.categoryName}) — Listed Price: ${priceDisplay}.`;
 
+              const revealDelay = revealedIds[part.id];
+              const isRevealed = revealDelay !== undefined;
+
               return (
                 <tr
                   key={part.id}
-                  className="hover:bg-surface-container-high/60 transition-colors group"
+                  data-part-id={part.id}
+                  style={
+                    isRevealed && revealDelay > 0
+                      ? ({ "--io-delay": `${revealDelay}ms` } as React.CSSProperties)
+                      : undefined
+                  }
+                  className={`hover:bg-surface-container-high/60 group transition-[opacity,transform,background-color] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] [transition-delay:var(--io-delay,0ms)] hover:[transition-delay:0ms] motion-reduce:transition-none motion-reduce:opacity-100 motion-reduce:translate-y-0 ${
+                    isRevealed
+                      ? "opacity-100 translate-y-0"
+                      : "opacity-0 translate-y-3"
+                  }`}
                 >
                   <td className="py-space-md px-space-lg">
                     <div className="flex items-center gap-space-md">

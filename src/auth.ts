@@ -4,13 +4,12 @@ import Google from "next-auth/providers/google";
 import type { Provider } from "next-auth/providers";
 import { authConfig } from "@/auth.config";
 import { getRuntimeSecret } from "@/lib/cf-env";
+import { resolveAuthSecret } from "@/lib/auth-secret";
 import { upsertOAuthProfile, verifyUserCredentials } from "@/lib/auth-users";
 
 export const { handlers, auth, signIn, signOut } = NextAuth(async () => {
   const [secret, googleId, googleSecret] = await Promise.all([
-    getRuntimeSecret("AUTH_SECRET").then(
-      (val) => val ?? getRuntimeSecret("NEXTAUTH_SECRET")
-    ),
+    resolveAuthSecret(),
     getRuntimeSecret("AUTH_GOOGLE_ID").then(
       (val) => val ?? getRuntimeSecret("GOOGLE_CLIENT_ID")
     ),
@@ -65,7 +64,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth(async () => {
 
   return {
     ...authConfig,
-    ...(secret ? { secret } : {}),
+    secret,
     providers,
     callbacks: {
       ...authConfig.callbacks,

@@ -897,9 +897,102 @@ th{background:#071138;color:#ffc000}
         .join("");
   }
 
-  function renderGrid() {
+  // ───────── Intersection Observer Scroll Reveal Controller ─────────
+  const prefersReducedMotion =
+    typeof window !== "undefined" &&
+    window.matchMedia &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  let revealObserver = null;
+
+  function markRevealed(el, delayMs) {
+    if (!el || el.classList.contains("is-visible")) return;
+    if (delayMs > 0) {
+      el.style.setProperty("--io-delay", delayMs + "ms");
+    } else {
+      el.style.removeProperty("--io-delay");
+    }
+    el.classList.add("is-visible");
+    if (el.classList.contains("ne-io-card")) {
+      window.setTimeout(() => {
+        el.classList.add("is-settled");
+      }, 480 + delayMs);
+    }
+  }
+
+  function getRevealObserver() {
+    if (revealObserver) return revealObserver;
+    if (prefersReducedMotion || typeof window.IntersectionObserver !== "function") {
+      return null;
+    }
+    revealObserver = new IntersectionObserver(
+      (entries, observer) => {
+        const entering = entries.filter((entry) => entry.isIntersecting);
+        if (!entering.length) return;
+
+        // Sort top-to-bottom, then left-to-right for natural grid waterfall
+        entering.sort((a, b) => {
+          const dy = a.boundingClientRect.top - b.boundingClientRect.top;
+          if (Math.abs(dy) > 24) return dy;
+          return a.boundingClientRect.left - b.boundingClientRect.left;
+        });
+
+        let cardIndex = 0;
+        entering.forEach((entry) => {
+          const el = entry.target;
+          const isHead = el.classList.contains("ne-io-head");
+          const delayMs = isHead ? 0 : Math.min(cardIndex++, 7) * 36;
+          markRevealed(el, delayMs);
+          observer.unobserve(el);
+        });
+      },
+      {
+        rootMargin: "0px 0px -16px 0px",
+        threshold: 0.01,
+      }
+    );
+    return revealObserver;
+  }
+
+  function observeRevealElements(elements, kind) {
+    const cls = kind === "head" ? "ne-io-head" : "ne-io-card";
+    const obs = getRevealObserver();
+    elements.forEach((el) => {
+      if (!el) return;
+      el.classList.add(cls);
+      if (el.classList.contains("is-visible")) return;
+      if (!obs) {
+        markRevealed(el, 0);
+      } else {
+        obs.observe(el);
+      }
+    });
+  }
+
+  function initStaticSectionReveals() {
+    observeRevealElements(
+      $$(".ne-section-head, .ne-catalog-head, .ne-combo-head"),
+      "head"
+    );
+    observeRevealElements($$(".ne-assurance-card"), "card");
+  }
+
+  function renderGrid(opts) {
+    const appendOnly = Boolean(opts && opts.appendOnly);
+    const gridEl = $("#grid");
     const slice = filtered.slice(0, F.shown);
-    $("#grid").innerHTML = slice.map(productCard).join("");
+
+    if (appendOnly && gridEl && gridEl.children.length > 0 && gridEl.children.length < slice.length) {
+      const startIdx = gridEl.children.length;
+      const newItemsHtml = slice.slice(startIdx).map(productCard).join("");
+      gridEl.insertAdjacentHTML("beforeend", newItemsHtml);
+      const addedNodes = Array.from(gridEl.children).slice(startIdx);
+      observeRevealElements(addedNodes, "card");
+    } else if (gridEl) {
+      gridEl.innerHTML = slice.map(productCard).join("");
+      observeRevealElements(Array.from(gridEl.children), "card");
+    }
+
     $("#result-count").textContent = filtered.length + " result" + (filtered.length === 1 ? "" : "s");
     $("#empty").hidden = filtered.length > 0;
     $("#load-more-wrap").hidden = filtered.length <= F.shown;
@@ -1088,6 +1181,9 @@ th{background:#071138;color:#ffc000}
     $("#row-featured").innerHTML = featuredPicks.map(productCard).join("");
     if ($("#row-gpucpu")) $("#row-gpucpu").innerHTML = gpuCpuPicks.map(productCard).join("");
     if ($("#row-brandnew")) $("#row-brandnew").innerHTML = brandNewPicks.map(productCard).join("");
+
+    observeRevealElements($$("#ne-cat-tiles .ne-cat-tile"), "card");
+    observeRevealElements($$(".ne-deal-panel.active .ne-card"), "card");
   }
 
   // ───────── Hero Slider ─────────
@@ -1475,6 +1571,10 @@ th{background:#071138;color:#ffc000}
           if (tabEl) tabEl.classList.toggle("active", t === name);
           if (panelEl) panelEl.classList.toggle("active", t === name);
         });
+        const activePanel = $("#panel-" + t);
+        if (activePanel) {
+          observeRevealElements(Array.from(activePanel.querySelectorAll(".ne-card")), "card");
+        }
       });
     });
 
@@ -1518,7 +1618,7 @@ th{background:#071138;color:#ffc000}
     $("#sort").addEventListener("change", (e) => setFilters({ sort: e.target.value }));
     $("#f-reset").addEventListener("click", resetAllFilters);
     if ($("#empty-reset-btn")) $("#empty-reset-btn").addEventListener("click", resetAllFilters);
-    $("#load-more").addEventListener("click", () => { F.shown += PAGE; renderGrid(); });
+    $("#load-more").addEventListener("click", () => { F.shown += PAGE; renderGrid({ appendOnly: true }); });
 
     if ($("#view-grid")) $("#view-grid").addEventListener("click", () => setViewMode("grid"));
     if ($("#view-list")) $("#view-list").addEventListener("click", () => setViewMode("list"));
@@ -1719,6 +1819,7 @@ th{background:#071138;color:#ffc000}
   suggest();
   initRose();
   renderCart();
+  initStaticSectionReveals();
   readUrlParams();
   apply();
   syncCompareUI();

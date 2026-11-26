@@ -1,5 +1,5 @@
 export const SITE_NAME = "Aqua PC Solutions";
-export const SITE_TAGLINE = "PC Parts, Custom Builds & Lab";
+export const SITE_TAGLINE = "PC Hardware, Lab & Web Studio";
 export const SITE_EST = "EST. 11.06.2026";
 export const SITE_FOUNDED_DATE = "November 6, 2026";
 export const SITE_FOUNDER = "S.L.K Thinul Hansana";
@@ -51,10 +51,11 @@ export const SITE_HOURS = {
 export const NAV_LINKS = [
   { label: "Home", href: "/" },
   { label: "Shop", href: AQUA_PC_PARTS_URL },
-  { label: "3D Builder", href: AQUA_3D_PORTAL_URL },
+  { label: "Web Design", href: "/web-development" },
+  { label: "3D Studio", href: "/studio-3d" },
+  { label: "AI Lab", href: "/ai-lab" },
   { label: "Services", href: "/services" },
   { label: "Pricing", href: "/pricing" },
-  { label: "About", href: "/about" },
   { label: "Contact", href: "/contact" },
 ] as const;
 
@@ -62,7 +63,8 @@ export const FOOTER_LINKS = {
   products: {
     title: "Aqua PC Parts",
     links: [
-      { label: "3D PC Builder Studio", href: AQUA_3D_PORTAL_URL },
+      { label: "3D PC Rig Studio", href: "/studio-3d" },
+      { label: "Aqua AI Hardware Lab", href: "/ai-lab" },
       { label: "Used Parts (358+)", href: `${AQUA_PC_PARTS_URL}/used-parts` },
       { label: "Brand New Parts", href: `${AQUA_PC_PARTS_URL}/brand-new-parts` },
       { label: "Processors", href: getAquaPcPartsUrl("processors") },
@@ -78,6 +80,8 @@ export const FOOTER_LINKS = {
   services: {
     title: "Services",
     links: [
+      { label: "Business & Personal Websites", href: "/web-development" },
+      { label: "Website Cost Estimator", href: "/web-development#estimator" },
       { label: "Diagnostics & Repair", href: "/services#srv-01" },
       { label: "Custom Builds & Liquid Cooling", href: "/services#srv-02" },
       { label: "Thermal & Cooling Upgrades", href: "/services#srv-03" },
@@ -108,6 +112,6 @@ export const TRUST_BADGES = [
 ] as const;
 
 export const TECH_SPECS_LINE =
-  "ESD-Safe Precision Lab · Grade-A Tested Parts · Embilipitiya, Sri Lanka";
+  "ESD-Safe Precision Lab · Custom Web Development · Embilipitiya, Sri Lanka";
 
 export const LOGO_SRC = "/logo.jpg";

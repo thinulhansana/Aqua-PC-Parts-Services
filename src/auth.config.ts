@@ -8,6 +8,19 @@ export function isGoogleOAuthConfigured(): boolean {
   return Boolean(clientId?.trim() && clientSecret?.trim());
 }
 
+const useSecureCrossSiteCookies =
+  Boolean(process.env.APP_URL?.startsWith("https://")) ||
+  Boolean(process.env.AUTH_URL?.startsWith("https://")) ||
+  Boolean(process.env.NEXTAUTH_URL?.startsWith("https://")) ||
+  process.env.NODE_ENV === "production";
+
+const crossSiteCookieOptions = {
+  httpOnly: true,
+  sameSite: "none" as const,
+  path: "/",
+  secure: true,
+};
+
 /**
  * Edge-safe Auth.js configuration shared between middleware and server routes.
  */
@@ -21,6 +34,37 @@ export const authConfig: NextAuthConfig = {
     maxAge: 30 * 24 * 60 * 60, // 30 days
   },
   trustHost: true,
+  useSecureCookies: useSecureCrossSiteCookies,
+  ...(useSecureCrossSiteCookies
+    ? {
+        cookies: {
+          sessionToken: {
+            name: "__Secure-authjs.session-token",
+            options: crossSiteCookieOptions,
+          },
+          callbackUrl: {
+            name: "__Secure-authjs.callback-url",
+            options: crossSiteCookieOptions,
+          },
+          csrfToken: {
+            name: "__Host-authjs.csrf-token",
+            options: crossSiteCookieOptions,
+          },
+          pkceCodeVerifier: {
+            name: "__Secure-authjs.pkce.code_verifier",
+            options: { ...crossSiteCookieOptions, maxAge: 900 },
+          },
+          state: {
+            name: "__Secure-authjs.state",
+            options: { ...crossSiteCookieOptions, maxAge: 900 },
+          },
+          nonce: {
+            name: "__Secure-authjs.nonce",
+            options: { ...crossSiteCookieOptions, maxAge: 900 },
+          },
+        },
+      }
+    : {}),
   callbacks: {
     authorized({ auth, request: { nextUrl } }) {
       const isLoggedIn = Boolean(auth?.user);

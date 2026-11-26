@@ -1,0 +1,190 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Pillar 0: Global default-deny safety net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Pillar 3: Hardened global primitives
+    function isValidId(id) {
+      return id is string && id.size() >= 1 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isVerifiedUser() {
+      return isSignedIn() && request.auth.token.email_verified == true;
+    }
+
+    function isOwner(userId) {
+      return isVerifiedUser() && request.auth.uid == userId;
+    }
+
+    function isBootstrappedFounder() {
+      return isVerifiedUser() &&
+        request.auth.token.email is string &&
+        request.auth.token.email in [
+          'thinulhansana0411@gmail.com',
+          'thinulhansana@gmail.com',
+          'thinulhansana.business@gmail.com'
+        ];
+    }
+
+    function isAdmin() {
+      return isBootstrappedFounder() ||
+        (isVerifiedUser() && exists(/databases/$(database)/documents/admins/$(request.auth.uid)));
+    }
+
+    // Pillar 2: Validation Blueprints (Anti-Update-Gap)
+    function isValidUserProfile(data, userId) {
+      return data.keys().hasAll(['uid', 'displayName', 'email', 'createdAt', 'updatedAt']) &&
+        data.keys().hasOnly(['uid', 'displayName', 'email', 'photoURL', 'phone', 'rigSpecs', 'createdAt', 'updatedAt']) &&
+        isValidId(data.uid) &&
+        data.uid == userId &&
+        data.uid == request.auth.uid &&
+        data.displayName is string && data.displayName.size() >= 1 && data.displayName.size() <= 80 &&
+        data.email is string && data.email.size() >= 3 && data.email.size() <= 254 &&
+        (!('photoURL' in data) || (data.photoURL is string && data.photoURL.size() <= 500)) &&
+        (!('phone' in data) || (data.phone is string && data.phone.size() <= 40)) &&
+        (!('rigSpecs' in data) || (data.rigSpecs is string && data.rigSpecs.size() <= 400)) &&
+        data.createdAt is timestamp &&
+        data.updatedAt is timestamp;
+    }
+
+    function isValidBuild(data, userId) {
+      return data.keys().hasAll(['ownerId', 'name', 'cpu', 'gpu', 'coolingMode', 'caseFinish', 'rgbColor', 'explodedLevel', 'createdAt', 'updatedAt']) &&
+        data.keys().hasOnly(['ownerId', 'name', 'cpu', 'gpu', 'coolingMode', 'caseFinish', 'rgbColor', 'explodedLevel', 'notes', 'createdAt', 'updatedAt']) &&
+        isValidId(data.ownerId) &&
+        data.ownerId == userId &&
+        data.ownerId == request.auth.uid &&
+        data.name is string && data.name.size() >= 1 && data.name.size() <= 80 &&
+        data.cpu is string && data.cpu.size() >= 1 && data.cpu.size() <= 80 &&
+        data.gpu is string && data.gpu.size() >= 1 && data.gpu.size() <= 80 &&
+        data.coolingMode is string && data.coolingMode in ['liquid', 'air', 'hybrid'] &&
+        data.caseFinish is string && data.caseFinish in ['obsidian', 'titanium', 'frost'] &&
+        data.rgbColor is string && data.rgbColor.size() == 7 && data.rgbColor.matches('^#[0-9a-fA-F]{6}$') &&
+        data.explodedLevel is number && data.explodedLevel >= 0 && data.explodedLevel <= 1 &&
+        (!('notes' in data) || (data.notes is string && data.notes.size() <= 400)) &&
+        data.createdAt is timestamp &&
+        data.updatedAt is timestamp;
+    }
+
+    function isValidChatMessage(data, userId) {
+      return data.keys().hasAll(['ownerId', 'role', 'text', 'model', 'mode', 'createdAt']) &&
+        data.keys().hasOnly(['ownerId', 'role', 'text', 'model', 'mode', 'createdAt']) &&
+        isValidId(data.ownerId) &&
+        data.ownerId == userId &&
+        data.ownerId == request.auth.uid &&
+        data.role is string && data.role in ['user', 'model'] &&
+        data.text is string && data.text.size() >= 1 && data.text.size() <= 8000 &&
+        data.model is string && data.model.size() >= 1 && data.model.size() <= 64 &&
+        data.mode is string && data.mode in ['standard', 'search', 'maps'] &&
+        data.createdAt is timestamp;
+    }
+
+    // Admin RBAC marker collection — read-only for verified admins, client writes strictly forbidden
+    match /admins/{userId} {
+      allow get: if isSignedIn() && isValidId(userId) && (isOwner(userId) || isAdmin());
+      allow list: if false;
+      allow create, update, delete: if false;
+    }
+
+    // Customer profiles (contains PII — strictly owner or admin only)
+    match /users/{userId} {
+      allow get: if isSignedIn() && isValidId(userId) && (isOwner(userId) || isAdmin());
+      allow list: if isBootstrappedFounder();
+
+      allow create: if isVerifiedUser() &&
+        isValidId(userId) &&
+        isOwner(userId) &&
+        isValidUserProfile(incoming(), userId) &&
+        incoming().createdAt == request.time &&
+        incoming().updatedAt == request.time;
+
+      allow update: if isVerifiedUser() &&
+        isValidId(userId) &&
+        isValidUserProfile(incoming(), userId) &&
+        incoming().uid == existing().uid &&
+        incoming().createdAt == existing().createdAt &&
+        incoming().updatedAt == request.time &&
+        (
+          isAdmin() ||
+          (
+            isOwner(userId) &&
+            incoming().diff(existing()).affectedKeys().hasOnly(['displayName', 'photoURL', 'phone', 'rigSpecs', 'updatedAt'])
+          )
+        );
+
+      allow delete: if isSignedIn() && isValidId(userId) && isAdmin();
+
+      // Saved 3D PC Rig Studio builds (Master Gate verifies parent /users/{userId} exists)
+      match /builds/{buildId} {
+        allow get: if isSignedIn() && isValidId(userId) && isValidId(buildId) && (isOwner(userId) || isAdmin());
+        allow list: if isVerifiedUser() && (resource.data.ownerId == request.auth.uid || isBootstrappedFounder());
+
+        allow create: if isVerifiedUser() &&
+          isValidId(userId) &&
+          isValidId(buildId) &&
+          isOwner(userId) &&
+          isValidBuild(incoming(), userId) &&
+          incoming().createdAt == request.time &&
+          incoming().updatedAt == request.time &&
+          exists(/databases/$(database)/documents/users/$(userId));
+
+        allow update: if isVerifiedUser() &&
+          isValidId(userId) &&
+          isValidId(buildId) &&
+          isValidBuild(incoming(), userId) &&
+          incoming().ownerId == existing().ownerId &&
+          incoming().createdAt == existing().createdAt &&
+          incoming().updatedAt == request.time &&
+          (
+            isAdmin() ||
+            (
+              isOwner(userId) &&
+              exists(/databases/$(database)/documents/users/$(userId)) &&
+              incoming().diff(existing()).affectedKeys().hasOnly(['name', 'cpu', 'gpu', 'coolingMode', 'caseFinish', 'rgbColor', 'explodedLevel', 'notes', 'updatedAt'])
+            )
+          );
+
+        allow delete: if isVerifiedUser() &&
+          isValidId(userId) &&
+          isValidId(buildId) &&
+          (isOwner(userId) || isAdmin());
+      }
+
+      // Persisted Gemini AI Hardware Lab conversation messages
+      match /chatMessages/{messageId} {
+        allow get: if isSignedIn() && isValidId(userId) && isValidId(messageId) && (isOwner(userId) || isAdmin());
+        allow list: if isVerifiedUser() && (resource.data.ownerId == request.auth.uid || isBootstrappedFounder());
+
+        allow create: if isVerifiedUser() &&
+          isValidId(userId) &&
+          isValidId(messageId) &&
+          isOwner(userId) &&
+          isValidChatMessage(incoming(), userId) &&
+          incoming().createdAt == request.time &&
+          exists(/databases/$(database)/documents/users/$(userId));
+
+        allow update: if false;
+
+        allow delete: if isVerifiedUser() &&
+          isValidId(userId) &&
+          isValidId(messageId) &&
+          (isOwner(userId) || isAdmin());
+      }
+    }
+  }
+}

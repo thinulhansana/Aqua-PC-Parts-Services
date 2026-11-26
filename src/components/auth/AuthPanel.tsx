@@ -1,10 +1,11 @@
 "use client";
 
-import React, { useState, useId, useEffect } from "react";
+import React, { useState, useId, useEffect, useRef } from "react";
 import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { EASE_PREMIUM } from "@/components/ui/MotionPrimitives";
+import { useFirebaseAuth } from "@/components/firebase/FirebaseContext";
 
 export type AuthMode = "signin" | "register";
 
@@ -102,6 +103,7 @@ export default function AuthPanel({
 }: AuthPanelProps) {
   const router = useRouter();
   const { update: updateSession } = useSession();
+  const { signInWithGoogle: signInWithFirebaseGoogle } = useFirebaseAuth();
   const tabGroupId = useId();
   const formId = useId();
   const safeCallbackUrl = sanitizeCallbackUrl(callbackUrl);
@@ -118,6 +120,7 @@ export default function AuthPanel({
     initialError ? AUTH_ERROR_MESSAGES[initialError] || AUTH_ERROR_MESSAGES.Default : null
   );
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
+  const popupTimerRef = useRef<number | null>(null);
 
   useEffect(() => {
     setMode(initialMode);
@@ -128,6 +131,54 @@ export default function AuthPanel({
     );
     setSuccessMsg(null);
   }, [initialMode, initialError]);
+
+  useEffect(() => {
+    const clearPopupWatcher = () => {
+      if (popupTimerRef.current !== null) {
+        window.clearInterval(popupTimerRef.current);
+        popupTimerRef.current = null;
+      }
+    };
+
+    const handleOAuthMessage = async (event: MessageEvent) => {
+      const origin = event.origin;
+      const isTrustedOrigin =
+        origin === window.location.origin ||
+        origin.endsWith(".run.app") ||
+        origin.includes("localhost");
+      if (!isTrustedOrigin) return;
+
+      const payload = event.data as { type?: string; error?: string } | null;
+      if (!payload || typeof payload !== "object") return;
+
+      if (payload.type === "OAUTH_AUTH_SUCCESS") {
+        clearPopupWatcher();
+        setIsGoogleLoading(false);
+        setErrorMsg(null);
+        setSuccessMsg("Google account verified! Syncing your Aqua session...");
+        await updateSession();
+        router.refresh();
+        window.setTimeout(() => {
+          if (onSuccess) {
+            onSuccess(safeCallbackUrl);
+          } else {
+            router.push(safeCallbackUrl);
+          }
+        }, 300);
+      } else if (payload.type === "OAUTH_AUTH_ERROR") {
+        clearPopupWatcher();
+        setIsGoogleLoading(false);
+        const code = typeof payload.error === "string" ? payload.error : "Default";
+        setErrorMsg(AUTH_ERROR_MESSAGES[code] || AUTH_ERROR_MESSAGES.Default);
+      }
+    };
+
+    window.addEventListener("message", handleOAuthMessage);
+    return () => {
+      clearPopupWatcher();
+      window.removeEventListener("message", handleOAuthMessage);
+    };
+  }, [onSuccess, router, safeCallbackUrl, updateSession]);
 
   const strength = getPasswordStrength(password);
 
@@ -142,12 +193,98 @@ export default function AuthPanel({
     setSuccessMsg(null);
 
     if (!googleEnabled) {
-      setErrorMsg("Google Sign-In is currently unavailable. Please continue with Email & Password below.");
+      setIsGoogleLoading(true);
+      try {
+        const fbUser = await signInWithFirebaseGoogle();
+        if (fbUser) {
+          setSuccessMsg("Google account verified! Syncing your Aqua Cloud session...");
+          window.setTimeout(() => {
+            if (onSuccess) {
+              onSuccess(safeCallbackUrl);
+            } else {
+              router.push("/studio-3d");
+            }
+          }, 300);
+        } else {
+          setErrorMsg(
+            "Google Sign-In was canceled or blocked. Please allow popups or sign in with Email & Password below."
+          );
+        }
+      } finally {
+        setIsGoogleLoading(false);
+      }
       return;
     }
 
     try {
       setIsGoogleLoading(true);
+      const isInIframe =
+        typeof window !== "undefined" && window.self !== window.top;
+
+      if (isInIframe) {
+        const res = await signIn("google", {
+          redirect: false,
+          callbackUrl: "/api/auth/popup-close",
+        });
+
+        if (!res?.url) {
+          setIsGoogleLoading(false);
+          setErrorMsg(
+            (res?.error && AUTH_ERROR_MESSAGES[res.error]) ||
+              "Unable to start Google Sign-In. Please try again."
+          );
+          return;
+        }
+
+        const parsedUrl = new URL(res.url, window.location.origin);
+        const isGoogleHost =
+          parsedUrl.protocol === "https:" &&
+          (parsedUrl.hostname === "accounts.google.com" ||
+            parsedUrl.hostname.endsWith(".google.com"));
+
+        if (!isGoogleHost) {
+          const errParam = parsedUrl.searchParams.get("error") || "OAuthSignin";
+          setIsGoogleLoading(false);
+          setErrorMsg(
+            AUTH_ERROR_MESSAGES[errParam] || AUTH_ERROR_MESSAGES.Default
+          );
+          return;
+        }
+
+        const width = 520;
+        const height = 660;
+        const left = Math.max(0, Math.round(window.screenX + (window.outerWidth - width) / 2));
+        const top = Math.max(0, Math.round(window.screenY + (window.outerHeight - height) / 2));
+
+        const popup = window.open(
+          parsedUrl.toString(),
+          "aqua_google_oauth",
+          `width=${width},height=${height},left=${left},top=${top},noopener=no,noreferrer=no`
+        );
+
+        if (!popup) {
+          setIsGoogleLoading(false);
+          setErrorMsg(
+            "Popup blocked by your browser. Please allow popups for this site and click Continue with Google again."
+          );
+          return;
+        }
+
+        if (popupTimerRef.current !== null) {
+          window.clearInterval(popupTimerRef.current);
+        }
+        popupTimerRef.current = window.setInterval(() => {
+          if (popup.closed) {
+            if (popupTimerRef.current !== null) {
+              window.clearInterval(popupTimerRef.current);
+              popupTimerRef.current = null;
+            }
+            setIsGoogleLoading(false);
+          }
+        }, 500);
+        return;
+      }
+
       await signIn("google", { callbackUrl: safeCallbackUrl });
     } catch {
       setIsGoogleLoading(false);
@@ -276,62 +413,58 @@ export default function AuthPanel({
       </div>
 
       {/* Continue with Google Button */}
-      {googleEnabled && (
-        <>
-          <div className="flex flex-col gap-2">
-            <motion.button
-              type="button"
-              onClick={handleGoogleLogin}
-              disabled={busy}
-              whileTap={{ scale: 0.99 }}
-              className="w-full py-3 px-4 rounded-xl bg-surface-container hover:bg-surface-container-high border border-outline-variant/40 hover:border-primary/45 text-on-surface font-jakarta font-semibold text-body-md flex items-center justify-center gap-3 shadow-sm hover:shadow-cyan-glow transition-all duration-200 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
-            >
-              {isGoogleLoading ? (
-                <span className="material-symbols-outlined text-[20px] text-primary animate-spin">
-                  progress_activity
-                </span>
-              ) : (
-                <svg
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  aria-hidden="true"
-                  className="shrink-0"
-                >
-                  <path
-                    fill="#4285F4"
-                    d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17Z"
-                  />
-                  <path
-                    fill="#34A853"
-                    d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.11-6.72-4.96H1.29v3.14C3.26 21.3 7.31 24 12 24Z"
-                  />
-                  <path
-                    fill="#FBBC05"
-                    d="M5.28 14.24c-.24-.72-.38-1.49-.38-2.24s.14-1.52.38-2.24V6.62H1.29C.47 8.24 0 10.06 0 12s.47 3.76 1.29 5.38l3.99-3.14Z"
-                  />
-                  <path
-                    fill="#EA4335"
-                    d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.31 0 3.26 2.7 1.29 6.62l3.99 3.14c.95-2.85 3.6-4.96 6.72-4.96Z"
-                  />
-                </svg>
-              )}
-              <span>
-                {isGoogleLoading ? "Connecting to Google..." : "Continue with Google"}
-              </span>
-            </motion.button>
-          </div>
-
-          {/* Divider */}
-          <div className="flex items-center gap-3">
-            <div className="h-px flex-1 bg-outline-variant/30" />
-            <span className="font-mono text-[10px] uppercase tracking-widest text-outline">
-              OR CONTINUE WITH EMAIL
+      <div className="flex flex-col gap-2">
+        <motion.button
+          type="button"
+          onClick={handleGoogleLogin}
+          disabled={busy}
+          whileTap={{ scale: 0.99 }}
+          className="w-full py-3 px-4 rounded-xl bg-surface-container hover:bg-surface-container-high border border-outline-variant/40 hover:border-primary/45 text-on-surface font-jakarta font-semibold text-body-md flex items-center justify-center gap-3 shadow-sm hover:shadow-cyan-glow transition-all duration-200 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
+        >
+          {isGoogleLoading ? (
+            <span className="material-symbols-outlined text-[20px] text-primary animate-spin">
+              progress_activity
             </span>
-            <div className="h-px flex-1 bg-outline-variant/30" />
-          </div>
-        </>
-      )}
+          ) : (
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+              className="shrink-0"
+            >
+              <path
+                fill="#4285F4"
+                d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17Z"
+              />
+              <path
+                fill="#34A853"
+                d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.11-6.72-4.96H1.29v3.14C3.26 21.3 7.31 24 12 24Z"
+              />
+              <path
+                fill="#FBBC05"
+                d="M5.28 14.24c-.24-.72-.38-1.49-.38-2.24s.14-1.52.38-2.24V6.62H1.29C.47 8.24 0 10.06 0 12s.47 3.76 1.29 5.38l3.99-3.14Z"
+              />
+              <path
+                fill="#EA4335"
+                d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.31 0 3.26 2.7 1.29 6.62l3.99 3.14c.95-2.85 3.6-4.96 6.72-4.96Z"
+              />
+            </svg>
+          )}
+          <span>
+            {isGoogleLoading ? "Connecting to Google..." : "Continue with Google"}
+          </span>
+        </motion.button>
+      </div>
+
+      {/* Divider */}
+      <div className="flex items-center gap-3">
+        <div className="h-px flex-1 bg-outline-variant/30" />
+        <span className="font-mono text-[10px] uppercase tracking-widest text-outline">
+          OR CONTINUE WITH EMAIL
+        </span>
+        <div className="h-px flex-1 bg-outline-variant/30" />
+      </div>
 
       {/* Segmented Pill Toggle */}
       <div
